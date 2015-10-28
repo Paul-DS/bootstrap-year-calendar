@@ -1,0 +1,105 @@
+/*!
+ * Simple calendar for Bootstrap
+ *
+ * Copyright 2015 Paul David-Sivelle
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ */
+
+/* Main */
+.calendar {
+  padding: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  direction: ltr;
+}
+
+.calendar.calendar-rtl {
+  direction: rtl;
+}
+.calendar.calendar-rtl table tr td span {
+  float: right;
+}
+
+.calendar table {
+  margin: auto;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.calendar table td,
+.calendar table th {
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: none;
+  padding: 4px 5px;
+  font-size:13px;
+}
+
+/* Header */
+.calendar table.calendar-header
+{
+	width:100%;
+}
+
+.calendar table.calendar-header th
+{
+	font-size:22px;
+}
+
+.calendar td.prev,
+.calendar td.next
+{
+	width:20px;
+}
+
+.calendar .year-title {
+	font-weight:bold;
+	text-align:center;
+	height:20px;
+	width:auto;
+}
+
+/* Months */
+.calendar .month-container {
+	padding:5px 0;
+	min-width:180px;
+	text-align:center;
+}
+
+.calendar table.month th.month-title
+{
+	font-size:15px;
+}
+
+.table-striped .calendar table.month tr td,
+.table-striped .calendar table.month tr th {
+  background-color: transparent;
+}
+
+.calendar table.calendar-header th.prev:hover,
+.calendar table.calendar-header th.next:hover,
+.calendar table.month td.day:hover {
+  background: #eeeeee;
+  cursor: pointer;
+}
+.calendar table.month tr td.old,
+.calendar table.month tr td.new {
+  color: #999999;
+}
+.calendar table.month tr td.disabled,
+.calendar table.month tr td.disabled:hover {
+  background: none;
+  color: #999999;
+  cursor: default;
+}
