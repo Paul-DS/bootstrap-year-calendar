@@ -104,7 +104,7 @@
 			for(var i = 0; i < 12; i++) {
 				var monthDiv = $(document.createElement('div'));
 				monthDiv.addClass('month-container col-lg-2 col-md-3 col-sm-3 col-xs-4')
-				monthDiv.data('monthId', i);
+				monthDiv.data('month-id', i);
 				monthsDiv.append(monthDiv);
 			}
 			
@@ -114,7 +114,7 @@
 			var _this = this;
 		
 			this.element.children('.months-container').children('.month-container').each(function() {
-				var monthNumber = $(this).data('monthId');
+				var monthNumber = $(this).data('month-id');
 				
 				var firstDate = new Date(_this.options.startYear, monthNumber, 1);
 				
@@ -196,6 +196,8 @@
 		},
 		_applyEvents: function () {
 			var _this = this;
+			
+			/* Header buttons */
 			this.element.find('.year-neighbor, .year-neighbor2').click(function() {
 				_this.setYear(parseInt($(this).text()));
 			});
@@ -217,23 +219,98 @@
 				});
 			});
 			
-			if(this.options.clickDate) {
-				this.element.find('.day:not(.old, .new)').click(function(e) {					
-					e.stopPropagation();
-					_this.options.clickDate({
-						date: new Date(_this.options.startYear, $(this).closest('.month-container').data('monthId'), parseInt($(this).text()))
-					});
-				});
-			}
-			
+			/* Day rendering */
 			if(this.options.renderDay) {
 				this.element.find('.day:not(.old, .new)').each(function() {					
 					_this.options.renderDay({
 						element: $(this).children('.day-content'),
-						date: new Date(_this.options.startYear, $(this).closest('.month-container').data('monthId'), parseInt($(this).text()))
+						date: _this._getDate($(this))
 					});
 				});
 			}
+			
+			/* Click on date */
+			if(this.options.clickDate) {
+				this.element.find('.day:not(.old, .new)').click(function(e) {					
+					e.stopPropagation();
+					_this.options.clickDate({
+						date: _this._getDate($(this))
+					});
+				});
+			}
+			
+			/* Range selection */
+			if(this.options.selectRange) {
+				this.element.find('td.day:not(.old, .new)').mousedown(function (e) {
+					_this._mouseDown = true;
+					_this._rangeStart = _this._rangeEnd = _this._getDate($(this));
+					_this._refreshRange();
+				});
+
+				this.element.find('td.day:not(.old, .new)').mouseenter(function (e) {
+					if (_this._mouseDown) {
+						var oldValue = _this._rangeEnd;
+						_this._rangeEnd = _this._getDate($(this));
+
+						if (oldValue.getTime() != _this._rangeEnd.getTime()) {
+							_this._refreshRange();
+						}
+					}
+				});
+
+				$(window).mouseup(function (e) {
+					if (_this._mouseDown) {
+						_this._mouseDown = false;
+						_this._refreshRange();
+
+						var minDate = _this._rangeStart < _this._rangeEnd ? _this._rangeStart : _this._rangeEnd;
+						var maxDate = _this._rangeEnd > _this._rangeStart ? _this._rangeEnd : _this._rangeStart;
+
+						_this.options.selectRange({ startDate: minDate, endDate: maxDate });
+					}
+				});
+			}
+		},
+		_refreshRange: function () {
+			var _this = this;
+		
+            this.element.find('td.day.range').removeClass('range')
+            this.element.find('td.day.range-start').removeClass('range-start');
+            this.element.find('td.day.range-end').removeClass('range-end');
+
+            if (this._mouseDown) {
+                var beforeRange = true;
+                var afterRange = false;
+                var minDate = _this._rangeStart < _this._rangeEnd ? _this._rangeStart : _this._rangeEnd;
+                var maxDate = _this._rangeEnd > _this._rangeStart ? _this._rangeEnd : _this._rangeStart;
+
+                this.element.find('.month-container').each(function () {
+					var monthId = $(this).data('month-id');
+                    if (minDate.getMonth() <= monthId && maxDate.getMonth() >= monthId) {
+                        $(this).find('td.day:not(.old, .new)').each(function () {
+                            var date = _this._getDate($(this));
+                            if (date >= minDate && date <= maxDate) {
+                                $(this).addClass('range');
+
+                                if (date.getTime() == minDate.getTime()) {
+                                    $(this).addClass('range-start');
+                                }
+
+                                if (date.getTime() == maxDate.getTime()) {
+                                    $(this).addClass('range-end');
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        },
+		_getDate: function(elt) {
+			var day = elt.children('.day-content').text();
+			var month = elt.closest('.month-container').data('month-id');
+			var year = this.options.startYear;
+
+			return new Date(year, month, day);
 		},
 		setYear: function(year) {
 			this.options.startYear = year;

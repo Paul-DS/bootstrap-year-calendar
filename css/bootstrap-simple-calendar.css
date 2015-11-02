@@ -14,6 +14,13 @@
   -moz-border-radius: 4px;
   border-radius: 4px;
   direction: ltr;
+  
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .calendar.calendar-rtl {
@@ -25,12 +32,6 @@
 
 .calendar table {
   margin: auto;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 .calendar table td,
@@ -143,4 +144,21 @@
   background: none;
   color: #999999;
   cursor: default;
+}
+
+.calendar table.month tr td.range {
+  background-color:#ccc;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+
+.calendar table.month tr td.range.range-start {
+  border-top-left-radius:4px;
+  border-bottom-left-radius:4px;
+}
+
+.calendar table.month tr td.range.range-end {
+  border-top-right-radius:4px;
+  border-bottom-right-radius:4px;
 }
