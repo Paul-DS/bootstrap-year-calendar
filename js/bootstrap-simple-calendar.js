@@ -176,7 +176,10 @@
 							cell.addClass('new');
 						}
 						else {
-							cell.text(currentDate.getDate());
+							var cellContent = $(document.createElement('div'));
+							cellContent.addClass('day-content');
+							cellContent.text(currentDate.getDate());
+							cell.append(cellContent);
 						}
 						
 						row.append(cell);
@@ -213,6 +216,24 @@
 					_this.setYear(_this.options.startYear + 1);
 				});
 			});
+			
+			if(this.options.clickDate) {
+				this.element.find('.day:not(.old, .new)').click(function(e) {					
+					e.stopPropagation();
+					_this.options.clickDate({
+						date: new Date(_this.options.startYear, $(this).closest('.month-container').data('monthId'), parseInt($(this).text()))
+					});
+				});
+			}
+			
+			if(this.options.renderDay) {
+				this.element.find('.day:not(.old, .new)').each(function() {					
+					_this.options.renderDay({
+						element: $(this).children('.day-content'),
+						date: new Date(_this.options.startYear, $(this).closest('.month-container').data('monthId'), parseInt($(this).text()))
+					});
+				});
+			}
 		},
 		setYear: function(year) {
 			this.options.startYear = year;
