@@ -29,12 +29,15 @@
 	Calendar.prototype = {
 		constructor: Calendar,
 		_render: function() {
+			console.time("myCode"); // 'myCode' is the namespace
 			this.element.empty();
+			
+			
 			this._renderHeader();
-			this._renderYear();
-			this.element.find('.months-container').hide();
-			this._renderMonth();
+			this._renderBody();
+			
 			this._applyEvents();
+			console.timeEnd("myCode");
 			this.element.find('.months-container').fadeIn(500);
 		},
 		_renderHeader: function() {
@@ -97,30 +100,22 @@
 			
 			this.element.append(header);
 		},
-		_renderYear: function() {
+		_renderBody: function() {
 			var monthsDiv = $(document.createElement('div'));
 			monthsDiv.addClass('months-container');
 			
-			for(var i = 0; i < 12; i++) {
+			for(var m = 0; m < 12; m++) {
+				/* Container */
 				var monthDiv = $(document.createElement('div'));
 				monthDiv.addClass('month-container col-lg-2 col-md-3 col-sm-3 col-xs-4')
-				monthDiv.data('month-id', i);
-				monthsDiv.append(monthDiv);
-			}
-			
-			this.element.append(monthsDiv);
-		},
-		_renderMonth: function() {
-			var _this = this;
-		
-			this.element.children('.months-container').children('.month-container').each(function() {
-				var monthNumber = $(this).data('month-id');
+				monthDiv.data('month-id', m);
 				
-				var firstDate = new Date(_this.options.startYear, monthNumber, 1);
+				var firstDate = new Date(this.options.startYear, m, 1);
 				
 				var table = $(document.createElement('table'));
 				table.addClass('month');
 				
+				/* Month header */
 				var thead = $(document.createElement('thead'));
 				
 				var titleRow = $(document.createElement('tr'));
@@ -128,18 +123,18 @@
 				var titleCell = $(document.createElement('th'));
 				titleCell.addClass('month-title');
 				titleCell.attr('colspan', 7);
-				titleCell.text(dates[_this.options.language].months[monthNumber]);
+				titleCell.text(dates[this.options.language].months[m]);
 				
 				titleRow.append(titleCell);
 				thead.append(titleRow);
 				
 				var headerRow = $(document.createElement('tr'));
 				
-				var d = dates[_this.options.language].weekStart;
+				var d = dates[this.options.language].weekStart;
 				do
 				{
 					var headerCell = $(document.createElement('th'));
-					headerCell.text(dates[_this.options.language].daysMin[d]);
+					headerCell.text(dates[this.options.language].daysMin[d]);
 					
 					headerRow.append(headerCell);
 					
@@ -147,15 +142,18 @@
 					if(d >= 7)
 						d = 0;
 				}
-				while(d != dates[_this.options.language].weekStart)
+				while(d != dates[this.options.language].weekStart)
 				
 				thead.append(headerRow);
 				table.append(thead);
 				
+				/* Days */
 				var currentDate = new Date(firstDate.getTime());
-				var lastDate = new Date(_this.options.startYear, monthNumber + 1, 0);
+				var lastDate = new Date(this.options.startYear, m + 1, 0);
 				
-				while(currentDate.getDay() != dates[_this.options.language].weekStart)
+				var weekStart = dates[this.options.language].weekStart
+				
+				while(currentDate.getDay() != weekStart)
 				{
 					currentDate.setDate(currentDate.getDate() - 1);
 				}
@@ -178,7 +176,7 @@
 						else {
 							var cellContent = $(document.createElement('div'));
 							cellContent.addClass('day-content');
-							cellContent.text(currentDate.getDate());
+							cellContent[0].innerText = currentDate.getDate();
 							cell.append(cellContent);
 						}
 						
@@ -186,13 +184,17 @@
 						
 						currentDate.setDate(currentDate.getDate() + 1);
 					}
-					while(currentDate.getDay() != dates[_this.options.language].weekStart)
+					while(currentDate.getDay() != weekStart)
 					
 					table.append(row);
 				}
 				
-				$(this).append(table);
-			});
+				monthDiv.append(table);
+				
+				monthsDiv.append(monthDiv);
+			}
+			
+			this.element.append(monthsDiv);
 		},
 		_applyEvents: function () {
 			var _this = this;
@@ -206,7 +208,7 @@
 				_this.element.find('.months-container').animate({'margin-left':'100%'},100, function() {
 					_this.element.find('.months-container').hide();
 					_this.element.find('.months-container').css('margin-left', '0');
-					_this.setYear(_this.options.startYear - 1);
+					setTimeout(function() { _this.setYear(_this.options.startYear - 1) }, 50);
 				});
 				
 			});
@@ -215,23 +217,28 @@
 				_this.element.find('.months-container').animate({'margin-left':'-100%'},100, function() {
 					_this.element.find('.months-container').hide();
 					_this.element.find('.months-container').css('margin-left', '0');
-					_this.setYear(_this.options.startYear + 1);
+					setTimeout(function() { _this.setYear(_this.options.startYear + 1) }, 50);
 				});
 			});
 			
+			var cells = this.element.find('.day:not(.old, .new)');
+			
 			/* Day rendering */
 			if(this.options.renderDay) {
-				this.element.find('.day:not(.old, .new)').each(function() {					
-					_this.options.renderDay({
-						element: $(this).children('.day-content'),
-						date: _this._getDate($(this))
+				this.element.find('.month-container').each(function() {
+					var month = $(this).data('month-id');
+					$(this).find('.day-content').each(function() {
+						_this.options.renderDay({
+							element: $(this),
+							date: new Date(_this.options.startYear, month, $(this).text())
+						});
 					});
 				});
 			}
 			
 			/* Click on date */
 			if(this.options.clickDate) {
-				this.element.find('.day:not(.old, .new)').click(function(e) {					
+				cells.click(function(e) {					
 					e.stopPropagation();
 					_this.options.clickDate({
 						date: _this._getDate($(this))
@@ -241,13 +248,13 @@
 			
 			/* Range selection */
 			if(this.options.selectRange) {
-				this.element.find('td.day:not(.old, .new)').mousedown(function (e) {
+				cells.mousedown(function (e) {
 					_this._mouseDown = true;
 					_this._rangeStart = _this._rangeEnd = _this._getDate($(this));
 					_this._refreshRange();
 				});
 
-				this.element.find('td.day:not(.old, .new)').mouseenter(function (e) {
+				cells.mouseenter(function (e) {
 					if (_this._mouseDown) {
 						var oldValue = _this._rangeEnd;
 						_this._rangeEnd = _this._getDate($(this));

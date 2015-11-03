@@ -93,6 +93,7 @@
 /* Months */
 .calendar .months-container {
 	width:100%;
+	display:none;
 }
 
 .calendar .month-container {
