@@ -20,14 +20,31 @@
  (function($) {
 	var Calendar = function(element, options) {
 		this.element = element;
-		this.options = options;
-			
 		this.element.addClass('calendar');
+		
+		this._initializeOptions(options);
 		this._render();
 	};
  
 	Calendar.prototype = {
 		constructor: Calendar,
+		_initializeOptions(opt) {
+			if(opt == null) {
+				opt = [];
+			}
+		
+			this.options = {
+				startYear: opt.startYear != null ? opt.startYear : new Date().getFullYear(),
+				language: opt.language != null ? opt.language : 'en',
+				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
+				dataSource: opt.dataSource != null ? opt.dataSource : [],
+				renderDay: opt.renderDay,
+				clickDate: opt.clickDate,
+				selectRange: opt.selectRange,
+				mouseOnDate: opt.mouseOnDate,
+				mouseOutDate: opt.mouseOutDate
+			};
+		},
 		_render: function() {
 			console.time("myCode"); // 'myCode' is the namespace
 			this.element.empty();
@@ -252,7 +269,6 @@
 										
 										boxShadow += 'inset 0 -' + (parseInt(i) + 1) * weight + 'px 0 0 ' + dayData[i].color;
 									}
-									
 									$(this).parent().css('box-shadow', boxShadow);
 								}
 							}
@@ -319,16 +335,55 @@
 			if(this.options.selectRange) {
 				cells.mousedown(function (e) {
 					if(e.which == 1) {
-						_this._mouseDown = true;
-						_this._rangeStart = _this._rangeEnd = _this._getDate($(this));
-						_this._refreshRange();
+						var currentDate = _this._getDate($(this));
+					
+						if(_this.options.allowOverlap || _this.getEvents(currentDate).length == 0)
+						{
+							_this._mouseDown = true;
+							_this._rangeStart = _this._rangeEnd = currentDate;
+							_this._refreshRange();
+						}
 					}
 				});
 
 				cells.mouseenter(function (e) {
 					if (_this._mouseDown) {
+						var currentDate = _this._getDate($(this));
+						
+						if(!_this.options.allowOverlap)
+						{
+							var newDate =  new Date(_this._rangeStart.getTime());
+							
+							if(newDate < currentDate) {
+								var nextDate = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate() + 1);
+								while(newDate < currentDate) {
+									if(_this.getEvents(nextDate).length > 0)
+									{
+										break;
+									}
+								
+									newDate.setDate(newDate.getDate() + 1);
+									nextDate.setDate(nextDate.getDate() + 1);
+								}
+							}
+							else {
+								var nextDate = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate() - 1);
+								while(newDate > currentDate) {
+									if(_this.getEvents(nextDate).length > 0)
+									{
+										break;
+									}
+								
+									newDate.setDate(newDate.getDate() - 1);
+									nextDate.setDate(nextDate.getDate() - 1);
+								}
+							}
+							
+							currentDate = newDate;
+						}
+					
 						var oldValue = _this._rangeEnd;
-						_this._rangeEnd = _this._getDate($(this));
+						_this._rangeEnd = currentDate;
 
 						if (oldValue.getTime() != _this._rangeEnd.getTime()) {
 							_this._refreshRange();
