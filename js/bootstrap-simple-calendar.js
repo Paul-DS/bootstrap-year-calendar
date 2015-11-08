@@ -35,6 +35,7 @@
 			
 			this._renderHeader();
 			this._renderBody();
+			this._renderDataSource();
 			
 			this._applyEvents();
 			console.timeEnd("myCode");
@@ -196,6 +197,70 @@
 			
 			this.element.append(monthsDiv);
 		},
+		_renderDataSource: function() {
+			var _this = this;
+			if(this.options.dataSource != null && this.options.dataSource.length > 0) {
+				this.element.find('.month-container').each(function() {
+					var month = $(this).data('month-id');
+					
+					var monthData = [];
+					
+					var firstDate = new Date(_this.options.startYear, month, 1);
+					var lastDate = new Date(_this.options.startYear, month + 1, 0);
+					
+					for(var i in _this.options.dataSource) {
+						if(!(_this.options.dataSource[i].startDate > lastDate) || (_this.options.dataSource[i].endDate < firstDate)) {
+							monthData.push(_this.options.dataSource[i]);
+						}
+					}
+					
+					if(monthData.length > 0) {
+						$(this).find('.day-content').each(function() {
+							var currentDate = new Date(_this.options.startYear, month, $(this).text());
+							
+							var dayData = [];
+						
+							for(var i in monthData) {
+								if(monthData[i].startDate <= currentDate && monthData[i].endDate >= currentDate) {
+									dayData.push(monthData[i]);
+								}
+							}
+							
+							if(dayData.length > 0)
+							{
+								var weight = 0;
+								
+								if(dayData.length == 1) {
+									weight = 4;
+								}
+								else if(dayData.length <= 3) {
+									weight = 2;
+								}
+								else {
+									$(this).parent().css('box-shadow', 'inset 0 -4px 0 0 black');
+								}
+								
+								if(weight > 0)
+								{
+									var boxShadow = '';
+								
+									for(var i in dayData)
+									{
+										if(boxShadow != '') {
+											boxShadow += ",";
+										}
+										
+										boxShadow += 'inset 0 -' + (parseInt(i) + 1) * weight + 'px 0 0 ' + dayData[i].color;
+									}
+									
+									$(this).parent().css('box-shadow', boxShadow);
+								}
+							}
+						});
+					}
+				});
+			}
+		},
 		_applyEvents: function () {
 			var _this = this;
 			
@@ -239,19 +304,23 @@
 			/* Click on date */
 			if(this.options.clickDate) {
 				cells.click(function(e) {					
-					e.stopPropagation();
-					_this.options.clickDate({
-						date: _this._getDate($(this))
-					});
+					if(e.which == 1) {
+						e.stopPropagation();
+						_this.options.clickDate({
+							date: _this._getDate($(this))
+						});
+					}
 				});
 			}
 			
 			/* Range selection */
 			if(this.options.selectRange) {
 				cells.mousedown(function (e) {
-					_this._mouseDown = true;
-					_this._rangeStart = _this._rangeEnd = _this._getDate($(this));
-					_this._refreshRange();
+					if(e.which == 1) {
+						_this._mouseDown = true;
+						_this._rangeStart = _this._rangeEnd = _this._getDate($(this));
+						_this._refreshRange();
+					}
 				});
 
 				cells.mouseenter(function (e) {
