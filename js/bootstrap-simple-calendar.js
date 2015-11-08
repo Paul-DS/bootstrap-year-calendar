@@ -38,12 +38,22 @@
 				language: opt.language != null ? opt.language : 'en',
 				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
 				dataSource: opt.dataSource != null ? opt.dataSource : [],
+				style: opt.style != null ? opt.style : 'border',
 				renderDay: opt.renderDay,
 				clickDate: opt.clickDate,
 				selectRange: opt.selectRange,
 				mouseOnDate: opt.mouseOnDate,
 				mouseOutDate: opt.mouseOutDate
 			};
+			
+			this._initializeDatasourceColors();
+		},
+		_initializeDatasourceColors: function() {
+			for(var i in this.options.dataSource) {
+				if(this.options.dataSource[i].color == null) {
+					this.options.dataSource[i].color = colors[i % colors.length];
+				}
+			}
 		},
 		_render: function() {
 			this.element.empty();
@@ -149,6 +159,7 @@
 				do
 				{
 					var headerCell = $(document.createElement('th'));
+					headerCell.addClass('day-header');
 					headerCell.text(dates[this.options.language].daysMin[d]);
 					
 					headerRow.append(headerCell);
@@ -242,32 +253,43 @@
 							
 							if(dayData.length > 0)
 							{
-								var weight = 0;
-								
-								if(dayData.length == 1) {
-									weight = 4;
-								}
-								else if(dayData.length <= 3) {
-									weight = 2;
-								}
-								else {
-									$(this).parent().css('box-shadow', 'inset 0 -4px 0 0 black');
-								}
-								
-								if(weight > 0)
+								switch(_this.options.style)
 								{
-									var boxShadow = '';
+									case 'border':
+										var weight = 0;
 								
-									for(var i in dayData)
-									{
-										if(boxShadow != '') {
-											boxShadow += ",";
+										if(dayData.length == 1) {
+											weight = 4;
+										}
+										else if(dayData.length <= 3) {
+											weight = 2;
+										}
+										else {
+											$(this).parent().css('box-shadow', 'inset 0 -4px 0 0 black');
 										}
 										
-										boxShadow += 'inset 0 -' + (parseInt(i) + 1) * weight + 'px 0 0 ' + dayData[i].color;
-									}
-									$(this).parent().css('box-shadow', boxShadow);
+										if(weight > 0)
+										{
+											var boxShadow = '';
+										
+											for(var i in dayData)
+											{
+												if(boxShadow != '') {
+													boxShadow += ",";
+												}
+												
+												boxShadow += 'inset 0 -' + (parseInt(i) + 1) * weight + 'px 0 0 ' + dayData[i].color;
+											}
+											$(this).parent().css('box-shadow', boxShadow);
+										}
+										break;
+								
+									case 'background':
+										$(this).parent().css('background-color', dayData[dayData.length - 1].color);
+										break;
 								}
+							
+								
 							}
 						});
 					}
@@ -456,6 +478,11 @@
                 });
             }
         },
+		_getColor: function(colorString) {
+			var div = $('<div />');
+			div.css('color', colorString);
+			
+		},
 		_getDate: function(elt) {
 			var day = elt.children('.day-content').text();
 			var month = elt.closest('.month-container').data('month-id');
@@ -497,4 +524,6 @@
 			weekStart:0
 		}
 	};
+	
+	var colors = $.fn.calendar.colors = ['#2C8FC9', '#9CB703', '#F5BB00', '#FF4A32', '#B56CE2', '#45A597'];
  }(window.jQuery));
