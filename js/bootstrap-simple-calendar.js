@@ -303,10 +303,10 @@
 				case 'border':
 					var weight = 0;
 			
-					if(dayData.length == 1) {
+					if(events.length == 1) {
 						weight = 4;
 					}
-					else if(dayData.length <= 3) {
+					else if(events.length <= 3) {
 						weight = 2;
 					}
 					else {
