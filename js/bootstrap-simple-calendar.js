@@ -547,8 +547,56 @@
 			
 			return events;
 		},
+		getYear: function() {
+			return this.options.startYear;
+		},
 		setYear: function(year) {
 			this.options.startYear = year;
+			this._render();
+		},
+		getMinDate: function() {
+			return this.options.minDate;
+		},
+		setMinDate: function(date) {
+			this.options.minDate = date;
+			this._render();
+		},
+		getMaxDate: function() {
+			return this.options.maxDate;
+		},
+		setMaxDate: function(date) {
+			this.options.maxDate = date;
+			this._render();
+		},
+		getStyle: function() {
+			return this.options.style;
+		},
+		setStyle: function(style) {
+			this.options.style = style;
+			this._render();
+		},
+		getAllowOverlap: function() {
+			return this.options.allowOverlap;
+		},
+		setAllowOverlap: function(allowOverlap) {
+			this.options.allowOverlap = allowOverlap;
+		},
+		getLanguage: function() {
+			return this.options.language;
+		},
+		setLanguage: function(language) {
+			this.options.language = language;
+			this._render();
+		},
+		getDataSource: function() {
+			return this.options.dataSource;
+		},
+		setDataSource: function(dataSource) {
+			this.options.dataSource = dataSource;
+			this._render();
+		},
+		addEvent: function(evt) {
+			this.options.dataSource.push(evt);
 			this._render();
 		}
 	}
