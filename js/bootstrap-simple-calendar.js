@@ -46,16 +46,13 @@
 			};
 		},
 		_render: function() {
-			console.time("myCode"); // 'myCode' is the namespace
 			this.element.empty();
-			
 			
 			this._renderHeader();
 			this._renderBody();
 			this._renderDataSource();
 			
 			this._applyEvents();
-			console.timeEnd("myCode");
 			this.element.find('.months-container').fadeIn(500);
 		},
 		_renderHeader: function() {
@@ -496,7 +493,8 @@
 			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
 			daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
 			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-			monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+			monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+			weekStart:0
 		}
 	};
  }(window.jQuery));
