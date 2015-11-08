@@ -303,11 +303,13 @@
 			
 			/* Click on date */
 			if(this.options.clickDate) {
-				cells.click(function(e) {					
+				cells.click(function(e) {
 					if(e.which == 1) {
 						e.stopPropagation();
+						var date = _this._getDate($(this));
 						_this.options.clickDate({
-							date: _this._getDate($(this))
+							date: date,
+							events: _this.getEvents(date)
 						});
 					}
 				});
@@ -344,6 +346,27 @@
 
 						_this.options.selectRange({ startDate: minDate, endDate: maxDate });
 					}
+				});
+			}
+		
+			/* Hover date */
+			if(this.options.mouseOnDate) {
+				cells.mouseenter(function(e) {
+					var date = _this._getDate($(this));
+					_this.options.mouseOnDate({
+						date: date,
+						events: _this.getEvents(date)
+					});
+				});
+			}
+			
+			if(this.options.mouseOutDate) {
+				cells.mouseleave(function(e) {
+					var date = _this.mouseOutDate($(this));
+					_this.options.mouseOnDate({
+						date: date,
+						events: _this.getEvents(date)
+					});
 				});
 			}
 		},
@@ -387,6 +410,19 @@
 			var year = this.options.startYear;
 
 			return new Date(year, month, day);
+		},
+		getEvents: function(date) {
+			var events = [];
+			
+			if(this.options.dataSource && date) {
+				for(var i in this.options.dataSource) {
+					if(this.options.dataSource[i].startDate <= date && this.options.dataSource[i].endDate >= date) {
+						events.push(this.options.dataSource[i]);
+					}
+				}
+			}
+			
+			return events;
 		},
 		setYear: function(year) {
 			this.options.startYear = year;
