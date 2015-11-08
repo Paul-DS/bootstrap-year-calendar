@@ -470,11 +470,14 @@
 			/* Hover date */
 			if(this.options.mouseOnDate) {
 				cells.mouseenter(function(e) {
-					var date = _this._getDate($(this));
-					_this.options.mouseOnDate({
-						date: date,
-						events: _this.getEvents(date)
-					});
+					if(!_this._mouseDown)
+					{
+						var date = _this._getDate($(this));
+						_this.options.mouseOnDate({
+							date: date,
+							events: _this.getEvents(date)
+						});
+					}
 				});
 			}
 			
