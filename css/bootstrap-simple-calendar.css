@@ -68,6 +68,13 @@
   cursor: pointer;
 }
 
+.calendar .calendar-header table th.disabled,
+.calendar .calendar-header table th.disabled:hover {
+  background: none;
+  cursor: default;
+  color:white;
+}
+
 .calendar .calendar-header table th.prev,
 .calendar .calendar-header table th.next
 {
@@ -147,9 +154,12 @@
 }
 .calendar table.month tr td.disabled,
 .calendar table.month tr td.disabled:hover {
-  background: none;
-  color: #999999;
-  cursor: default;
+  color: #dddddd;
+}
+
+.calendar table.month td.day.disabled .day-content:hover {
+	background: none;
+	cursor: default;
 }
 
 .calendar table.month tr td.range .day-content {

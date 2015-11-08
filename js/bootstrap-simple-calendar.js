@@ -35,6 +35,8 @@
 		
 			this.options = {
 				startYear: opt.startYear != null ? opt.startYear : new Date().getFullYear(),
+				minDate: opt.minDate,
+				maxDate: opt.maxDate,
 				language: opt.language != null ? opt.language : 'en',
 				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
 				dataSource: opt.dataSource != null ? opt.dataSource : [],
@@ -74,6 +76,10 @@
 			var prevDiv = $(document.createElement('th'));
 			prevDiv.addClass('prev');
 			
+			if(this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 1, 11, 31)) {
+				prevDiv.addClass('disabled');
+			}
+			
 			var prevIcon = $(document.createElement('span'));
 			prevIcon.addClass('glyphicon glyphicon-chevron-left');
 			
@@ -85,11 +91,19 @@
 			prev2YearDiv.addClass('year-title year-neighbor2 hidden-sm hidden-xs');
 			prev2YearDiv.text(this.options.startYear - 2);
 			
+			if(this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 2, 11, 31)) {
+				prev2YearDiv.addClass('disabled');
+			}
+			
 			headerTable.append(prev2YearDiv);
 			
 			var prevYearDiv = $(document.createElement('th'));
 			prevYearDiv.addClass('year-title year-neighbor hidden-xs');
 			prevYearDiv.text(this.options.startYear - 1);
+			
+			if(this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 1, 11, 31)) {
+				prevYearDiv.addClass('disabled');
+			}
 			
 			headerTable.append(prevYearDiv);
 			
@@ -103,16 +117,28 @@
 			nextYearDiv.addClass('year-title year-neighbor hidden-xs');
 			nextYearDiv.text(this.options.startYear + 1);
 			
+			if(this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 1, 0, 1)) {
+				nextYearDiv.addClass('disabled');
+			}
+			
 			headerTable.append(nextYearDiv);
 			
 			var next2YearDiv = $(document.createElement('th'));
 			next2YearDiv.addClass('year-title year-neighbor2 hidden-sm hidden-xs');
 			next2YearDiv.text(this.options.startYear + 2);
 			
+			if(this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 2, 0, 1)) {
+				next2YearDiv.addClass('disabled');
+			}
+			
 			headerTable.append(next2YearDiv);
 			
 			var nextDiv = $(document.createElement('th'));
 			nextDiv.addClass('next');
+			
+			if(this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 1, 0, 1)) {
+				nextDiv.addClass('disabled');
+			}
 			
 			var nextIcon = $(document.createElement('span'));
 			nextIcon.addClass('glyphicon glyphicon-chevron-right');
@@ -200,6 +226,11 @@
 							cell.addClass('new');
 						}
 						else {
+							if((this.options.minDate != null && currentDate < this.options.minDate) || (this.options.maxDate != null && currentDate > this.options.maxDate))
+							{
+								cell.addClass('disabled');
+							}
+						
 							var cellContent = $(document.createElement('div'));
 							cellContent.addClass('day-content');
 							cellContent[0].innerText = currentDate.getDate();
@@ -228,72 +259,80 @@
 				this.element.find('.month-container').each(function() {
 					var month = $(this).data('month-id');
 					
-					var monthData = [];
-					
 					var firstDate = new Date(_this.options.startYear, month, 1);
 					var lastDate = new Date(_this.options.startYear, month + 1, 0);
 					
-					for(var i in _this.options.dataSource) {
-						if(!(_this.options.dataSource[i].startDate > lastDate) || (_this.options.dataSource[i].endDate < firstDate)) {
-							monthData.push(_this.options.dataSource[i]);
+					if((_this.options.minDate == null || lastDate >= _this.options.minDate) && (_this.options.maxDate == null || firstDate <= _this.options.maxDate))
+					{
+						var monthData = [];
+					
+						for(var i in _this.options.dataSource) {
+							if(!(_this.options.dataSource[i].startDate > lastDate) || (_this.options.dataSource[i].endDate < firstDate)) {
+								monthData.push(_this.options.dataSource[i]);
+							}
+						}
+						
+						if(monthData.length > 0) {
+							$(this).find('.day-content').each(function() {
+								var currentDate = new Date(_this.options.startYear, month, $(this).text());
+								
+								var dayData = [];
+								
+								if((_this.options.minDate == null || currentDate >= _this.options.minDate) && (_this.options.maxDate == null || currentDate <= _this.options.maxDate))
+								{
+									for(var i in monthData) {
+										if(monthData[i].startDate <= currentDate && monthData[i].endDate >= currentDate) {
+											dayData.push(monthData[i]);
+										}
+									}
+									
+									if(dayData.length > 0)
+									{
+										_this._renderDataSourceDay($(this), dayData);
+									}
+								}
+							});
 						}
 					}
-					
-					if(monthData.length > 0) {
-						$(this).find('.day-content').each(function() {
-							var currentDate = new Date(_this.options.startYear, month, $(this).text());
-							
-							var dayData = [];
-						
-							for(var i in monthData) {
-								if(monthData[i].startDate <= currentDate && monthData[i].endDate >= currentDate) {
-									dayData.push(monthData[i]);
-								}
-							}
-							
-							if(dayData.length > 0)
-							{
-								switch(_this.options.style)
-								{
-									case 'border':
-										var weight = 0;
-								
-										if(dayData.length == 1) {
-											weight = 4;
-										}
-										else if(dayData.length <= 3) {
-											weight = 2;
-										}
-										else {
-											$(this).parent().css('box-shadow', 'inset 0 -4px 0 0 black');
-										}
-										
-										if(weight > 0)
-										{
-											var boxShadow = '';
-										
-											for(var i in dayData)
-											{
-												if(boxShadow != '') {
-													boxShadow += ",";
-												}
-												
-												boxShadow += 'inset 0 -' + (parseInt(i) + 1) * weight + 'px 0 0 ' + dayData[i].color;
-											}
-											$(this).parent().css('box-shadow', boxShadow);
-										}
-										break;
-								
-									case 'background':
-										$(this).parent().css('background-color', dayData[dayData.length - 1].color);
-										break;
-								}
-							
-								
-							}
-						});
-					}
 				});
+			}
+		},
+		_renderDataSourceDay: function(elt, events) {
+			switch(this.options.style)
+			{
+				case 'border':
+					var weight = 0;
+			
+					if(dayData.length == 1) {
+						weight = 4;
+					}
+					else if(dayData.length <= 3) {
+						weight = 2;
+					}
+					else {
+						elt.parent().css('box-shadow', 'inset 0 -4px 0 0 black');
+					}
+					
+					if(weight > 0)
+					{
+						var boxShadow = '';
+					
+						for(var i in events)
+						{
+							if(boxShadow != '') {
+								boxShadow += ",";
+							}
+							
+							boxShadow += 'inset 0 -' + (parseInt(i) + 1) * weight + 'px 0 0 ' + events[i].color;
+						}
+						
+						elt.parent().css('box-shadow', boxShadow);
+					}
+					break;
+			
+				case 'background':
+					elt.parent().css('background-color', events[events.length - 1].color);
+					break;
 			}
 		},
 		_applyEvents: function () {
@@ -301,27 +340,32 @@
 			
 			/* Header buttons */
 			this.element.find('.year-neighbor, .year-neighbor2').click(function() {
-				_this.setYear(parseInt($(this).text()));
+				if(!$(this).hasClass('disabled')) {
+					_this.setYear(parseInt($(this).text()));
+				}
 			});
 			
 			this.element.find('.calendar-header .prev').click(function() {
-				_this.element.find('.months-container').animate({'margin-left':'100%'},100, function() {
-					_this.element.find('.months-container').hide();
-					_this.element.find('.months-container').css('margin-left', '0');
-					setTimeout(function() { _this.setYear(_this.options.startYear - 1) }, 50);
-				});
-				
+				if(!$(this).hasClass('disabled')) {
+					_this.element.find('.months-container').animate({'margin-left':'100%'},100, function() {
+						_this.element.find('.months-container').hide();
+						_this.element.find('.months-container').css('margin-left', '0');
+						setTimeout(function() { _this.setYear(_this.options.startYear - 1) }, 50);
+					});
+				}
 			});
 			
 			this.element.find('.calendar-header .next').click(function() {
-				_this.element.find('.months-container').animate({'margin-left':'-100%'},100, function() {
-					_this.element.find('.months-container').hide();
-					_this.element.find('.months-container').css('margin-left', '0');
-					setTimeout(function() { _this.setYear(_this.options.startYear + 1) }, 50);
-				});
+				if(!$(this).hasClass('disabled')) {
+					_this.element.find('.months-container').animate({'margin-left':'-100%'},100, function() {
+						_this.element.find('.months-container').hide();
+						_this.element.find('.months-container').css('margin-left', '0');
+						setTimeout(function() { _this.setYear(_this.options.startYear + 1) }, 50);
+					});
+				}
 			});
 			
-			var cells = this.element.find('.day:not(.old, .new)');
+			var cells = this.element.find('.day:not(.old, .new, .disabled)');
 			
 			/* Day rendering */
 			if(this.options.renderDay) {
