@@ -387,6 +387,7 @@
 					e.stopPropagation();
 					var date = _this._getDate($(this));
 					_this.options.clickDate({
+						element: $(this),
 						which: e.which,
 						date: date,
 						events: _this.getEvents(date)
@@ -400,6 +401,7 @@
 					e.preventDefault();
 					var date = _this._getDate($(this));
 					_this.options.contextMenu({
+						element: $(this),
 						date: date,
 						events: _this.getEvents(date)
 					});
