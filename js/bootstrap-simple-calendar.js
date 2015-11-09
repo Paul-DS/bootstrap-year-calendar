@@ -43,6 +43,7 @@
 				style: opt.style != null ? opt.style : 'border',
 				renderDay: opt.renderDay,
 				clickDate: opt.clickDate,
+				contextMenu: opt.contextMenu,
 				selectRange: opt.selectRange,
 				mouseOnDate: opt.mouseOnDate,
 				mouseOutDate: opt.mouseOutDate
@@ -383,14 +384,25 @@
 			/* Click on date */
 			if(this.options.clickDate) {
 				cells.click(function(e) {
-					if(e.which == 1) {
-						e.stopPropagation();
-						var date = _this._getDate($(this));
-						_this.options.clickDate({
-							date: date,
-							events: _this.getEvents(date)
-						});
-					}
+					e.stopPropagation();
+					var date = _this._getDate($(this));
+					_this.options.clickDate({
+						which: e.which,
+						date: date,
+						events: _this.getEvents(date)
+					});
+				});
+			}
+			
+			/* Click right on date */
+			if(this.options.contextMenu) {
+				cells.bind('contextmenu', function(e) {
+					e.preventDefault();
+					var date = _this._getDate($(this));
+					_this.options.contextMenu({
+						date: date,
+						events: _this.getEvents(date)
+					});
 				});
 			}
 			
