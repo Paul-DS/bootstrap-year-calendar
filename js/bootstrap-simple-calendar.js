@@ -474,6 +474,7 @@
 					{
 						var date = _this._getDate($(this));
 						_this.options.mouseOnDate({
+							element: $(this),
 							date: date,
 							events: _this.getEvents(date)
 						});
@@ -485,6 +486,7 @@
 				cells.mouseleave(function(e) {
 					var date = _this.mouseOutDate($(this));
 					_this.options.mouseOnDate({
+						element: $(this),
 						date: date,
 						events: _this.getEvents(date)
 					});
