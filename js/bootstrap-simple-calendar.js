@@ -484,7 +484,7 @@
 			
 			if(this.options.mouseOutDate) {
 				cells.mouseleave(function(e) {
-					var date = _this.mouseOutDate($(this));
+					var date = _this._getDate($(this));
 					_this.options.mouseOnDate({
 						element: $(this),
 						date: date,
