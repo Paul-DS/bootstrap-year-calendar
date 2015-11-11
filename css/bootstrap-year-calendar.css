@@ -108,6 +108,7 @@
 	min-width:180px;
 	text-align:center;
 	height:200px;
+	padding:0;
 }
 
 .calendar table.month th.month-title

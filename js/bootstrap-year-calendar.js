@@ -163,7 +163,7 @@
 			for(var m = 0; m < 12; m++) {
 				/* Container */
 				var monthDiv = $(document.createElement('div'));
-				monthDiv.addClass('month-container col-lg-2 col-md-3 col-sm-3 col-xs-4')
+				monthDiv.addClass('month-container');
 				monthDiv.data('month-id', m);
 				
 				var firstDate = new Date(this.options.startYear, m, 1);
@@ -531,6 +531,32 @@
 					});
 				});
 			}
+			
+			/* Responsive management */
+			
+			setInterval(function() {
+				var calendarSize = $(_this.element).width();
+				var monthSize = $(_this.element).find('.month').first().width() + 10;
+				var monthContainerClass = 'month-container';
+				
+				if(monthSize * 6 < calendarSize) {
+					monthContainerClass += ' col-xs-2';
+				}
+				else if(monthSize * 4 < calendarSize) {
+					monthContainerClass += ' col-xs-3';
+				}
+				else if(monthSize * 3 < calendarSize) {
+					monthContainerClass += ' col-xs-4';
+				}
+				else if(monthSize * 2 < calendarSize) {
+					monthContainerClass += ' col-xs-6';
+				}
+				else {
+					monthContainerClass += ' col-xs-12';
+				}
+				
+				$(_this.element).find('.month-container').attr('class', monthContainerClass);
+			}, 300);
 		},
 		_refreshRange: function () {
 			var _this = this;
