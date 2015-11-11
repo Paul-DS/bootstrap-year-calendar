@@ -177,3 +177,47 @@
   border-top-right-radius:4px;
   border-bottom-right-radius:4px;
 }
+
+.calendar-context-menu,
+.calendar-context-menu  .submenu {
+	border: 1px solid #ddd;
+	background-color: white;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, .2);
+	-webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, .2);
+	position:absolute;
+	display:none;
+}
+
+.calendar-context-menu .item {
+	padding:5px 10px;
+	cursor:pointer;
+	display:table;
+	width:100%;
+}
+
+.calendar-context-menu .item:hover {
+	background:#eee;
+}
+
+.calendar-context-menu .item .content {
+	display:table-cell;
+}
+
+.calendar-context-menu .item span {
+	display:table-cell;
+	padding-left:10px;
+	text-align:right;
+}
+
+.calendar-context-menu .item span:last-child {
+	display:none;
+}
+
+.calendar-context-menu  .submenu {
+	left: 100%;
+	margin-top: -6px;
+}
+
+.calendar-context-menu  .item:hover > .submenu {
+	display:block;
+}

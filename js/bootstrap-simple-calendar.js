@@ -41,6 +41,9 @@
 				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
 				dataSource: opt.dataSource != null ? opt.dataSource : [],
 				style: opt.style != null ? opt.style : 'border',
+				contextMenuEnabled: opt.contextMenuEnabled != null ? opt.contextMenuEnabled : false,
+				contextMenuItems: opt.contextMenuItems != null ? opt.contextMenuItems : [],
+				/* Events */
 				renderDay: opt.renderDay,
 				clickDate: opt.clickDate,
 				contextMenu: opt.contextMenu,
@@ -396,15 +399,22 @@
 			}
 			
 			/* Click right on date */
-			if(this.options.contextMenu) {
+			if(this.options.contextMenuEnabled) {
 				cells.bind('contextmenu', function(e) {
 					e.preventDefault();
-					var date = _this._getDate($(this));
-					_this.options.contextMenu({
-						element: $(this),
-						date: date,
-						events: _this.getEvents(date)
-					});
+					if(_this.options.contextMenu)
+					{
+						var date = _this._getDate($(this));
+						_this.options.contextMenu({
+							element: $(this),
+							date: date,
+							events: _this.getEvents(date)
+						});
+					}
+					else
+					{
+						_this._openContextMenu($(this));
+					}
 				});
 			}
 			
@@ -541,6 +551,95 @@
                 });
             }
         },
+		_openContextMenu: function(elt) {
+			var contextMenu = $('.calendar-context-menu');
+			
+			if(contextMenu.length > 0) {
+				contextMenu.hide();
+				contextMenu.empty();
+			}
+			else {
+				contextMenu = $(document.createElement('div'));
+				contextMenu.addClass('calendar-context-menu');
+				$('body').append(contextMenu);
+			}
+			
+			var date = this._getDate(elt);
+			var events = this.getEvents(date);
+			
+			for(var i in events) {
+				var eventItem = $(document.createElement('div'));
+				eventItem.addClass('item');
+				eventItem.css('border-left', '4px solid ' + events[i].color);
+				
+				var eventItemContent = $(document.createElement('div'));
+				eventItemContent.addClass('content');
+				eventItemContent.text(events[i].name);
+				
+				eventItem.append(eventItemContent);
+				
+				var icon = $(document.createElement('span'));
+				icon.addClass('glyphicon glyphicon-chevron-right');
+				
+				eventItem.append(icon);
+				
+				this._renderContextMenuItems(eventItem, this.options.contextMenuItems, events[i]);
+				
+				contextMenu.append(eventItem);
+			}
+			
+			if(contextMenu.children().length > 0)
+			{
+				contextMenu.css('left', elt.offset().left + 25 + 'px');
+				contextMenu.css('top', elt.offset().top + 25 + 'px');
+				contextMenu.show();
+				
+				$(window).one('mouseup', function() {
+					contextMenu.hide();
+				});
+			}
+		},
+		_renderContextMenuItems: function(parent, items, evt) {
+			var subMenu = $(document.createElement('div'));
+			subMenu.addClass('submenu');
+			
+			for(var i in items) {
+				if(!items[i].visible || items[i].visible(evt)) {
+					var menuItem = $(document.createElement('div'));
+					menuItem.addClass('item');
+					
+					var menuItemContent = $(document.createElement('div'));
+					menuItemContent.addClass('content');
+					menuItemContent.text(items[i].text);
+					
+					menuItem.append(menuItemContent);
+					
+					if(items[i].click) {
+						(function(index) {
+							menuItem.click(function() {
+								items[index].click(evt);
+							});
+						})(i);
+					}
+					
+					var icon = $(document.createElement('span'));
+					icon.addClass('glyphicon glyphicon-chevron-right');
+					
+					menuItem.append(icon);
+					
+					if(items[i].items && items[i].items.length > 0) {
+						this._renderContextMenuItems(menuItem, items[i].items, evt);
+					}
+					
+					subMenu.append(menuItem);
+				}
+			}
+			
+			if(subMenu.children().length > 0)
+			{
+				parent.append(subMenu);
+			}
+		},
 		_getColor: function(colorString) {
 			var div = $('<div />');
 			div.css('color', colorString);
