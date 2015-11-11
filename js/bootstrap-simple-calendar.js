@@ -612,6 +612,7 @@
 		},
 		setDataSource: function(dataSource) {
 			this.options.dataSource = dataSource;
+			this._initializeDatasourceColors();
 			this._render();
 		},
 		addEvent: function(evt) {
