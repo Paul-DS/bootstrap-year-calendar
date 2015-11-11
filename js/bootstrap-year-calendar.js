@@ -39,6 +39,7 @@
 				maxDate: opt.maxDate,
 				language: opt.language != null ? opt.language : 'en',
 				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
+				displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
 				dataSource: opt.dataSource != null ? opt.dataSource : [],
 				style: opt.style != null ? opt.style : 'border',
 				contextMenuEnabled: opt.contextMenuEnabled != null ? opt.contextMenuEnabled : false,
@@ -177,13 +178,20 @@
 				
 				var titleCell = $(document.createElement('th'));
 				titleCell.addClass('month-title');
-				titleCell.attr('colspan', 7);
+				titleCell.attr('colspan', this.options.displayWeekNumber ? 8 : 7);
 				titleCell.text(dates[this.options.language].months[m]);
 				
 				titleRow.append(titleCell);
 				thead.append(titleRow);
 				
 				var headerRow = $(document.createElement('tr'));
+				
+				if(this.options.displayWeekNumber) {
+					var weekNumberCell = $(document.createElement('th'));
+					weekNumberCell.addClass('week-number');
+					weekNumberCell.text('W')
+					headerRow.append(weekNumberCell);
+				}
 				
 				var d = dates[this.options.language].weekStart;
 				do
@@ -217,6 +225,13 @@
 				while(currentDate < lastDate)
 				{
 					var row = $(document.createElement('tr'));
+					
+					if(this.options.displayWeekNumber) {
+						var weekNumberCell = $(document.createElement('td'));
+						weekNumberCell.addClass('week-number');
+						weekNumberCell.text(this.getWeekNumber(currentDate));
+						row.append(weekNumberCell);
+					}
 				
 					do
 					{
@@ -651,6 +666,13 @@
 			var year = this.options.startYear;
 
 			return new Date(year, month, day);
+		},
+		getWeekNumber: function(date) {
+			var tempDate = new Date(date.getTime());
+			tempDate.setHours(0, 0, 0, 0);
+			tempDate.setDate(tempDate.getDate() + 3 - (tempDate.getDay() + 6) % 7);
+			var week1 = new Date(tempDate.getFullYear(), 0, 4);
+			return 1 + Math.round(((tempDate.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
 		},
 		getEvents: function(date) {
 			var events = [];
