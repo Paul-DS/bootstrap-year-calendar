@@ -737,4 +737,10 @@
 	};
 	
 	var colors = $.fn.calendar.colors = ['#2C8FC9', '#9CB703', '#F5BB00', '#FF4A32', '#B56CE2', '#45A597'];
+	
+	$(function(){
+		$('[data-provide="calendar"]').each(function() {
+			$(this).calendar();
+		});
+	});
  }(window.jQuery));
