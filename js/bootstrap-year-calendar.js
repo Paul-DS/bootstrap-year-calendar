@@ -28,7 +28,7 @@
  
 	Calendar.prototype = {
 		constructor: Calendar,
-		_initializeOptions(opt) {
+		_initializeOptions: function(opt) {
 			if(opt == null) {
 				opt = [];
 			}
