@@ -40,6 +40,7 @@
 				language: opt.language != null ? opt.language : 'en',
 				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
 				displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
+				disableDays: opt.disableDays ? opt.disableDays : [],
 				dataSource: opt.dataSource != null ? opt.dataSource : [],
 				style: opt.style != null ? opt.style : 'border',
 				contextMenuEnabled: opt.contextMenuEnabled != null ? opt.contextMenuEnabled : false,
@@ -248,6 +249,14 @@
 							if((this.options.minDate != null && currentDate < this.options.minDate) || (this.options.maxDate != null && currentDate > this.options.maxDate))
 							{
 								cell.addClass('disabled');
+							}
+							else if(this.options.disableDays.length > 0) {
+								for(var d in this.options.disableDays){
+									if(currentDate.getTime() == this.options.disableDays[d].getTime()) {
+										cell.addClass('disabled');
+										break;
+									}
+								}
 							}
 						
 							var cellContent = $(document.createElement('div'));
@@ -746,6 +755,13 @@
 		},
 		setAllowOverlap: function(allowOverlap) {
 			this.options.allowOverlap = allowOverlap;
+		},
+		getDisableDays: function() {
+			return this.options.disableDays;
+		},
+		setDisableDays: function(disableDays) {
+			this.options.disableDays = disableDays;
+			this._render();
 		},
 		getLanguage: function() {
 			return this.options.language;
