@@ -756,11 +756,32 @@
 		setAllowOverlap: function(allowOverlap) {
 			this.options.allowOverlap = allowOverlap;
 		},
+		getDisplayWeekNumber: function() {
+			return this.options.displayWeekNumber;
+		},
+		setDisplayWeekNumber: function(displayWeekNumber) {
+			this.options.displayWeekNumber = displayWeekNumber;
+			this._render();
+		},
 		getDisableDays: function() {
 			return this.options.disableDays;
 		},
 		setDisableDays: function(disableDays) {
 			this.options.disableDays = disableDays;
+			this._render();
+		},
+		getContextMenuEnabled: function() {
+			return this.options.contextMenuEnabled;
+		},
+		setContextMenuEnabled: function(contextMenuEnabled) {
+			this.options.contextMenuEnabled = contextMenuEnabled;
+			this._render();
+		},
+		getContextMenuItems: function() {
+			return this.options.contextMenuItems;
+		},
+		setContextMenuItems: function(contextMenuItems) {
+			this.options.contextMenuItems = contextMenuItems;
 			this._render();
 		},
 		getLanguage: function() {
