@@ -35,18 +35,18 @@
 			}
 		
 			this.options = {
-				startYear: opt.startYear != null ? opt.startYear : new Date().getFullYear(),
-				minDate: opt.minDate,
-				maxDate: opt.maxDate,
-				language: opt.language != null ? opt.language : 'en',
+				startYear: !isNaN(parseInt(opt.startYear)) ? parseInt(opt.startYear) : new Date().getFullYear(),
+				minDate: opt.minDate instanceof Date ? opt.minDate : null,
+				maxDate: opt.maxDate instanceof Date ? opt.maxDate : null,
+				language: (opt.language != null && dates[opt.language] != null) ? opt.language : 'en',
 				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
 				displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
 				enableRangeSelection: opt.enableRangeSelection != null ? opt.enableRangeSelection : false,
-				disableDays: opt.disableDays ? opt.disableDays : [],
-				dataSource: opt.dataSource != null ? opt.dataSource : [],
-				style: opt.style != null ? opt.style : 'border',
+				disableDays: opt.disableDays instanceof Array ? opt.disableDays : [],
+				dataSource: opt.dataSource instanceof Array != null ? opt.dataSource : [],
+				style: opt.style == 'background' ? 'background' : 'border',
 				enableContextMenu: opt.enableContextMenu != null ? opt.enableContextMenu : false,
-				contextMenuItems: opt.contextMenuItems != null ? opt.contextMenuItems : []
+				contextMenuItems: opt.contextMenuItems instanceof Array ? opt.contextMenuItems : []
 			};
 			
 			this._initializeDatasourceColors();
@@ -736,28 +736,35 @@
 			return this.options.startYear;
 		},
 		setYear: function(year) {
-			this.options.startYear = year;
-			this._render();
+			var parsedYear = parseInt(year);
+			if(!isNaN(parsedYear)) {
+				this.options.startYear = parsedYear;
+				this._render();
+			}
 		},
 		getMinDate: function() {
 			return this.options.minDate;
 		},
 		setMinDate: function(date) {
-			this.options.minDate = date;
-			this._render();
+			if(date instanceof Date) {
+				this.options.minDate = date;
+				this._render();
+			}
 		},
 		getMaxDate: function() {
 			return this.options.maxDate;
 		},
 		setMaxDate: function(date) {
-			this.options.maxDate = date;
-			this._render();
+			if(date instanceof Date) {
+				this.options.maxDate = date;
+				this._render();
+			}
 		},
 		getStyle: function() {
 			return this.options.style;
 		},
 		setStyle: function(style) {
-			this.options.style = style;
+			this.options.style = style == 'background' ? 'background' : 'border';
 			this._render();
 		},
 		getAllowOverlap: function() {
@@ -784,7 +791,7 @@
 			return this.options.disableDays;
 		},
 		setDisableDays: function(disableDays) {
-			this.options.disableDays = disableDays;
+			this.options.disableDays = disableDays instanceof Array ? disableDays : [];
 			this._render();
 		},
 		getEnableContextMenu: function() {
@@ -798,21 +805,23 @@
 			return this.options.contextMenuItems;
 		},
 		setContextMenuItems: function(contextMenuItems) {
-			this.options.contextMenuItems = contextMenuItems;
+			this.options.contextMenuItems = contextMenuItems instanceof Array ? contextMenuItems : [];
 			this._render();
 		},
 		getLanguage: function() {
 			return this.options.language;
 		},
 		setLanguage: function(language) {
-			this.options.language = language;
-			this._render();
+			if(language != null && dates[language] != null) {
+				this.options.language = language;
+				this._render();
+			}
 		},
 		getDataSource: function() {
 			return this.options.dataSource;
 		},
 		setDataSource: function(dataSource) {
-			this.options.dataSource = dataSource;
+			this.options.dataSource = dataSource instanceof Array ? dataSource : [];
 			this._initializeDatasourceColors();
 			this._render();
 		},
