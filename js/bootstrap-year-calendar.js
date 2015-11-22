@@ -1,5 +1,5 @@
 /* =========================================================
- * bootstrap-simple-calender.js
+ * Bootstrap year calendar v1.0
  * Repo: https://github.com/Paul-DS/bootstrap-simple-calendar
  * =========================================================
  * Created by Paul David-Sivelle
@@ -22,6 +22,7 @@
 		this.element = element;
 		this.element.addClass('calendar');
 		
+		this._initializeEvents(options);
 		this._initializeOptions(options);
 		this._render();
 	};
@@ -40,22 +41,28 @@
 				language: opt.language != null ? opt.language : 'en',
 				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
 				displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
+				enableRangeSelection: opt.enableRangeSelection != null ? opt.enableRangeSelection : false,
 				disableDays: opt.disableDays ? opt.disableDays : [],
 				dataSource: opt.dataSource != null ? opt.dataSource : [],
 				style: opt.style != null ? opt.style : 'border',
-				contextMenuEnabled: opt.contextMenuEnabled != null ? opt.contextMenuEnabled : false,
-				contextMenuItems: opt.contextMenuItems != null ? opt.contextMenuItems : [],
-				/* Events */
-				renderEnd: opt.renderEnd,
-				renderDay: opt.renderDay,
-				clickDate: opt.clickDate,
-				contextMenu: opt.contextMenu,
-				selectRange: opt.selectRange,
-				mouseOnDate: opt.mouseOnDate,
-				mouseOutDate: opt.mouseOutDate
+				enableContextMenu: opt.enableContextMenu != null ? opt.enableContextMenu : false,
+				contextMenuItems: opt.contextMenuItems != null ? opt.contextMenuItems : []
 			};
 			
 			this._initializeDatasourceColors();
+		},
+		_initializeEvents: function(opt) {
+			if(opt == null) {
+				opt = [];
+			}
+		
+			if(opt.renderEnd) { this.element.bind('renderEnd', opt.renderEnd); }
+			if(opt.renderDay) { this.element.bind('renderDay', opt.renderDay); }
+			if(opt.clickDate) { this.element.bind('clickDate', opt.clickDate); }
+			if(opt.dayContextMenu) { this.element.bind('dayContextMenu', opt.dayContextMenu); }
+			if(opt.selectRange) { this.element.bind('selectRange', opt.selectRange); }
+			if(opt.mouseOnDate) { this.element.bind('mouseOnDate', opt.mouseOnDate); }
+			if(opt.mouseOutDate) { this.element.bind('mouseOutDate', opt.mouseOutDate); }
 		},
 		_initializeDatasourceColors: function() {
 			for(var i in this.options.dataSource) {
@@ -74,10 +81,7 @@
 			this._applyEvents();
 			this.element.find('.months-container').fadeIn(500);
 			
-			if(this.options.renderEnd)
-			{
-				this.options.renderEnd({ currentYear: this.options.startYear });
-			}
+			this._triggerEvent('renderEnd', { currentYear: this.options.startYear });
 		},
 		_renderHeader: function() {
 			var header = $(document.createElement('div'));
@@ -402,54 +406,49 @@
 			var cells = this.element.find('.day:not(.old, .new, .disabled)');
 			
 			/* Day rendering */
-			if(this.options.renderDay) {
-				this.element.find('.month-container').each(function() {
-					var month = $(this).data('month-id');
-					$(this).find('.day-content').each(function() {
-						_this.options.renderDay({
-							element: $(this),
-							date: new Date(_this.options.startYear, month, $(this).text())
-						});
+			this.element.find('.month-container').each(function() {
+				var month = $(this).data('month-id');
+				$(this).find('.day-content').each(function() {
+					_this._triggerEvent('renderDay', {
+						element: $(this),
+						date: new Date(_this.options.startYear, month, $(this).text())
 					});
 				});
-			}
+			});
 			
 			/* Click on date */
-			if(this.options.clickDate) {
-				cells.click(function(e) {
-					e.stopPropagation();
+			cells.click(function(e) {
+				e.stopPropagation();
+				var date = _this._getDate($(this));
+				_this._triggerEvent('clickDate', {
+					element: $(this),
+					which: e.which,
+					date: date,
+					events: _this.getEvents(date)
+				});
+			});
+			
+			/* Click right on date */
+			if(this.options.enableContextMenu)
+			{
+				cells.bind('contextmenu', function(e) {
+					e.preventDefault();
+					if(_this.options.contextMenuItems.length > 0)
+					{
+						_this._openContextMenu($(this));
+					}
+					
 					var date = _this._getDate($(this));
-					_this.options.clickDate({
+					_this._triggerEvent('dayContextMenu', {
 						element: $(this),
-						which: e.which,
 						date: date,
 						events: _this.getEvents(date)
 					});
 				});
 			}
 			
-			/* Click right on date */
-			if(this.options.contextMenuEnabled) {
-				cells.bind('contextmenu', function(e) {
-					e.preventDefault();
-					if(_this.options.contextMenu)
-					{
-						var date = _this._getDate($(this));
-						_this.options.contextMenu({
-							element: $(this),
-							date: date,
-							events: _this.getEvents(date)
-						});
-					}
-					else
-					{
-						_this._openContextMenu($(this));
-					}
-				});
-			}
-			
 			/* Range selection */
-			if(this.options.selectRange) {
+			if(this.options.enableRangeSelection) {
 				cells.mousedown(function (e) {
 					if(e.which == 1) {
 						var currentDate = _this._getDate($(this));
@@ -516,36 +515,32 @@
 						var minDate = _this._rangeStart < _this._rangeEnd ? _this._rangeStart : _this._rangeEnd;
 						var maxDate = _this._rangeEnd > _this._rangeStart ? _this._rangeEnd : _this._rangeStart;
 
-						_this.options.selectRange({ startDate: minDate, endDate: maxDate });
+						_this._triggerEvent('selectRange', { startDate: minDate, endDate: maxDate });
 					}
 				});
 			}
 		
 			/* Hover date */
-			if(this.options.mouseOnDate) {
-				cells.mouseenter(function(e) {
-					if(!_this._mouseDown)
-					{
-						var date = _this._getDate($(this));
-						_this.options.mouseOnDate({
-							element: $(this),
-							date: date,
-							events: _this.getEvents(date)
-						});
-					}
-				});
-			}
-			
-			if(this.options.mouseOutDate) {
-				cells.mouseleave(function(e) {
+			cells.mouseenter(function(e) {
+				if(!_this._mouseDown)
+				{
 					var date = _this._getDate($(this));
-					_this.options.mouseOutDate({
+					_this._triggerEvent('mouseOnDate', {
 						element: $(this),
 						date: date,
 						events: _this.getEvents(date)
 					});
+				}
+			});
+			
+			cells.mouseleave(function(e) {
+				var date = _this._getDate($(this));
+				_this._triggerEvent('mouseOutDate', {
+					element: $(this),
+					date: date,
+					events: _this.getEvents(date)
 				});
-			}
+			});
 			
 			/* Responsive management */
 			
@@ -708,6 +703,15 @@
 
 			return new Date(year, month, day);
 		},
+		_triggerEvent: function(eventName, parameters) {
+			var event = $.Event(eventName);
+			
+			for(var i in parameters) {
+				event[i] = parameters[i];
+			}
+			
+			this.element.trigger(event);
+		},
 		getWeekNumber: function(date) {
 			var tempDate = new Date(date.getTime());
 			tempDate.setHours(0, 0, 0, 0);
@@ -769,6 +773,13 @@
 			this.options.displayWeekNumber = displayWeekNumber;
 			this._render();
 		},
+		getEnableRangeSelection: function() {
+			return this.options.enableRangeSelection;
+		},
+		setEnableRangeSelection: function(enableRangeSelection) {
+			this.options.enableRangeSelection = enableRangeSelection;
+			this._render();
+		},
 		getDisableDays: function() {
 			return this.options.disableDays;
 		},
@@ -776,11 +787,11 @@
 			this.options.disableDays = disableDays;
 			this._render();
 		},
-		getContextMenuEnabled: function() {
-			return this.options.contextMenuEnabled;
+		getEnableContextMenu: function() {
+			return this.options.enableContextMenu;
 		},
-		setContextMenuEnabled: function(contextMenuEnabled) {
-			this.options.contextMenuEnabled = contextMenuEnabled;
+		setEnableContextMenu: function(enableContextMenu) {
+			this.options.enableContextMenu = enableContextMenu;
 			this._render();
 		},
 		getContextMenuItems: function() {
@@ -815,6 +826,15 @@
 		var calendar = new Calendar($(this) ,options);
 		$(this).data('calendar', calendar);
 	}
+	
+	/* Events binding management */
+	$.fn.renderEnd = function(fct) { $(this).bind('renderEnd', fct); }
+	$.fn.renderDay = function(fct) { $(this).bind('renderDay', fct); }
+	$.fn.clickDate = function(fct) { $(this).bind('clickDate', fct); }
+	$.fn.dayContextMenu = function(fct) { $(this).bind('dayContextMenu', fct); }
+	$.fn.selectRange = function(fct) { $(this).bind('selectRange', fct); }
+	$.fn.mouseOnDate = function(fct) { $(this).bind('mouseOnDate', fct); }
+	$.fn.mouseOutDate = function(fct) { $(this).bind('mouseOutDate', fct); }
 	
 	var dates = $.fn.calendar.dates = {
 		en: {
