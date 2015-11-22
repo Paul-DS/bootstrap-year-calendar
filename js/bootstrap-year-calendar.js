@@ -46,6 +46,7 @@
 				contextMenuEnabled: opt.contextMenuEnabled != null ? opt.contextMenuEnabled : false,
 				contextMenuItems: opt.contextMenuItems != null ? opt.contextMenuItems : [],
 				/* Events */
+				renderEnd: opt.renderEnd,
 				renderDay: opt.renderDay,
 				clickDate: opt.clickDate,
 				contextMenu: opt.contextMenu,
@@ -72,6 +73,11 @@
 			
 			this._applyEvents();
 			this.element.find('.months-container').fadeIn(500);
+			
+			if(this.options.renderEnd)
+			{
+				this.options.renderEnd({ currentYear: this.options.startYear });
+			}
 		},
 		_renderHeader: function() {
 			var header = $(document.createElement('div'));
