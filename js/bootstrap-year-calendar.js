@@ -58,11 +58,11 @@
 		
 			if(opt.renderEnd) { this.element.bind('renderEnd', opt.renderEnd); }
 			if(opt.renderDay) { this.element.bind('renderDay', opt.renderDay); }
-			if(opt.clickDate) { this.element.bind('clickDate', opt.clickDate); }
+			if(opt.clickDay) { this.element.bind('clickDay', opt.clickDay); }
 			if(opt.dayContextMenu) { this.element.bind('dayContextMenu', opt.dayContextMenu); }
 			if(opt.selectRange) { this.element.bind('selectRange', opt.selectRange); }
-			if(opt.mouseOnDate) { this.element.bind('mouseOnDate', opt.mouseOnDate); }
-			if(opt.mouseOutDate) { this.element.bind('mouseOutDate', opt.mouseOutDate); }
+			if(opt.mouseOnDay) { this.element.bind('mouseOnDay', opt.mouseOnDay); }
+			if(opt.mouseOutDay) { this.element.bind('mouseOutDay', opt.mouseOutDay); }
 		},
 		_initializeDatasourceColors: function() {
 			for(var i in this.options.dataSource) {
@@ -420,7 +420,7 @@
 			cells.click(function(e) {
 				e.stopPropagation();
 				var date = _this._getDate($(this));
-				_this._triggerEvent('clickDate', {
+				_this._triggerEvent('clickDay', {
 					element: $(this),
 					which: e.which,
 					date: date,
@@ -525,7 +525,7 @@
 				if(!_this._mouseDown)
 				{
 					var date = _this._getDate($(this));
-					_this._triggerEvent('mouseOnDate', {
+					_this._triggerEvent('mouseOnDay', {
 						element: $(this),
 						date: date,
 						events: _this.getEvents(date)
@@ -535,7 +535,7 @@
 			
 			cells.mouseleave(function(e) {
 				var date = _this._getDate($(this));
-				_this._triggerEvent('mouseOutDate', {
+				_this._triggerEvent('mouseOutDay', {
 					element: $(this),
 					date: date,
 					events: _this.getEvents(date)
@@ -830,11 +830,11 @@
 	/* Events binding management */
 	$.fn.renderEnd = function(fct) { $(this).bind('renderEnd', fct); }
 	$.fn.renderDay = function(fct) { $(this).bind('renderDay', fct); }
-	$.fn.clickDate = function(fct) { $(this).bind('clickDate', fct); }
+	$.fn.clickDay = function(fct) { $(this).bind('clickDay', fct); }
 	$.fn.dayContextMenu = function(fct) { $(this).bind('dayContextMenu', fct); }
 	$.fn.selectRange = function(fct) { $(this).bind('selectRange', fct); }
-	$.fn.mouseOnDate = function(fct) { $(this).bind('mouseOnDate', fct); }
-	$.fn.mouseOutDate = function(fct) { $(this).bind('mouseOutDate', fct); }
+	$.fn.mouseOnDay = function(fct) { $(this).bind('mouseOnDay', fct); }
+	$.fn.mouseOutDay = function(fct) { $(this).bind('mouseOutDay', fct); }
 	
 	var dates = $.fn.calendar.dates = {
 		en: {
