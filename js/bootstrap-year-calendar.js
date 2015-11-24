@@ -42,7 +42,7 @@
 				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
 				displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
 				enableRangeSelection: opt.enableRangeSelection != null ? opt.enableRangeSelection : false,
-				disableDays: opt.disableDays instanceof Array ? opt.disableDays : [],
+				disabledDays: opt.disabledDays instanceof Array ? opt.disabledDays : [],
 				dataSource: opt.dataSource instanceof Array != null ? opt.dataSource : [],
 				style: opt.style == 'background' ? 'background' : 'border',
 				enableContextMenu: opt.enableContextMenu != null ? opt.enableContextMenu : false,
@@ -260,9 +260,9 @@
 							{
 								cell.addClass('disabled');
 							}
-							else if(this.options.disableDays.length > 0) {
-								for(var d in this.options.disableDays){
-									if(currentDate.getTime() == this.options.disableDays[d].getTime()) {
+							else if(this.options.disabledDays.length > 0) {
+								for(var d in this.options.disabledDays){
+									if(currentDate.getTime() == this.options.disabledDays[d].getTime()) {
 										cell.addClass('disabled');
 										break;
 									}
@@ -787,11 +787,11 @@
 			this.options.enableRangeSelection = enableRangeSelection;
 			this._render();
 		},
-		getDisableDays: function() {
-			return this.options.disableDays;
+		getDisabledDays: function() {
+			return this.options.disabledDays;
 		},
-		setDisableDays: function(disableDays) {
-			this.options.disableDays = disableDays instanceof Array ? disableDays : [];
+		setDisabledDays: function(disabledDays) {
+			this.options.disabledDays = disabledDays instanceof Array ? disabledDays : [];
 			this._render();
 		},
 		getEnableContextMenu: function() {
