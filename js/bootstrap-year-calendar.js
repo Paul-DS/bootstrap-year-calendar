@@ -1,6 +1,6 @@
 /* =========================================================
  * Bootstrap year calendar v1.0
- * Repo: https://github.com/Paul-DS/bootstrap-simple-calendar
+ * Repo: https://github.com/Paul-DS/bootstrap-year-calendar
  * =========================================================
  * Created by Paul David-Sivelle
  *
