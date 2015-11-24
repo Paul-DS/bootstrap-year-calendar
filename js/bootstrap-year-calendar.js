@@ -429,23 +429,24 @@
 			});
 			
 			/* Click right on date */
-			if(this.options.enableContextMenu)
-			{
-				cells.bind('contextmenu', function(e) {
+			
+			cells.bind('contextmenu', function(e) {
+				if(_this.options.enableContextMenu)
+				{
 					e.preventDefault();
 					if(_this.options.contextMenuItems.length > 0)
 					{
 						_this._openContextMenu($(this));
 					}
+				}
 					
-					var date = _this._getDate($(this));
-					_this._triggerEvent('dayContextMenu', {
-						element: $(this),
-						date: date,
-						events: _this.getEvents(date)
-					});
+				var date = _this._getDate($(this));
+				_this._triggerEvent('dayContextMenu', {
+					element: $(this),
+					date: date,
+					events: _this.getEvents(date)
 				});
-			}
+			});
 			
 			/* Range selection */
 			if(this.options.enableRangeSelection) {
