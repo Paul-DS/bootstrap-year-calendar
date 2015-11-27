@@ -271,7 +271,7 @@
 						
 							var cellContent = $(document.createElement('div'));
 							cellContent.addClass('day-content');
-							cellContent[0].innerText = currentDate.getDate();
+							cellContent.text(currentDate.getDate());
 							cell.append(cellContent);
 						}
 						
