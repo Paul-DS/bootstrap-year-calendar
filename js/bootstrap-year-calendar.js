@@ -1,5 +1,5 @@
 /* =========================================================
- * Bootstrap year calendar v1.0
+ * Bootstrap year calendar v1.0.1
  * Repo: https://github.com/Paul-DS/bootstrap-year-calendar
  * =========================================================
  * Created by Paul David-Sivelle
@@ -233,7 +233,7 @@
 					currentDate.setDate(currentDate.getDate() - 1);
 				}
 				
-				while(currentDate < lastDate)
+				while(currentDate <= lastDate)
 				{
 					var row = $(document.createElement('tr'));
 					
