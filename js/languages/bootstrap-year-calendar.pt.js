@@ -14,6 +14,7 @@
 		daysMin: ["Do", "Se", "Te", "Qu", "Qu", "Se", "Sa"],
 		months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
 		monthsShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+		weekShort: 'S',
 		weekStart:0
 	};
 }(jQuery));
