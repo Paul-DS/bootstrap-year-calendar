@@ -376,7 +376,11 @@
 					{
 						elt.parent().addClass('day-start');
 						
-						if(this.options.roundRangeLimits) {
+						if(events[events.length - 1].startHalfDay) {
+							elt.parent().addClass('day-half');
+							elt.parent().css('background', 'linear-gradient(-45deg, ' + events[events.length - 1].color + ', ' + events[events.length - 1].color + ' 49%, transparent 51%, transparent)');
+						}
+						else if(this.options.roundRangeLimits) {
 							elt.parent().addClass('round-left');
 						}
 					}
@@ -384,7 +388,11 @@
 					{
 						elt.parent().addClass('day-end');
 						
-						if(this.options.roundRangeLimits) {
+						if(events[events.length - 1].endHalfDay) {
+							elt.parent().addClass('day-half');
+							elt.parent().css('background', 'linear-gradient(135deg, ' + events[events.length - 1].color + ', ' + events[events.length - 1].color + ' 49%, transparent 51%, transparent)');
+						}
+						else if(this.options.roundRangeLimits) {
 							elt.parent().addClass('round-right');
 						}
 					}
