@@ -43,6 +43,7 @@
 				displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
 				enableRangeSelection: opt.enableRangeSelection != null ? opt.enableRangeSelection : false,
 				disabledDays: opt.disabledDays instanceof Array ? opt.disabledDays : [],
+				roundRangeLimits: opt.roundRangeLimits != null ? opt.roundRangeLimits : false,
 				dataSource: opt.dataSource instanceof Array != null ? opt.dataSource : [],
 				style: opt.style == 'background' ? 'background' : 'border',
 				enableContextMenu: opt.enableContextMenu != null ? opt.enableContextMenu : false,
@@ -326,7 +327,7 @@
 									
 									if(dayData.length > 0)
 									{
-										_this._renderDataSourceDay($(this), dayData);
+										_this._renderDataSourceDay($(this), currentDate, dayData);
 									}
 								}
 							});
@@ -335,7 +336,7 @@
 				});
 			}
 		},
-		_renderDataSourceDay: function(elt, events) {
+		_renderDataSourceDay: function(elt, currentDate, events) {
 			switch(this.options.style)
 			{
 				case 'border':
@@ -370,6 +371,23 @@
 			
 				case 'background':
 					elt.parent().css('background-color', events[events.length - 1].color);
+					
+					if(events[events.length - 1].startDate.getTime() == currentDate.getTime())
+					{
+						elt.parent().addClass('day-start');
+						
+						if(this.options.roundRangeLimits) {
+							elt.parent().addClass('round-left');
+						}
+					}
+					else if(events[events.length - 1].endDate.getTime() == currentDate.getTime())
+					{
+						elt.parent().addClass('day-end');
+						
+						if(this.options.roundRangeLimits) {
+							elt.parent().addClass('round-right');
+						}
+					}
 					break;
 			}
 		},
