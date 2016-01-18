@@ -372,25 +372,47 @@
 				case 'background':
 					elt.parent().css('background-color', events[events.length - 1].color);
 					
-					if(events[events.length - 1].startDate.getTime() == currentDate.getTime())
+					var currentTime = currentDate.getTime();
+					
+					if(events[events.length - 1].startDate.getTime() == currentTime)
 					{
 						elt.parent().addClass('day-start');
 						
 						if(events[events.length - 1].startHalfDay) {
 							elt.parent().addClass('day-half');
-							elt.parent().css('background', 'linear-gradient(-45deg, ' + events[events.length - 1].color + ', ' + events[events.length - 1].color + ' 49%, transparent 51%, transparent)');
+							
+							// Find color for other half
+							var otherColor = 'transparent';
+							for(var i = events.length - 2; i >= 0; i--) {
+								if(events[i].startDate.getTime() != currentTime || !events[i].startHalfDay) {
+									otherColor = events[i].color;
+									break;
+								}
+							}
+							
+							elt.parent().css('background', 'linear-gradient(-45deg, ' + events[events.length - 1].color + ', ' + events[events.length - 1].color + ' 49%, ' + otherColor + ' 51%, ' + otherColor + ')');
 						}
 						else if(this.options.roundRangeLimits) {
 							elt.parent().addClass('round-left');
 						}
 					}
-					else if(events[events.length - 1].endDate.getTime() == currentDate.getTime())
+					else if(events[events.length - 1].endDate.getTime() == currentTime)
 					{
 						elt.parent().addClass('day-end');
 						
 						if(events[events.length - 1].endHalfDay) {
 							elt.parent().addClass('day-half');
-							elt.parent().css('background', 'linear-gradient(135deg, ' + events[events.length - 1].color + ', ' + events[events.length - 1].color + ' 49%, transparent 51%, transparent)');
+							
+							// Find color for other half
+							var otherColor = 'transparent';
+							for(var i = events.length - 2; i >= 0; i--) {
+								if(events[i].endDate.getTime() != currentTime || !events[i].endHalfDay) {
+									otherColor = events[i].color;
+									break;
+								}
+							}
+							
+							elt.parent().css('background', 'linear-gradient(135deg, ' + events[events.length - 1].color + ', ' + events[events.length - 1].color + ' 49%, ' + otherColor + ' 51%, ' + otherColor + ')');
 						}
 						else if(this.options.roundRangeLimits) {
 							elt.parent().addClass('round-right');
