@@ -41,6 +41,7 @@
 				language: (opt.language != null && dates[opt.language] != null) ? opt.language : 'en',
 				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
 				displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
+				alwaysHalfDay: opt.alwaysHalfDay != null ? opt.alwaysHalfDay : false,
 				enableRangeSelection: opt.enableRangeSelection != null ? opt.enableRangeSelection : false,
 				disabledDays: opt.disabledDays instanceof Array ? opt.disabledDays : [],
 				roundRangeLimits: opt.roundRangeLimits != null ? opt.roundRangeLimits : false,
@@ -378,13 +379,13 @@
 					{
 						elt.parent().addClass('day-start');
 						
-						if(events[events.length - 1].startHalfDay) {
+						if(events[events.length - 1].startHalfDay || this.options.alwaysHalfDay) {
 							elt.parent().addClass('day-half');
 							
 							// Find color for other half
 							var otherColor = 'transparent';
 							for(var i = events.length - 2; i >= 0; i--) {
-								if(events[i].startDate.getTime() != currentTime || !events[i].startHalfDay) {
+								if(events[i].startDate.getTime() != currentTime || (!events[i].startHalfDay && !this.options.alwaysHalfDay)) {
 									otherColor = events[i].color;
 									break;
 								}
@@ -400,13 +401,13 @@
 					{
 						elt.parent().addClass('day-end');
 						
-						if(events[events.length - 1].endHalfDay) {
+						if(events[events.length - 1].endHalfDay || this.options.alwaysHalfDay) {
 							elt.parent().addClass('day-half');
 							
 							// Find color for other half
 							var otherColor = 'transparent';
 							for(var i = events.length - 2; i >= 0; i--) {
-								if(events[i].endDate.getTime() != currentTime || !events[i].endHalfDay) {
+								if(events[i].endDate.getTime() != currentTime || (!events[i].endHalfDay &&  !this.options.alwaysHalfDay)) {
 									otherColor = events[i].color;
 									break;
 								}
@@ -827,6 +828,13 @@
 		},
 		setDisplayWeekNumber: function(displayWeekNumber) {
 			this.options.displayWeekNumber = displayWeekNumber;
+			this._render();
+		},
+		getAlwaysHalfDay: function() {
+			return this.options.alwaysHalfDay;
+		},
+		setAlwaysHalfDay: function(alwaysHalfDay) {
+			this.options.alwaysHalfDay = alwaysHalfDay;
 			this._render();
 		},
 		getEnableRangeSelection: function() {
