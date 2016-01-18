@@ -851,6 +851,13 @@
 			this.options.disabledDays = disabledDays instanceof Array ? disabledDays : [];
 			this._render();
 		},
+		getRoundRangeLimits: function() {
+			return this.options.roundRangeLimits;
+		},
+		setRoundRangeLimits: function(roundRangeLimits) {
+			this.options.roundRangeLimits = roundRangeLimits;
+			this._render();
+		},
 		getEnableContextMenu: function() {
 			return this.options.enableContextMenu;
 		},
