@@ -212,7 +212,7 @@ interface Calendar<T extends CalendarDataSourceElement> {
     /**
      * Gets a value indicating whether the user can select a range which overlapping an other element present in the datasource.
      */
-    getAllowOverlap(): void;
+    getAllowOverlap(): boolean;
 
     /**
      * Gets the context menu items.
