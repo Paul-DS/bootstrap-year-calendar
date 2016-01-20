@@ -1,4 +1,4 @@
-// Type definitions for bootstrap-year-calendar v1.0.1
+// Type definitions for bootstrap-year-calendar v1.0.2
 // Project: https://github.com/Paul-DS/bootstrap-year-calendar
 // Definitions by: Paul David-Sivelle
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
@@ -31,6 +31,16 @@ interface CalendarContextMenuItem<T>
  */
 interface CalendarDataSourceElement
 {
+	/**
+     * The name of the element. Used for context menu or specific events.
+     */
+    name?: string;
+
+    /**
+     * The color of the element. This property will be computed automatically if not defined.
+     */
+    color?: string;
+	
     /**
      * The date of the beginning of the element range.
      */
@@ -40,16 +50,16 @@ interface CalendarDataSourceElement
      * The date of the end of the element range.
      */
     endDate: Date;
+	
+	/**
+     * Indicates whether only the half of start day of the element range should be rendered.
+     */
+    startHalfDay?: boolean;
 
     /**
-     * The name of the element. Used for context menu or specific events.
+     * Indicates whether only the half of last day of the element range should be rendered.
      */
-    name?: string;
-
-    /**
-     * The color of the element. This property will be computed automatically if not defined.
-     */
-    color?: string;
+    endHalfDay?: boolean;
 }
 
 /**
@@ -62,6 +72,11 @@ interface CalendarOptions<T extends CalendarDataSourceElement> {
      */
     allowOverlap?: boolean;
 
+	/**
+     * Specifies whether the beginning and the end of each range should be displayed as half selected day.
+     */
+    alwaysHalfDay?: boolean;
+	
     /**
      * Specifies the items of the default context menu.
      */
@@ -106,6 +121,11 @@ interface CalendarOptions<T extends CalendarDataSourceElement> {
      * The date from which days are enabled.
      */
     minDate?: Date;
+	
+	/**
+     * Specifies whether the beginning and the end of each range should be displayed as rounded cells.
+     */
+    roundRangeLimits?: boolean;
 
     /**
      * The year on which the calendar should be opened.
@@ -213,6 +233,11 @@ interface Calendar<T extends CalendarDataSourceElement> {
      * Gets a value indicating whether the user can select a range which overlapping an other element present in the datasource.
      */
     getAllowOverlap(): boolean;
+	
+	/**
+     * Gets a value indicating whether the beginning and the end of each range should be displayed as half selected day.
+     */
+    getAlwaysHalfDay(): boolean;
 
     /**
      * Gets the context menu items.
@@ -265,6 +290,11 @@ interface Calendar<T extends CalendarDataSourceElement> {
      * Gets the minimum date of the calendar.
      */
     getMinDate(): Date;
+	
+	/**
+     * Gets a value indicating whether the beginning and the end of each range should be displayed as rounded cells.
+     */
+    getRoundRangeLimits(): void;
 
     /**
      * Gets the current style used for displaying data source.
@@ -290,6 +320,14 @@ interface Calendar<T extends CalendarDataSourceElement> {
      */
     setAllowOverlap(allowOverlap: boolean): void;
 
+	/**
+     * Sets a value indicating whether the beginning and the end of each range should be displayed as half selected day.
+	 * This method causes a refresh of the calendar.
+     *
+     * @param alwaysHalfDay Indicates whether the beginning and the end of each range should be displayed as half selected day.
+     */
+    setAlwaysHalfDay(alwaysHalfDay: boolean): void;
+	
     /**
      * Sets new context menu items. This method causes a refresh of the calendar.
      *
@@ -353,6 +391,14 @@ interface Calendar<T extends CalendarDataSourceElement> {
      * @param minDate The minimum date to set.
      */
     setMinDate(minDate: Date): void;
+	
+	/**
+     * Sets a value indicating whether the beginning and the end of each range should be displayed as rounded cells.
+	 * This method causes a refresh of the calendar.
+     *
+     * @param roundRangeLimits Indicates whether the beginning and the end of each range should be displayed as rounded cells. 
+     */
+    setRoundRangeLimits(roundRangeLimits: boolean): void;
 
     /**
      * Sets the style to use for displaying data source. This method causes a refresh of the calendar.
