@@ -46,7 +46,7 @@
 				disabledDays: opt.disabledDays instanceof Array ? opt.disabledDays : [],
 				roundRangeLimits: opt.roundRangeLimits != null ? opt.roundRangeLimits : false,
 				dataSource: opt.dataSource instanceof Array != null ? opt.dataSource : [],
-				style: opt.style == 'background' ? 'background' : 'border',
+				style: $.type(opt.style) == 'function' ? opt.style : (opt.style == 'background' ? 'background' : 'border'),
 				enableContextMenu: opt.enableContextMenu != null ? opt.enableContextMenu : false,
 				contextMenuItems: opt.contextMenuItems instanceof Array ? opt.contextMenuItems : []
 			};
@@ -338,6 +338,11 @@
 			}
 		},
 		_renderDataSourceDay: function(elt, currentDate, events) {
+			if ( $.type(this.options.style) == 'function' ) {
+				this.options.style.call(this, elt, currentDate, events);
+				return;
+			}
+
 			switch(this.options.style)
 			{
 				case 'border':
@@ -814,7 +819,7 @@
 			return this.options.style;
 		},
 		setStyle: function(style) {
-			this.options.style = style == 'background' ? 'background' : 'border';
+			this.options.style = $.type(style) == 'function' ? style : (style == 'background' ? 'background' : 'border');
 			this._render();
 		},
 		getAllowOverlap: function() {
