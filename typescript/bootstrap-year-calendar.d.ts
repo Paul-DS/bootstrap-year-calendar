@@ -85,6 +85,12 @@ interface CalendarOptions<T extends CalendarDataSourceElement> {
      * Specifies the items of the default context menu.
      */
     contextMenuItems?: CalendarContextMenuItem<T>[];
+	
+	/**
+     * Specify a custom renderer for data source. Works only with the style set to "custom".
+	 * This function is called during render for each day containing at least one event.
+     */
+    customDataSourceRenderer?: (element: JQuery, currentDate: Date, events: T[]) => void;
 
     /**
      * The elements that must be displayed on the calendar.
@@ -137,9 +143,9 @@ interface CalendarOptions<T extends CalendarDataSourceElement> {
     startYear?: number;
 
     /**
-     * Specifies the style used for displaying datasource.
+     * Specifies the style used for displaying datasource ("background", "border" or "custom").
      */
-    style?: string | CalendarDataSourceRenderer;
+    style?: string;
 	
     /**
      * Function fired when a day is clicked.
@@ -247,6 +253,11 @@ interface Calendar<T extends CalendarDataSourceElement> {
      * Gets the context menu items.
      */
     getContextMenuItems(): CalendarContextMenuItem<T>[];
+	
+	/**
+     * Gets the custom data source renderer.
+     */
+	getCustomDataSourceRenderer(): (element: JQuery, currentDate: Date, events: T[]) => void;
 
     /**
      * Gets the current data source.
@@ -338,6 +349,13 @@ interface Calendar<T extends CalendarDataSourceElement> {
      * @param contextMenuItems The new context menu items.
      */
     setContextMenuItems(contextMenuItems: CalendarContextMenuItem<T>[]): void;
+	
+	/**
+     * Sets the custom data source renderer. Works only with the style set to "custom".
+	 *
+	  * @param handler The function used to render the data source. This function is called during render for each day containing at least one event.
+     */
+	setCustomDataSourceRenderer(handler: (element: JQuery, currentDate: Date, events: T[]) => void): void;
 
     /**
      * Sets a new data source. This method causes a refresh of the calendar.
@@ -407,7 +425,7 @@ interface Calendar<T extends CalendarDataSourceElement> {
     /**
      * Sets the style to use for displaying data source. This method causes a refresh of the calendar.
      *
-     * @param style The style to use for displaying data source.
+     * @param style The style to use for displaying data source ("background", "border" or "custom").
      */
     setStyle(style: string): void;
 

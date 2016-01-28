@@ -46,9 +46,10 @@
 				disabledDays: opt.disabledDays instanceof Array ? opt.disabledDays : [],
 				roundRangeLimits: opt.roundRangeLimits != null ? opt.roundRangeLimits : false,
 				dataSource: opt.dataSource instanceof Array != null ? opt.dataSource : [],
-				style: $.type(opt.style) == 'function' ? opt.style : (opt.style == 'background' ? 'background' : 'border'),
+				style: opt.style == 'background' || opt.style == 'border' || opt.style == 'custom' ? opt.style : 'border',
 				enableContextMenu: opt.enableContextMenu != null ? opt.enableContextMenu : false,
-				contextMenuItems: opt.contextMenuItems instanceof Array ? opt.contextMenuItems : []
+				contextMenuItems: opt.contextMenuItems instanceof Array ? opt.contextMenuItems : [],
+				customDataSourceRenderer : $.isFunction(opt.customDataSourceRenderer) ? opt.customDataSourceRenderer : null
 			};
 			
 			this._initializeDatasourceColors();
@@ -338,11 +339,6 @@
 			}
 		},
 		_renderDataSourceDay: function(elt, currentDate, events) {
-			if ( $.type(this.options.style) == 'function' ) {
-				this.options.style.call(this, elt, currentDate, events);
-				return;
-			}
-
 			switch(this.options.style)
 			{
 				case 'border':
@@ -423,6 +419,12 @@
 						else if(this.options.roundRangeLimits) {
 							elt.parent().addClass('round-right');
 						}
+					}
+					break;
+					
+				case 'custom':
+					if(this.options.customDataSourceRenderer) {
+						this.options.customDataSourceRenderer.call(this, elt, currentDate, events);
 					}
 					break;
 			}
@@ -819,7 +821,7 @@
 			return this.options.style;
 		},
 		setStyle: function(style) {
-			this.options.style = $.type(style) == 'function' ? style : (style == 'background' ? 'background' : 'border');
+			this.options.style = style == 'background' || style == 'border' || style == 'custom' ? style : 'border';
 			this._render();
 		},
 		getAllowOverlap: function() {
@@ -875,6 +877,13 @@
 		},
 		setContextMenuItems: function(contextMenuItems) {
 			this.options.contextMenuItems = contextMenuItems instanceof Array ? contextMenuItems : [];
+			this._render();
+		},
+		getCustomDataSourceRenderer: function() {
+			return this.options.customDataSourceRenderer;
+		},
+		setCustomDataSourceRenderer: function(customDataSourceRenderer) {
+			this.options.customDataSourceRenderer = $.isFunction(customDataSourceRenderer) ? customDataSourceRenderer : null;
 			this._render();
 		},
 		getLanguage: function() {
