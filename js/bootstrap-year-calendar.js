@@ -912,6 +912,7 @@
 	$.fn.calendar = function (options) {
 		var calendar = new Calendar($(this) ,options);
 		$(this).data('calendar', calendar);
+		return calendar;
 	}
 	
 	/* Events binding management */
