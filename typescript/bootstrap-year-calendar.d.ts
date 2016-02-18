@@ -60,10 +60,6 @@ interface CalendarDataSourceElement {
     endHalfDay?: boolean;
 }
 
-interface CalendarDataSourceRenderer {
-    (element: JQuery, currentDate: Date, events: CalendarDataSourceElement[]): void;
-}
-
 /**
  * Options used for calendar customization.
  */
@@ -316,7 +312,7 @@ interface Calendar<T extends CalendarDataSourceElement> {
     /**
      * Gets the current style used for displaying data source.
      */
-    getStyle(): string | CalendarDataSourceRenderer;
+    getStyle(): string;
 
     /**
      * Gets the week number for a specified date.
