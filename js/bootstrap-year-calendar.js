@@ -49,6 +49,7 @@
 				style: opt.style == 'background' || opt.style == 'border' || opt.style == 'custom' ? opt.style : 'border',
 				enableContextMenu: opt.enableContextMenu != null ? opt.enableContextMenu : false,
 				contextMenuItems: opt.contextMenuItems instanceof Array ? opt.contextMenuItems : [],
+				customDayRenderer : $.isFunction(opt.customDayRenderer) ? opt.customDayRenderer : null,
 				customDataSourceRenderer : $.isFunction(opt.customDataSourceRenderer) ? opt.customDataSourceRenderer : null
 			};
 			
@@ -60,7 +61,6 @@
 			}
 		
 			if(opt.renderEnd) { this.element.bind('renderEnd', opt.renderEnd); }
-			if(opt.renderDay) { this.element.bind('renderDay', opt.renderDay); }
 			if(opt.clickDay) { this.element.bind('clickDay', opt.clickDay); }
 			if(opt.dayContextMenu) { this.element.bind('dayContextMenu', opt.dayContextMenu); }
 			if(opt.selectRange) { this.element.bind('selectRange', opt.selectRange); }
@@ -276,6 +276,10 @@
 							cellContent.addClass('day-content');
 							cellContent.text(currentDate.getDate());
 							cell.append(cellContent);
+							
+							if(this.options.customDayRenderer) {
+								this.options.customDayRenderer(cellContent, currentDate);
+							}
 						}
 						
 						row.append(cell);
@@ -460,17 +464,6 @@
 			});
 			
 			var cells = this.element.find('.day:not(.old, .new, .disabled)');
-			
-			/* Day rendering */
-			this.element.find('.month-container').each(function() {
-				var month = $(this).data('month-id');
-				$(this).find('.day-content').each(function() {
-					_this._triggerEvent('renderDay', {
-						element: $(this),
-						date: new Date(_this.options.startYear, month, $(this).text())
-					});
-				});
-			});
 			
 			/* Click on date */
 			cells.click(function(e) {
@@ -879,6 +872,13 @@
 			this.options.contextMenuItems = contextMenuItems instanceof Array ? contextMenuItems : [];
 			this._render();
 		},
+		getCustomDayRenderer: function() {
+			return this.options.customDayRenderer;
+		},
+		setCustomDayRenderer: function(customDayRenderer) {
+			this.options.customDayRenderer = $.isFunction(customDayRenderer) ? customDayRenderer : null;
+			this._render();
+		},
 		getCustomDataSourceRenderer: function() {
 			return this.options.customDataSourceRenderer;
 		},
@@ -912,11 +912,11 @@
 	$.fn.calendar = function (options) {
 		var calendar = new Calendar($(this) ,options);
 		$(this).data('calendar', calendar);
+		return calendar;
 	}
 	
 	/* Events binding management */
 	$.fn.renderEnd = function(fct) { $(this).bind('renderEnd', fct); }
-	$.fn.renderDay = function(fct) { $(this).bind('renderDay', fct); }
 	$.fn.clickDay = function(fct) { $(this).bind('clickDay', fct); }
 	$.fn.dayContextMenu = function(fct) { $(this).bind('dayContextMenu', fct); }
 	$.fn.selectRange = function(fct) { $(this).bind('selectRange', fct); }
