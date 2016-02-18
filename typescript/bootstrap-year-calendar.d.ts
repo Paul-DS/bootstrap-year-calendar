@@ -1,4 +1,4 @@
-// Type definitions for bootstrap-year-calendar v1.0.2
+// Type definitions for bootstrap-year-calendar v1.1.0
 // Project: https://github.com/Paul-DS/bootstrap-year-calendar
 // Definitions by: Paul David-Sivelle
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
