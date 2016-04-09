@@ -446,7 +446,7 @@
 			this.element.find('.calendar-header .prev').click(function() {
 				if(!$(this).hasClass('disabled')) {
 					_this.element.find('.months-container').animate({'margin-left':'100%'},100, function() {
-						_this.element.find('.months-container').hide();
+						_this.element.find('.months-container').css('visibility', 'hidden');
 						_this.element.find('.months-container').css('margin-left', '0');
 						setTimeout(function() { _this.setYear(_this.options.startYear - 1) }, 50);
 					});
@@ -456,7 +456,7 @@
 			this.element.find('.calendar-header .next').click(function() {
 				if(!$(this).hasClass('disabled')) {
 					_this.element.find('.months-container').animate({'margin-left':'-100%'},100, function() {
-						_this.element.find('.months-container').hide();
+						_this.element.find('.months-container').css('visibility', 'hidden');
 						_this.element.find('.months-container').css('margin-left', '0');
 						setTimeout(function() { _this.setYear(_this.options.startYear + 1) }, 50);
 					});
