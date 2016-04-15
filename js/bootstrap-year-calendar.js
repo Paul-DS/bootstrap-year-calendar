@@ -44,6 +44,7 @@
 				alwaysHalfDay: opt.alwaysHalfDay != null ? opt.alwaysHalfDay : false,
 				enableRangeSelection: opt.enableRangeSelection != null ? opt.enableRangeSelection : false,
 				disabledDays: opt.disabledDays instanceof Array ? opt.disabledDays : [],
+				disabledWeekDays: opt.disabledWeekDays instanceof Array ? opt.disabledWeekDays : [],
 				roundRangeLimits: opt.roundRangeLimits != null ? opt.roundRangeLimits : false,
 				dataSource: opt.dataSource instanceof Array != null ? opt.dataSource : [],
 				style: opt.style == 'background' || opt.style == 'border' || opt.style == 'custom' ? opt.style : 'border',
@@ -259,17 +260,34 @@
 							cell.addClass('new');
 						}
 						else {
+							var disabled = false;
+							
 							if((this.options.minDate != null && currentDate < this.options.minDate) || (this.options.maxDate != null && currentDate > this.options.maxDate))
 							{
-								cell.addClass('disabled');
+								disabled = true;
 							}
-							else if(this.options.disabledDays.length > 0) {
-								for(var d in this.options.disabledDays){
-									if(currentDate.getTime() == this.options.disabledDays[d].getTime()) {
-										cell.addClass('disabled');
-										break;
+							else  {
+								if(this.options.disabledWeekDays.length > 0) {
+									for(var d in this.options.disabledWeekDays){
+										if(currentDate.getDay() == this.options.disabledWeekDays[d]) {
+											disabled = true;
+											break;
+										}
 									}
 								}
+								
+								if(this.options.disabledDays.length > 0 && !disabled) {
+									for(var d in this.options.disabledDays){
+										if(currentDate.getTime() == this.options.disabledDays[d].getTime()) {
+											disabled = true;
+											break;
+										}
+									}
+								}
+							}
+							
+							if(disabled) {
+								cell.addClass('disabled');
 							}
 						
 							var cellContent = $(document.createElement('div'));
@@ -849,6 +867,13 @@
 		},
 		setDisabledDays: function(disabledDays) {
 			this.options.disabledDays = disabledDays instanceof Array ? disabledDays : [];
+			this._render();
+		},
+		getDisabledWeekDays: function() {
+			return this.options.disabledWeekDays;
+		},
+		setDisabledWeekDays: function(disabledWeekDays) {
+			this.options.disabledWeekDays = disabledWeekDays instanceof Array ? disabledWeekDays : [];
 			this._render();
 		},
 		getRoundRangeLimits: function() {
