@@ -46,6 +46,7 @@
 				enableRangeSelection: opt.enableRangeSelection != null ? opt.enableRangeSelection : false,
 				disabledDays: opt.disabledDays instanceof Array ? opt.disabledDays : [],
 				disabledWeekDays: opt.disabledWeekDays instanceof Array ? opt.disabledWeekDays : [],
+				hiddenWeekDays: opt.hiddenWeekDays instanceof Array ? opt.hiddenWeekDays : [],
 				roundRangeLimits: opt.roundRangeLimits != null ? opt.roundRangeLimits : false,
 				dataSource: opt.dataSource instanceof Array != null ? opt.dataSource : [],
 				style: opt.style == 'background' || opt.style == 'border' || opt.style == 'custom' ? opt.style : 'border',
@@ -216,6 +217,10 @@
 					headerCell.addClass('day-header');
 					headerCell.text(dates[this.options.language].daysMin[d]);
 					
+					if(this._isHidden(d)) {
+						headerCell.addClass('hidden');
+					}
+					
 					headerRow.append(headerCell);
 					
 					d++;
@@ -253,6 +258,10 @@
 					{
 						var cell = $(document.createElement('td'));
 						cell.addClass('day');
+						
+						if(this._isHidden(currentDate.getDay())) {
+							cell.addClass('hidden');
+						}
 						
 						if(currentDate < firstDate) {
 							cell.addClass('old');
@@ -779,6 +788,17 @@
 			
 			return false;
 		},
+		_isHidden: function(day) {
+			if(this.options.hiddenWeekDays.length > 0) {
+				for(var d in this.options.hiddenWeekDays) {
+					if(day == this.options.hiddenWeekDays[d]) {
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		},
 		getWeekNumber: function(date) {
 			var tempDate = new Date(date.getTime());
 			tempDate.setHours(0, 0, 0, 0);
@@ -880,6 +900,13 @@
 		},
 		setDisabledWeekDays: function(disabledWeekDays) {
 			this.options.disabledWeekDays = disabledWeekDays instanceof Array ? disabledWeekDays : [];
+			this._render();
+		},
+		getHiddenWeekDays: function() {
+			return this.options.hiddenWeekDays;
+		},
+		setHiddenWeekDays: function(hiddenWeekDays) {
+			this.options.hiddenWeekDays = hiddenWeekDays instanceof Array ? hiddenWeekDays : [];
 			this._render();
 		},
 		getRoundRangeLimits: function() {

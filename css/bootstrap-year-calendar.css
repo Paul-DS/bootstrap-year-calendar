@@ -115,7 +115,6 @@
 }
 
 .calendar .month-container {
-	min-width:180px;
 	text-align:center;
 	height:200px;
 	padding:0;
@@ -137,6 +136,12 @@
 .calendar table.month tr th
 {
 	padding:0;
+}
+
+.calendar table.month tr td.hidden,
+.calendar table.month tr th.hidden
+{
+	display:none;
 }
 
 .calendar table.month td.week-number {
