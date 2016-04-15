@@ -41,6 +41,7 @@
 				language: (opt.language != null && dates[opt.language] != null) ? opt.language : 'en',
 				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
 				displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
+				displayDisabledDataSource: opt.displayDisabledDataSource != null ? opt.displayDisabledDataSource : false,
 				alwaysHalfDay: opt.alwaysHalfDay != null ? opt.alwaysHalfDay : false,
 				enableRangeSelection: opt.enableRangeSelection != null ? opt.enableRangeSelection : false,
 				disabledDays: opt.disabledDays instanceof Array ? opt.disabledDays : [],
@@ -260,33 +261,7 @@
 							cell.addClass('new');
 						}
 						else {
-							var disabled = false;
-							
-							if((this.options.minDate != null && currentDate < this.options.minDate) || (this.options.maxDate != null && currentDate > this.options.maxDate))
-							{
-								disabled = true;
-							}
-							else  {
-								if(this.options.disabledWeekDays.length > 0) {
-									for(var d in this.options.disabledWeekDays){
-										if(currentDate.getDay() == this.options.disabledWeekDays[d]) {
-											disabled = true;
-											break;
-										}
-									}
-								}
-								
-								if(this.options.disabledDays.length > 0 && !disabled) {
-									for(var d in this.options.disabledDays){
-										if(currentDate.getTime() == this.options.disabledDays[d].getTime()) {
-											disabled = true;
-											break;
-										}
-									}
-								}
-							}
-							
-							if(disabled) {
+							if(this._isDisabled(currentDate)) {
 								cell.addClass('disabled');
 							}
 						
@@ -349,7 +324,7 @@
 										}
 									}
 									
-									if(dayData.length > 0)
+									if(dayData.length > 0 && (_this.options.displayDisabledDataSource || !_this._isDisabled(currentDate)))
 									{
 										_this._renderDataSourceDay($(this), currentDate, dayData);
 									}
@@ -780,6 +755,30 @@
 			
 			this.element.trigger(event);
 		},
+		_isDisabled: function(date) {
+			if((this.options.minDate != null && date < this.options.minDate) || (this.options.maxDate != null && date > this.options.maxDate))
+			{
+				return true;
+			}
+			
+			if(this.options.disabledWeekDays.length > 0) {
+				for(var d in this.options.disabledWeekDays){
+					if(date.getDay() == this.options.disabledWeekDays[d]) {
+						return true;
+					}
+				}
+			}
+			
+			if(this.options.disabledDays.length > 0) {
+				for(var d in this.options.disabledDays){
+					if(date.getTime() == this.options.disabledDays[d].getTime()) {
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		},
 		getWeekNumber: function(date) {
 			var tempDate = new Date(date.getTime());
 			tempDate.setHours(0, 0, 0, 0);
@@ -846,6 +845,13 @@
 		},
 		setDisplayWeekNumber: function(displayWeekNumber) {
 			this.options.displayWeekNumber = displayWeekNumber;
+			this._render();
+		},
+		getDisplayDisabledDataSource: function() {
+			return this.options.displayDisabledDataSource;
+		},
+		setDisplayDisabledDataSource: function(displayDisabledDataSource) {
+			this.options.displayDisabledDataSource = displayDisabledDataSource;
 			this._render();
 		},
 		getAlwaysHalfDay: function() {

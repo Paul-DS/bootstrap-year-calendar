@@ -107,6 +107,11 @@ interface CalendarOptions<T extends CalendarDataSourceElement> {
      */
     disableWeekDays?: int[];
 
+	/**
+     * Specifies whether the data source must be rendered on disabled days.
+     */
+    displayDisabledDataSource?: boolean;
+	
     /**
      * Specifies whether the weeks number are displayed.
      */
@@ -277,6 +282,11 @@ interface Calendar<T extends CalendarDataSourceElement> {
      */
     getDisableWeekDays(): int[];
 
+	/**
+     * Gets a value indicating whether the data source must be rendered on disabled days.
+     */
+    getDisplayDisabledDataSource(): boolean;
+	
     /**
      * Gets a value indicating whether the weeks number are displayed.
      */
@@ -393,6 +403,13 @@ interface Calendar<T extends CalendarDataSourceElement> {
      */
     setDisableWeekDays(disableWeekDays: int[]): void;
 
+	/**
+     * Sets a value indicating whether the data source must be rendered on disabled days. This method causes a refresh of the calendar.
+     *
+     * @param  displayDisabledDataSource Indicates whether the data source must be rendered on disabled days.
+     */
+    setDisplayDisabledDataSource(displayDisabledDataSource: boolean): void;
+	
     /**
      * Sets a value indicating whether the weeks number are displayed. This method causes a refresh of the calendar.
      *
