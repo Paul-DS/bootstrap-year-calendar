@@ -456,7 +456,11 @@
 					_this.element.find('.months-container').animate({'margin-left':'100%'},100, function() {
 						_this.element.find('.months-container').css('visibility', 'hidden');
 						_this.element.find('.months-container').css('margin-left', '0');
-						setTimeout(function() { _this.setYear(_this.options.startYear - 1) }, 50);
+						
+						setTimeout(function() { 
+							_this.element.find('.months-container').hide();
+							_this.setYear(_this.options.startYear - 1);
+						}, 50);
 					});
 				}
 			});
@@ -466,7 +470,11 @@
 					_this.element.find('.months-container').animate({'margin-left':'-100%'},100, function() {
 						_this.element.find('.months-container').css('visibility', 'hidden');
 						_this.element.find('.months-container').css('margin-left', '0');
-						setTimeout(function() { _this.setYear(_this.options.startYear + 1) }, 50);
+						
+						setTimeout(function() { 
+							_this.element.find('.months-container').hide();
+							_this.setYear(_this.options.startYear + 1);
+						}, 50);
 					});
 				}
 			});
@@ -769,6 +777,8 @@
 			}
 			
 			this.element.trigger(event);
+			
+			return event;
 		},
 		_isDisabled: function(date) {
 			if((this.options.minDate != null && date < this.options.minDate) || (this.options.maxDate != null && date > this.options.maxDate))
@@ -834,8 +844,11 @@
 			var parsedYear = parseInt(year);
 			if(!isNaN(parsedYear)) {
 				this.options.startYear = parsedYear;
-				this._triggerEvent('yearChanged', { currentYear: this.options.startYear });
-				this.render();
+				var eventResult = this._triggerEvent('yearChanged', { currentYear: this.options.startYear, preventRendering: false });
+				
+				if(!eventResult.preventRendering) {
+					this.render();
+				}
 			}
 		},
 		getMinDate: function() {
