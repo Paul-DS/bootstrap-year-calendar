@@ -322,13 +322,14 @@
 						if(monthData.length > 0) {
 							$(this).find('.day-content').each(function() {
 								var currentDate = new Date(_this.options.startYear, month, $(this).text());
+								var nextDate = new Date(_this.options.startYear, month, currentDate.getDate() + 1);
 								
 								var dayData = [];
 								
 								if((_this.options.minDate == null || currentDate >= _this.options.minDate) && (_this.options.maxDate == null || currentDate <= _this.options.maxDate))
 								{
 									for(var i in monthData) {
-										if(monthData[i].startDate <= currentDate && monthData[i].endDate >= currentDate) {
+										if(monthData[i].startDate <= nextDate && monthData[i].endDate >= currentDate) {
 											dayData.push(monthData[i]);
 										}
 									}
@@ -809,9 +810,11 @@
 		getEvents: function(date) {
 			var events = [];
 			
+			var nextDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+			
 			if(this.options.dataSource && date) {
 				for(var i in this.options.dataSource) {
-					if(this.options.dataSource[i].startDate <= date && this.options.dataSource[i].endDate >= date) {
+					if(this.options.dataSource[i].startDate <= nextDate && this.options.dataSource[i].endDate >= nextDate) {
 						events.push(this.options.dataSource[i]);
 					}
 				}
