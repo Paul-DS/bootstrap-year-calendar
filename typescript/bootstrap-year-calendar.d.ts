@@ -196,6 +196,11 @@ interface CalendarOptions<T extends CalendarDataSourceElement> {
      * Function fired when a date range is selected.
      */
     selectRange?: (e: CalendarRangeEventObject) => void;
+	
+	/**
+     * Function fired when the visible year of the calendar is changed.
+     */
+    yearChanged?: (e: CalendarYearChangedEventObject) => void;
 }
 
 interface CalendarDayEventObject<T extends CalendarDataSourceElement> {
@@ -220,6 +225,13 @@ interface CalendarClickEventObject<T extends CalendarDataSourceElement> extends 
      * The clicked button.
      */
     which: number;
+}
+
+interface CalendarYearChangedEventObject {
+    /**
+     * The new year.
+     */
+    currentYear: number;
 }
 
 interface CalendarRenderEndEventObject {
@@ -608,4 +620,11 @@ interface JQuery {
      * @param handler A function to execute each time the event is triggered.
      */
     selectRange(handler: (e: CalendarRangeEventObject) => void): JQuery;
+	
+	/**
+     * Function fired when the visible year of the calendar is changed (for bootstrap-year-calendar only).
+     *
+     * @param handler A function to execute each time the event is triggered.
+     */
+    yearChanged(handler: (e: CalendarYearChangedEventObject) => void): JQuery;
 }

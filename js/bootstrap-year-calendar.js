@@ -64,6 +64,7 @@
 				opt = [];
 			}
 		
+			if(opt.yearChanged) { this.element.bind('yearChanged', opt.yearChanged); }
 			if(opt.renderEnd) { this.element.bind('renderEnd', opt.renderEnd); }
 			if(opt.clickDay) { this.element.bind('clickDay', opt.clickDay); }
 			if(opt.dayContextMenu) { this.element.bind('dayContextMenu', opt.dayContextMenu); }
@@ -833,6 +834,7 @@
 			var parsedYear = parseInt(year);
 			if(!isNaN(parsedYear)) {
 				this.options.startYear = parsedYear;
+				this._triggerEvent('yearChanged', { currentYear: this.options.startYear });
 				this._render();
 			}
 		},
@@ -988,6 +990,7 @@
 	}
 	
 	/* Events binding management */
+	$.fn.yearChanged = function(fct) { $(this).bind('yearChanged', fct); }
 	$.fn.renderEnd = function(fct) { $(this).bind('renderEnd', fct); }
 	$.fn.clickDay = function(fct) { $(this).bind('clickDay', fct); }
 	$.fn.dayContextMenu = function(fct) { $(this).bind('dayContextMenu', fct); }
