@@ -42,6 +42,7 @@
 				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
 				displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
 				displayDisabledDataSource: opt.displayDisabledDataSource != null ? opt.displayDisabledDataSource : false,
+				displayHeader: opt.displayHeader != null ? opt.displayHeader : true,
 				alwaysHalfDay: opt.alwaysHalfDay != null ? opt.alwaysHalfDay : false,
 				enableRangeSelection: opt.enableRangeSelection != null ? opt.enableRangeSelection : false,
 				disabledDays: opt.disabledDays instanceof Array ? opt.disabledDays : [],
@@ -80,7 +81,10 @@
 		_render: function() {
 			this.element.empty();
 			
-			this._renderHeader();
+			if(this.options.displayHeader) {
+				this._renderHeader();
+			}
+			
 			this._renderBody();
 			this._renderDataSource();
 			
@@ -868,6 +872,13 @@
 		},
 		setDisplayWeekNumber: function(displayWeekNumber) {
 			this.options.displayWeekNumber = displayWeekNumber;
+			this._render();
+		},
+		getDisplayHeader: function() {
+			return this.options.displayHeader;
+		},
+		setDisplayHeader: function(displayHeader) {
+			this.options.displayHeader = displayHeader;
 			this._render();
 		},
 		getDisplayDisabledDataSource: function() {

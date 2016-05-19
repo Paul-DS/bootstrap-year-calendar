@@ -121,6 +121,11 @@ interface CalendarOptions<T extends CalendarDataSourceElement> {
      * Specifies whether the weeks number are displayed.
      */
     displayWeekNumber?: boolean;
+	
+	/**
+     * Specifies whether the calendar header is displayed.
+     */
+    displayHeader?: boolean;
 
     /**
      * Specifies whether the default context menu must be displayed when right clicking on a day.
@@ -301,6 +306,11 @@ interface Calendar<T extends CalendarDataSourceElement> {
      * Gets a value indicating whether the weeks number are displayed.
      */
     getDisplayWeekNumber(): boolean;
+	
+	/**
+     * Gets a value indicating whether the calendar header is displayed.
+     */
+    getDisplayHeader(): boolean;
 
     /**
      * Gets a value indicating whether the default context menu must be displayed when right clicking on a day.
@@ -433,6 +443,13 @@ interface Calendar<T extends CalendarDataSourceElement> {
      * @param  displayWeekNumber Indicates whether the weeks number are displayed.
      */
     setDisplayWeekNumber(displayWeekNumber: boolean): void;
+	
+	/**
+     * Sets a value indicating whether the calendar header is displayed. This method causes a refresh of the calendar.
+     *
+     * @param  displayHeader Indicates whether the calendar header is displayed.
+     */
+    setDisplayHeader(displayHeader: boolean): void;
 
     /**
      * Sets a value indicating whether the default context menu must be displayed when right clicking on a day. 
