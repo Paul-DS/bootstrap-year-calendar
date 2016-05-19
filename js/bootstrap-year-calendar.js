@@ -24,7 +24,7 @@
 		
 		this._initializeEvents(options);
 		this._initializeOptions(options);
-		this._render();
+		this.render();
 	};
  
 	Calendar.prototype = {
@@ -79,7 +79,7 @@
 				}
 			}
 		},
-		_render: function() {
+		render: function() {
 			this.element.empty();
 			
 			if(this.options.displayHeader) {
@@ -835,33 +835,42 @@
 			if(!isNaN(parsedYear)) {
 				this.options.startYear = parsedYear;
 				this._triggerEvent('yearChanged', { currentYear: this.options.startYear });
-				this._render();
+				this.render();
 			}
 		},
 		getMinDate: function() {
 			return this.options.minDate;
 		},
-		setMinDate: function(date) {
+		setMinDate: function(date, preventRendering) {
 			if(date instanceof Date) {
 				this.options.minDate = date;
-				this._render();
+				
+				if(!preventRendering) {
+					this.render();
+				}
 			}
 		},
 		getMaxDate: function() {
 			return this.options.maxDate;
 		},
-		setMaxDate: function(date) {
+		setMaxDate: function(date, preventRendering) {
 			if(date instanceof Date) {
 				this.options.maxDate = date;
-				this._render();
+				
+				if(!preventRendering) {
+					this.render();
+				}
 			}
 		},
 		getStyle: function() {
 			return this.options.style;
 		},
-		setStyle: function(style) {
+		setStyle: function(style, preventRendering) {
 			this.options.style = style == 'background' || style == 'border' || style == 'custom' ? style : 'border';
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getAllowOverlap: function() {
 			return this.options.allowOverlap;
@@ -872,114 +881,162 @@
 		getDisplayWeekNumber: function() {
 			return this.options.displayWeekNumber;
 		},
-		setDisplayWeekNumber: function(displayWeekNumber) {
+		setDisplayWeekNumber: function(displayWeekNumber, preventRendering) {
 			this.options.displayWeekNumber = displayWeekNumber;
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getDisplayHeader: function() {
 			return this.options.displayHeader;
 		},
-		setDisplayHeader: function(displayHeader) {
+		setDisplayHeader: function(displayHeader, preventRendering) {
 			this.options.displayHeader = displayHeader;
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getDisplayDisabledDataSource: function() {
 			return this.options.displayDisabledDataSource;
 		},
-		setDisplayDisabledDataSource: function(displayDisabledDataSource) {
+		setDisplayDisabledDataSource: function(displayDisabledDataSource, preventRendering) {
 			this.options.displayDisabledDataSource = displayDisabledDataSource;
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getAlwaysHalfDay: function() {
 			return this.options.alwaysHalfDay;
 		},
-		setAlwaysHalfDay: function(alwaysHalfDay) {
+		setAlwaysHalfDay: function(alwaysHalfDay, preventRendering) {
 			this.options.alwaysHalfDay = alwaysHalfDay;
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getEnableRangeSelection: function() {
 			return this.options.enableRangeSelection;
 		},
-		setEnableRangeSelection: function(enableRangeSelection) {
+		setEnableRangeSelection: function(enableRangeSelection, preventRendering) {
 			this.options.enableRangeSelection = enableRangeSelection;
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getDisabledDays: function() {
 			return this.options.disabledDays;
 		},
-		setDisabledDays: function(disabledDays) {
+		setDisabledDays: function(disabledDays, preventRendering) {
 			this.options.disabledDays = disabledDays instanceof Array ? disabledDays : [];
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getDisabledWeekDays: function() {
 			return this.options.disabledWeekDays;
 		},
-		setDisabledWeekDays: function(disabledWeekDays) {
+		setDisabledWeekDays: function(disabledWeekDays, preventRendering) {
 			this.options.disabledWeekDays = disabledWeekDays instanceof Array ? disabledWeekDays : [];
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getHiddenWeekDays: function() {
 			return this.options.hiddenWeekDays;
 		},
-		setHiddenWeekDays: function(hiddenWeekDays) {
+		setHiddenWeekDays: function(hiddenWeekDays, preventRendering) {
 			this.options.hiddenWeekDays = hiddenWeekDays instanceof Array ? hiddenWeekDays : [];
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getRoundRangeLimits: function() {
 			return this.options.roundRangeLimits;
 		},
-		setRoundRangeLimits: function(roundRangeLimits) {
+		setRoundRangeLimits: function(roundRangeLimits, preventRendering) {
 			this.options.roundRangeLimits = roundRangeLimits;
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getEnableContextMenu: function() {
 			return this.options.enableContextMenu;
 		},
-		setEnableContextMenu: function(enableContextMenu) {
+		setEnableContextMenu: function(enableContextMenu, preventRendering) {
 			this.options.enableContextMenu = enableContextMenu;
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getContextMenuItems: function() {
 			return this.options.contextMenuItems;
 		},
-		setContextMenuItems: function(contextMenuItems) {
+		setContextMenuItems: function(contextMenuItems, preventRendering) {
 			this.options.contextMenuItems = contextMenuItems instanceof Array ? contextMenuItems : [];
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getCustomDayRenderer: function() {
 			return this.options.customDayRenderer;
 		},
-		setCustomDayRenderer: function(customDayRenderer) {
+		setCustomDayRenderer: function(customDayRenderer, preventRendering) {
 			this.options.customDayRenderer = $.isFunction(customDayRenderer) ? customDayRenderer : null;
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getCustomDataSourceRenderer: function() {
 			return this.options.customDataSourceRenderer;
 		},
-		setCustomDataSourceRenderer: function(customDataSourceRenderer) {
+		setCustomDataSourceRenderer: function(customDataSourceRenderer, preventRendering) {
 			this.options.customDataSourceRenderer = $.isFunction(customDataSourceRenderer) ? customDataSourceRenderer : null;
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
 		getLanguage: function() {
 			return this.options.language;
 		},
-		setLanguage: function(language) {
+		setLanguage: function(language, preventRendering) {
 			if(language != null && dates[language] != null) {
 				this.options.language = language;
-				this._render();
+				
+				if(!preventRendering) {
+					this.render();
+				}
 			}
 		},
 		getDataSource: function() {
 			return this.options.dataSource;
 		},
-		setDataSource: function(dataSource) {
+		setDataSource: function(dataSource, preventRendering) {
 			this.options.dataSource = dataSource instanceof Array ? dataSource : [];
 			this._initializeDatasourceColors();
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		},
-		addEvent: function(evt) {
+		addEvent: function(evt, preventRendering) {
 			this.options.dataSource.push(evt);
-			this._render();
+			
+			if(!preventRendering) {
+				this.render();
+			}
 		}
 	}
  
