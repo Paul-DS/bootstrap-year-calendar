@@ -334,7 +334,7 @@
 								if((_this.options.minDate == null || currentDate >= _this.options.minDate) && (_this.options.maxDate == null || currentDate <= _this.options.maxDate))
 								{
 									for(var i in monthData) {
-										if(monthData[i].startDate <= nextDate && monthData[i].endDate >= currentDate) {
+										if(monthData[i].startDate < nextDate && monthData[i].endDate >= currentDate) {
 											dayData.push(monthData[i]);
 										}
 									}
@@ -827,7 +827,7 @@
 			
 			if(this.options.dataSource && date) {
 				for(var i in this.options.dataSource) {
-					if(this.options.dataSource[i].startDate <= nextDate && this.options.dataSource[i].endDate >= date) {
+					if(this.options.dataSource[i].startDate < nextDate && this.options.dataSource[i].endDate >= date) {
 						events.push(this.options.dataSource[i]);
 					}
 				}
