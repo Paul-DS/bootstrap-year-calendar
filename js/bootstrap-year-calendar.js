@@ -458,7 +458,6 @@
 						_this.element.find('.months-container').css('margin-left', '0');
 						
 						setTimeout(function() { 
-							_this.element.find('.months-container').hide();
 							_this.setYear(_this.options.startYear - 1);
 						}, 50);
 					});
@@ -472,7 +471,6 @@
 						_this.element.find('.months-container').css('margin-left', '0');
 						
 						setTimeout(function() { 
-							_this.element.find('.months-container').hide();
 							_this.setYear(_this.options.startYear + 1);
 						}, 50);
 					});
@@ -844,6 +842,13 @@
 			var parsedYear = parseInt(year);
 			if(!isNaN(parsedYear)) {
 				this.options.startYear = parsedYear;
+								
+				this.element.empty();
+			
+				if(this.options.displayHeader) {
+					this._renderHeader();
+				}
+				
 				var eventResult = this._triggerEvent('yearChanged', { currentYear: this.options.startYear, preventRendering: false });
 				
 				if(!eventResult.preventRendering) {
