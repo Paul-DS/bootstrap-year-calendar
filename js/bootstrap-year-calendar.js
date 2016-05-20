@@ -827,7 +827,7 @@
 			
 			if(this.options.dataSource && date) {
 				for(var i in this.options.dataSource) {
-					if(this.options.dataSource[i].startDate <= nextDate && this.options.dataSource[i].endDate >= nextDate) {
+					if(this.options.dataSource[i].startDate <= nextDate && this.options.dataSource[i].endDate >= date) {
 						events.push(this.options.dataSource[i]);
 					}
 				}
