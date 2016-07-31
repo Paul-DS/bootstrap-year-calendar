@@ -54,7 +54,8 @@
 				enableContextMenu: opt.enableContextMenu != null ? opt.enableContextMenu : false,
 				contextMenuItems: opt.contextMenuItems instanceof Array ? opt.contextMenuItems : [],
 				customDayRenderer : $.isFunction(opt.customDayRenderer) ? opt.customDayRenderer : null,
-				customDataSourceRenderer : $.isFunction(opt.customDataSourceRenderer) ? opt.customDataSourceRenderer : null
+				customDataSourceRenderer : $.isFunction(opt.customDataSourceRenderer) ? opt.customDataSourceRenderer : null,
+				weekStart: !isNaN(parseInt(opt.weekStart)) ? parseInt(opt.weekStart) : null
 			};
 			
 			this._initializeDatasourceColors();
@@ -215,7 +216,8 @@
 					headerRow.append(weekNumberCell);
 				}
 				
-				var d = dates[this.options.language].weekStart;
+				var weekStart = this.options.weekStart ? this.options.weekStart : dates[this.options.language].weekStart;
+				var d = weekStart;
 				do
 				{
 					var headerCell = $(document.createElement('th'));
@@ -232,7 +234,7 @@
 					if(d >= 7)
 						d = 0;
 				}
-				while(d != dates[this.options.language].weekStart)
+				while(d != weekStart)
 				
 				thead.append(headerRow);
 				table.append(thead);
@@ -240,8 +242,6 @@
 				/* Days */
 				var currentDate = new Date(firstDate.getTime());
 				var lastDate = new Date(this.options.startYear, m + 1, 0);
-				
-				var weekStart = dates[this.options.language].weekStart
 				
 				while(currentDate.getDay() != weekStart)
 				{
@@ -1045,6 +1045,16 @@
 			this.options.dataSource = dataSource instanceof Array ? dataSource : [];
 			this._initializeDatasourceColors();
 			
+			if(!preventRendering) {
+				this.render();
+			}
+		},
+		getWeekStart: function() {
+			return this.options.weekStart ? this.options.weekStart : dates[this.options.language].weekStart;
+		},
+		setWeekStart: function(weekStart, preventRendering) {
+			this.options.weekStart = !isNaN(parseInt(weekStart)) ? parseInt(weekStart) : null;
+
 			if(!preventRendering) {
 				this.render();
 			}

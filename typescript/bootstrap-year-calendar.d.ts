@@ -167,6 +167,11 @@ interface CalendarOptions<T extends CalendarDataSourceElement> {
      */
     style?: string;
 	
+	/**
+     * The starting day of the week. This option overrides the parameter define in the language file.
+     */
+    weekStart?: number;
+	
     /**
      * Function fired when a day is clicked.
      */
@@ -370,6 +375,11 @@ interface Calendar<T extends CalendarDataSourceElement> {
      * Gets the current style used for displaying data source.
      */
     getStyle(): string;
+	
+	/**
+     * Gets the starting day of the week.
+     */
+    getWeekStart(): number;
 
     /**
      * Gets the week number for a specified date.
@@ -541,6 +551,14 @@ interface Calendar<T extends CalendarDataSourceElement> {
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
     setStyle(style: string, preventRedering: boolean?): void;
+	
+	/**
+     * Sets the starting day of the week. This method causes a refresh of the calendar.
+     *
+     * @param year The starting day of the week. This option overrides the parameter define in the language file.
+     * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+    setWeekStart(weekStart: number, preventRedering: boolean?): void;
 
     /**
      * Sets the year displayed on the calendar.
