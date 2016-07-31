@@ -579,7 +579,11 @@
 						var minDate = _this._rangeStart < _this._rangeEnd ? _this._rangeStart : _this._rangeEnd;
 						var maxDate = _this._rangeEnd > _this._rangeStart ? _this._rangeEnd : _this._rangeStart;
 
-						_this._triggerEvent('selectRange', { startDate: minDate, endDate: maxDate });
+						_this._triggerEvent('selectRange', { 
+							startDate: minDate, 
+							endDate: maxDate,
+							events: _this.getEventsOnRange(minDate, new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate() + 1))
+						});
 					}
 				});
 			}
@@ -821,13 +825,14 @@
 			return 1 + Math.round(((tempDate.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
 		},
 		getEvents: function(date) {
+			return this.getEventsOnRange(date, new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1));
+		},
+		getEventsOnRange: function(startDate, endDate) {
 			var events = [];
 			
-			var nextDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
-			
-			if(this.options.dataSource && date) {
+			if(this.options.dataSource && startDate && endDate) {
 				for(var i in this.options.dataSource) {
-					if(this.options.dataSource[i].startDate < nextDate && this.options.dataSource[i].endDate >= date) {
+					if(this.options.dataSource[i].startDate < endDate && this.options.dataSource[i].endDate >= startDate) {
 						events.push(this.options.dataSource[i]);
 					}
 				}

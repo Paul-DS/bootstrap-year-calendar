@@ -349,7 +349,15 @@ interface Calendar<T extends CalendarDataSourceElement> {
      *
      * @param date The specified day.
      */
-    getEvents(Date: Date): T[];
+    getEvents(date: Date): T[];
+	
+	/**
+     * Gets the data source elements for a specified range of days.
+     *
+     * @param startDate The beginning of the day range.
+	 * @param endDate The end of the day range.
+     */
+    getEventsOnRange(startDate: Date, endDate: Date): T[];
 
     /**
      * Gets the language used for calendar rendering.
