@@ -1,5 +1,5 @@
 /* =========================================================
- * Bootstrap year calendar v1.1.0
+ * Bootstrap year calendar v1.2.0
  * Repo: https://github.com/Paul-DS/bootstrap-year-calendar
  * =========================================================
  * Created by Paul David-Sivelle
@@ -48,6 +48,7 @@
 				displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
 				enableContextMenu: opt.enableContextMenu != null ? opt.enableContextMenu : false,
 				enableRangeSelection: opt.enableRangeSelection != null ? opt.enableRangeSelection : false,
+				enabledDays: opt.enabledDays instanceof Array ? opt.enabledDays : [],
 				hiddenWeekDays: opt.hiddenWeekDays instanceof Array ? opt.hiddenWeekDays : [],
 				language: (opt.language != null && dates[opt.language] != null) ? opt.language : 'en',
 				maxDate: opt.maxDate instanceof Date ? opt.maxDate : null,
@@ -804,6 +805,16 @@
 				}
 			}
 
+			if(this.options.enabledDays.length > 0) {
+				for(var d in this.options.enabledDays){
+					if(date.getTime() == this.options.enabledDays[d].getTime()) {
+						return false;
+					}
+				}
+
+				return true;
+			}
+
 			return false;
 		},
 		_isHidden: function(day) {
@@ -946,6 +957,16 @@
 		},
 		setEnableRangeSelection: function(enableRangeSelection, preventRendering) {
 			this.options.enableRangeSelection = enableRangeSelection;
+
+			if(!preventRendering) {
+				this.render();
+			}
+		},
+		getEnabledDays: function() {
+			return this.options.enabledDays;
+		},
+		setEnabledDays: function(enabledDays, preventRendering) {
+			this.options.enabledDays = enabledDays instanceof Array ? enabledDays : [];
 
 			if(!preventRendering) {
 				this.render();

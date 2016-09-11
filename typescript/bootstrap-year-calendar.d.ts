@@ -1,4 +1,4 @@
-// Type definitions for bootstrap-year-calendar v1.1.0
+// Type definitions for bootstrap-year-calendar v1.2.0
 // Project: https://github.com/Paul-DS/bootstrap-year-calendar
 // Definitions by: Paul David-Sivelle
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
@@ -103,17 +103,12 @@ declare namespace BootstrapYearCalendar {
          */
         disabledDays?: Date[];
 
-      /**
+        /**
          * The days of the week that must be displayed as disabled (0 for Sunday, 1 for Monday, etc.).
          */
         disabledWeekDays?: number[];
 
-      /**
-         * The days of the week that must not be displayed (0 for Sunday, 1 for Monday, etc.).
-         */
-        hiddenWeekDays?: number[];
-
-      /**
+        /**
          * Specifies whether the data source must be rendered on disabled days.
          */
         displayDisabledDataSource?: boolean;
@@ -123,7 +118,7 @@ declare namespace BootstrapYearCalendar {
          */
         displayWeekNumber?: boolean;
 
-      /**
+        /**
          * Specifies whether the calendar header is displayed.
          */
         displayHeader?: boolean;
@@ -137,6 +132,16 @@ declare namespace BootstrapYearCalendar {
          * Specifies whether the range selection is enabled.
          */
         enableRangeSelection?: boolean;
+
+        /**
+         * The days that must be displayed as enabled.
+         */
+        enabledDays?: Date[];
+
+        /**
+         * The days of the week that must not be displayed (0 for Sunday, 1 for Monday, etc.).
+         */
+        hiddenWeekDays?: number[];
 
         /**
          * The language/culture used for calendar rendering.
@@ -310,17 +315,12 @@ declare namespace BootstrapYearCalendar {
          */
         getDisabledDays(): Date[];
 
-      /**
+        /**
          * Gets the disabled days of the week.
          */
         getDisabledWeekDays(): number[];
 
-      /**
-         * Gets the hidden days of the week.
-         */
-        getHiddenWeekDays(): number[];
-
-      /**
+        /**
          * Gets a value indicating whether the data source must be rendered on disabled days.
          */
         getDisplayDisabledDataSource(): boolean;
@@ -346,19 +346,29 @@ declare namespace BootstrapYearCalendar {
         getEnableRangeSelection(): boolean;
 
         /**
+         * Gets the enabled days.
+         */
+        getEnabledDays(): Date[];
+
+        /**
          * Gets the data source elements for a specified day.
          *
          * @param date The specified day.
          */
         getEvents(date: Date): T[];
 
-      /**
+        /**
          * Gets the data source elements for a specified range of days.
          *
          * @param startDate The beginning of the day range.
-       * @param endDate The end of the day range.
+         * @param endDate The end of the day range.
          */
         getEventsOnRange(startDate: Date, endDate: Date): T[];
+
+        /**
+         * Gets the hidden days of the week.
+         */
+        getHiddenWeekDays(): number[];
 
         /**
          * Gets the language used for calendar rendering.
@@ -459,7 +469,7 @@ declare namespace BootstrapYearCalendar {
          * Sets the disabled days. This method causes a refresh of the calendar.
          *
          * @param disabledDays The disabled days to set.
-       * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+         * @param preventRedering Indicates whether the rendering should be prevented after the property update.
          */
         setDisabledDays(disabledDays: Date[], preventRedering?: boolean): void;
 
@@ -470,14 +480,6 @@ declare namespace BootstrapYearCalendar {
        * @param preventRedering Indicates whether the rendering should be prevented after the property update.
          */
         setDisabledWeekDays(disabledWeekDays: number[], preventRedering?: boolean): void;
-
-      /**
-         * Sets the hidden days of the week. This method causes a refresh of the calendar.
-         *
-         * @param hiddenWeekDays The hidden days of the week to set.
-       * @param preventRedering Indicates whether the rendering should be prevented after the property update.
-         */
-        setHiddenWeekDays(hiddenWeekDays: number[], preventRedering?: boolean): void;
 
       /**
          * Sets a value indicating whether the data source must be rendered on disabled days. This method causes a refresh of the calendar.
@@ -519,6 +521,22 @@ declare namespace BootstrapYearCalendar {
        * @param preventRedering Indicates whether the rendering should be prevented after the property update.
          */
         setEnableRangeSelection(enableRangeSelection: boolean, preventRedering?: boolean): void;
+
+        /**
+         * Sets the enabled days. This method causes a refresh of the calendar.
+         *
+         * @param enabledDays The enabled days to set.
+         * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+         */
+        setEnabledDays(enabledDays: Date[], preventRedering?: boolean): void;
+
+        /**
+         * Sets the hidden days of the week. This method causes a refresh of the calendar.
+         *
+         * @param hiddenWeekDays The hidden days of the week to set.
+         * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+         */
+        setHiddenWeekDays(hiddenWeekDays: number[], preventRedering?: boolean): void;
 
         /**
          * Sets the language used for calendar rendering. This method causes a refresh of the calendar.
