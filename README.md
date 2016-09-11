@@ -19,6 +19,8 @@ You can get the widget using the following methods:
 
 ## Usage
 
+### jQuery
+
 You can create a calendar using the following javascript code :
 ```
 $('.calendar').calendar()
@@ -30,4 +32,47 @@ $('.calendar').calendar(options)
 or with the `data-provide` html attribute 
 ```
 <div data-provide="calendar"></div>
+```
+
+### TypeScript
+- Include the typings file from *typescript* folder into your typings directory (ex. MyProject\typings\globals\bootstrap-year-calendar.d.ts)
+- Modify your typings file index.d.ts to include it (ex. MyProject\typings\index.d.ts)
+```
+/// <reference path="globals/jquery/jquery.d.ts" />
+/// <reference path="globals/bootstrap-year-calendar/bootstrap-year-calendar.d.ts" />
+```
+- Import the module and use the classes in your app (ex. app.component.ts)
+```
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { BaseCalendar } from 'bootstrap-year-calendar';
+
+declare let $: JQueryStatic;
+
+@Component({
+  moduleId: module.id,
+  selector: 'my-app',
+  template: `<div #calendarTS></div>`
+})
+export class AppComponent implements AfterViewInit {
+  @ViewChild('calendarTS') calendar: ElementRef;
+
+  ngAfterViewInit(): void {
+    let currentYear = new Date().getFullYear();
+
+    $(this.calendar.nativeElement).calendar({
+      enabledDays: [
+        new Date(currentYear, 1, 2),
+        new Date(currentYear, 1, 3),
+        new Date(currentYear, 1, 8),
+        new Date(currentYear, 1, 9)
+        ]
+    });
+    
+    let calendar: BaseCalendar = $(this.calendar.nativeElement).data('calendar');
+
+    if (calendar) {
+      calendar.setYear(2016);
+    }
+  }
+}
 ```
