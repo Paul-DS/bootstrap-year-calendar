@@ -24,7 +24,7 @@
 		
 		this._initializeEvents(options);
 		this._initializeOptions(options);
-		this.render();
+		this.setYear(options.startYear);
 	};
  
 	Calendar.prototype = {
