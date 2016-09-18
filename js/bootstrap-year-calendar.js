@@ -370,7 +370,7 @@
 					{
 						var boxShadow = '';
 					
-						for (var i in events)
+						for (var i = 0; i < events.length; i++)
 						{
 							if(boxShadow != '') {
 								boxShadow += ",";
