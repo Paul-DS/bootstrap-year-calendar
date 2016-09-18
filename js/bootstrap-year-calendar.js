@@ -24,7 +24,7 @@
 		
 		this._initializeEvents(options);
 		this._initializeOptions(options);
-		this.setYear(options.startYear);
+		this.setYear(this.options.startYear);
 	};
  
 	Calendar.prototype = {
@@ -370,7 +370,7 @@
 					{
 						var boxShadow = '';
 					
-						for(var i in events)
+						for (var i in events)
 						{
 							if(boxShadow != '') {
 								boxShadow += ",";
