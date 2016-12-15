@@ -334,7 +334,8 @@
 								if((_this.options.minDate == null || currentDate >= _this.options.minDate) && (_this.options.maxDate == null || currentDate <= _this.options.maxDate))
 								{
 									for(var i in monthData) {
-										if(monthData[i].startDate < nextDate && monthData[i].endDate >= currentDate) {
+										if (monthData[i].startDate.setHours(0, 0, 0, 0) < nextDate.setHours(0, 0, 0, 0) && monthData[i].endDate.setHours(0, 0, 0, 0) >= currentDate.setHours(0, 0, 0, 0))
+										{
 											dayData.push(monthData[i]);
 										}
 									}
