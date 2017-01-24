@@ -3,16 +3,16 @@
  * Paul DAVID-SIVELLE
  * Based on 
  * German translation for bootstrap-datepicker
- * Knútur Óli Magnússon <knutur@knutur.is>
+ * KnÃºtur Ã“li MagnÃºsson <knutur@knutur.is>
  */
  
 ;(function($){
   $.fn.calendar.dates['is'] = {
-    days: ["Sunnudagur", "Mánudagur", "Şriğjudagur", "Miğvikudagur", "Fimmtudagur", "Föstudagur", "Laugardagur"],
-    daysShort: ["Sun", "Mán", "Şri", "Miğ", "Fim", "Fös", "Lau"],
-    daysMin: ["Su", "Má", "Şr", "Mi", "Fi", "Fö", "La"],
-    months: ["Janúar", "Febrúar", "Mars", "Apríl", "Maí", "Júní", "Júlí", "Ágúst", "September", "Október", "Nóvember", "Desember"],
-    monthsShort: ["Jan", "Feb", "Mar", "Apr", "Maí", "Jún", "Júl", "Agú", "Sep", "Okt", "Nóv", "Des"],
+    days: ["Sunnudagur", "MÃ¡nudagur", "ÃriÃ°judagur", "MiÃ°vikudagur", "Fimmtudagur", "FÃ¶studagur", "Laugardagur"],
+    daysShort: ["Sun", "MÃ¡n", "Ãri", "MiÃ°", "Fim", "FÃ¶s", "Lau"],
+    daysMin: ["Su", "MÃ¡", "Ãr", "Mi", "Fi", "FÃ¶", "La"],
+    months: ["JanÃºar", "FebrÃºar", "Mars", "AprÃ­l", "MaÃ­", "JÃºnÃ­", "JÃºlÃ­", "ÃgÃºst", "September", "OktÃ³ber", "NÃ³vember", "Desember"],
+    monthsShort: ["Jan", "Feb", "Mar", "Apr", "MaÃ­", "JÃºn", "JÃºl", "AgÃº", "Sep", "Okt", "NÃ³v", "Des"],
     weekShort: 'W',
     weekStart: 1
   };
