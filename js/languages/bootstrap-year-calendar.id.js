@@ -1,6 +1,6 @@
 /**
  * Indonesian translation for bootstrap-year-calendar
- * Paul Kiki Ldc
+ * Kiki Ldc
  * Based on 
  * Indonesian translation for bootstrap-datepicker
  * Kiki Ldc <7x24th@gmail.com>
