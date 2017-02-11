@@ -611,8 +611,9 @@
 			});
 			
 			/* Responsive management */
-			
-			setInterval(function() {
+
+			clearInterval(timer);
+			timer = setInterval(function() {
 				var calendarSize = $(_this.element).width();
 				var monthSize = $(_this.element).find('.month').first().width() + 10;
 				var monthContainerClass = 'month-container';
@@ -1101,7 +1102,9 @@
 	};
 	
 	var colors = $.fn.calendar.colors = ['#2C8FC9', '#9CB703', '#F5BB00', '#FF4A32', '#B56CE2', '#45A597'];
-	
+
+	var timer = null;
+
 	$(function(){
 		$('[data-provide="calendar"]').each(function() {
 			$(this).calendar();
