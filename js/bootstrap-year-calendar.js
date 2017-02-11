@@ -634,7 +634,10 @@
 					monthContainerClass += ' col-xs-12';
 				}
 				
-				$(_this.element).find('.month-container').attr('class', monthContainerClass);
+				$(_this.element).find('.month-container').each(function() {
+					if ($(this).attr('class') != monthContainerClass)
+						$(this).attr('class', monthContainerClass);
+				});
 			}, 300);
 		},
 		_refreshRange: function () {
