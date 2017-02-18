@@ -774,7 +774,7 @@
 		_triggerEvent: function(eventName, parameters) {
 			var event = $.Event(eventName);
 			
-			for(var i = 0; i < parameters.length; i++) {
+			for(var i in parameters) {
 				event[i] = parameters[i];
 			}
 			
