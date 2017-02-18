@@ -1,9 +1,9 @@
 /**
  * Catalan translation for bootstrap-year-calendar
- * Paul DAVID-SIVELLE
+ * David Ramirez <david@davidrv.com>
  * Based on 
  * Catalan translation for bootstrap-datepicker
- * David Ramirez <david@davidrv.com>
+ * J. Garcia <jogaco.en@gmail.com>
  */
  
 ;(function($){
