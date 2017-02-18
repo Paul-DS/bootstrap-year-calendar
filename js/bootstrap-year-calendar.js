@@ -311,8 +311,8 @@
 				this.element.find('.month-container').each(function() {
 					var month = $(this).data('month-id');
 					
-					var firstDate = new Date(_this.options.startYear, month, 1);
-					var lastDate = new Date(_this.options.startYear, month + 1, 0);
+					var firstDate = new Date(_this.options.startYear, month, 1, 0, 0, 0);
+					var lastDate = new Date(_this.options.startYear, month + 1, 0, 23, 59, 59);
 					
 					if((_this.options.minDate == null || lastDate >= _this.options.minDate) && (_this.options.maxDate == null || firstDate <= _this.options.maxDate))
 					{
