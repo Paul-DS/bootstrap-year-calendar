@@ -1065,19 +1065,22 @@
 			}
 		},
 		addEvent: function(evt, preventRendering) {
+			if(evt.color == null) {
+				evt.color = colors[this.options.dataSource.length % colors.length];
+			}
 			this.options.dataSource.push(evt);
 			
 			if(!preventRendering) {
 				this.render();
 			}
 		}
-	}
+	};
  
 	$.fn.calendar = function (options) {
 		var calendar = new Calendar($(this) ,options);
 		$(this).data('calendar', calendar);
 		return calendar;
-	}
+	};
 	
 	/* Events binding management */
 	$.fn.yearChanged = function(fct) { $(this).bind('yearChanged', fct); }
