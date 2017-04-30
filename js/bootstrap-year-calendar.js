@@ -55,7 +55,8 @@
 				contextMenuItems: opt.contextMenuItems instanceof Array ? opt.contextMenuItems : [],
 				customDayRenderer : $.isFunction(opt.customDayRenderer) ? opt.customDayRenderer : null,
 				customDataSourceRenderer : $.isFunction(opt.customDataSourceRenderer) ? opt.customDataSourceRenderer : null,
-				weekStart: !isNaN(parseInt(opt.weekStart)) ? parseInt(opt.weekStart) : null
+				weekStart: !isNaN(parseInt(opt.weekStart)) ? parseInt(opt.weekStart) : null,
+				fadeInOnRender: opt.fadeInOnRender != null ? opt.fadeInOnRender : true
 			};
 			
 			this._initializeDatasourceColors();
@@ -91,7 +92,11 @@
 			this._renderDataSource();
 			
 			this._applyEvents();
-			this.element.find('.months-container').fadeIn(500);
+			if(this.options.fadeInOnRender) {
+				this.element.find('.months-container').fadeIn(500);
+			} else {
+				this.element.find('.months-container').show();
+			}
 			
 			this._triggerEvent('renderEnd', { currentYear: this.options.startYear });
 		},
