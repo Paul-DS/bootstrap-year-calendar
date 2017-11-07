@@ -2,6 +2,8 @@
  * Bootstrap year calendar v1.1.0
  * Repo: https://github.com/Paul-DS/bootstrap-year-calendar
  * =========================================================
+ * BOOTSTRAP 4 Integration by Raul Neiva
+ * =========================================================
  * Created by Paul David-Sivelle
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -97,7 +99,10 @@
 		},
 		_renderHeader: function() {
 			var header = $(document.createElement('div'));
-			header.addClass('calendar-header panel panel-default');
+			header.addClass('calendar-header card');
+
+			var headerBody = $(document.createElement('div'));
+			headerBody.addClass('card-body p-0');
 			
 			var headerTable = $(document.createElement('table'));
 			
@@ -175,7 +180,9 @@
 			
 			headerTable.append(nextDiv);
 			
-			header.append(headerTable);
+			headerBody.append(headerTable);
+
+			header.append(headerBody);
 			
 			this.element.append(header);
 		},
