@@ -114,7 +114,7 @@
 			}
 			
 			var prevIcon = $(document.createElement('span'));
-			prevIcon.addClass('glyphicon glyphicon-chevron-left');
+			prevIcon.addClass('oi oi-chevron-left');
 			
 			prevDiv.append(prevIcon);
 			
@@ -174,7 +174,7 @@
 			}
 			
 			var nextIcon = $(document.createElement('span'));
-			nextIcon.addClass('glyphicon glyphicon-chevron-right');
+			nextIcon.addClass('oi oi-chevron-right');
 			
 			nextDiv.append(nextIcon);
 			
@@ -705,7 +705,7 @@
 				eventItem.append(eventItemContent);
 				
 				var icon = $(document.createElement('span'));
-				icon.addClass('glyphicon glyphicon-chevron-right');
+				icon.addClass('oi oi-chevron-right');
 				
 				eventItem.append(icon);
 				
@@ -749,7 +749,7 @@
 					}
 					
 					var icon = $(document.createElement('span'));
-					icon.addClass('glyphicon glyphicon-chevron-right');
+					icon.addClass('oi oi-chevron-right');
 					
 					menuItem.append(icon);
 					

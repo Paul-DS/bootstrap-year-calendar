@@ -22,6 +22,7 @@
   "homepage": "http://www.bootstrap-year-calendar.com/",
   "dependencies": {
     "bootstrap": ">=3.1.1",
-    "jquery": ">=1.8.2"
+    "jquery": ">=1.8.2",
+    "open-icon": ">=1.1.1"
   }
 }
