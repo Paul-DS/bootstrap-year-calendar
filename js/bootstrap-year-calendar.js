@@ -189,6 +189,11 @@
 		_renderBody: function() {
 			var monthsDiv = $(document.createElement('div'));
 			monthsDiv.addClass('months-container');
+
+			var bsRow = $(document.createElement('div'));
+			bsRow.addClass('row m-0');
+
+			monthsDiv.append(bsRow);
 			
 			for(var m = 0; m < 12; m++) {
 				/* Container */
@@ -307,7 +312,7 @@
 				
 				monthDiv.append(table);
 				
-				monthsDiv.append(monthDiv);
+				bsRow.append(monthDiv);
 			}
 			
 			this.element.append(monthsDiv);
@@ -625,19 +630,19 @@
 				var monthContainerClass = 'month-container';
 				
 				if(monthSize * 6 < calendarSize) {
-					monthContainerClass += ' col-xs-2';
+					monthContainerClass += ' col-2';
 				}
 				else if(monthSize * 4 < calendarSize) {
-					monthContainerClass += ' col-xs-3';
+					monthContainerClass += ' col-3';
 				}
 				else if(monthSize * 3 < calendarSize) {
-					monthContainerClass += ' col-xs-4';
+					monthContainerClass += ' col-4';
 				}
 				else if(monthSize * 2 < calendarSize) {
-					monthContainerClass += ' col-xs-6';
+					monthContainerClass += ' col-6';
 				}
 				else {
-					monthContainerClass += ' col-xs-12';
+					monthContainerClass += ' col-12';
 				}
 				
 				$(_this.element).find('.month-container').attr('class', monthContainerClass);
