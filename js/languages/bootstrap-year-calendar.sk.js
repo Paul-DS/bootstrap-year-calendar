@@ -1,9 +1,7 @@
 /**
- * German translation for bootstrap-year-calendar
- * Paul DAVID-SIVELLE
- * Based on 
- * German translation for bootstrap-datepicker
- * Sam Zurcher <sam@orelias.ch>
+ * Slovak translation for bootstrap-year-calendar
+ * Marian Sulgan
+ * marian@sulgan.sk
  */
  
 ;(function($){
