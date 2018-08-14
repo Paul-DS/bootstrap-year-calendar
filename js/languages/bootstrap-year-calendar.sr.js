@@ -13,4 +13,4 @@
 		weekShort: 'н',
 		weekStart: 1
 	};
-}(jQuery));
+}(jQuery)); 
