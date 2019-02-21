@@ -1,6 +1,4 @@
-bootstrap-year-calendar
+js-year-calendar
 =======================
 
-A fully customizable year calendar widget, for boostrap !
-
-You can find all details on the `official website <http://www.bootstrap-year-calendar.com/>`_.
+A fully customizable year calendar widget

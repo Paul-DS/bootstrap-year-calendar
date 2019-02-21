@@ -1,8 +1,8 @@
 {
-  "name": "bootstrap-year-calendar",
+  "name": "js-year-calendar",
   "main": [
-    "css/bootstrap-year-calendar.css",
-    "js/bootstrap-year-calendar.js"
+    "css/js-year-calendar.css",
+    "js/js-year-calendar.js"
   ],
   "license": "Apache-2.0",
   "dependencies": {
