@@ -4,6 +4,9 @@
   "description": "A fully customizable year calendar widget",
   "main": "./js/js-year-calendar.js",
   "scripts": {
+    "watch": "gulp watch",
+    "build": "gulp build",
+    "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
