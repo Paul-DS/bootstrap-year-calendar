@@ -19,7 +19,7 @@
  
 export default class Calendar {
 
-	static dates = {
+	static locales = {
 		en: {
 			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
 			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -61,7 +61,7 @@ export default class Calendar {
 			startYear: !isNaN(parseInt(opt.startYear)) ? parseInt(opt.startYear) : new Date().getFullYear(),
 			minDate: opt.minDate instanceof Date ? opt.minDate : null,
 			maxDate: opt.maxDate instanceof Date ? opt.maxDate : null,
-			language: (opt.language != null && Calendar.dates[opt.language] != null) ? opt.language : 'en',
+			language: (opt.language != null && Calendar.locales[opt.language] != null) ? opt.language : 'en',
 			allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
 			displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
 			displayDisabledDataSource: opt.displayDisabledDataSource != null ? opt.displayDisabledDataSource : false,
@@ -230,7 +230,7 @@ export default class Calendar {
 			var titleCell = $(document.createElement('th'));
 			titleCell.addClass('month-title');
 			titleCell.attr('colspan', this.options.displayWeekNumber ? 8 : 7);
-			titleCell.text(Calendar.dates[this.options.language].months[m]);
+			titleCell.text(Calendar.locales[this.options.language].months[m]);
 			
 			titleRow.append(titleCell);
 			thead.append(titleRow);
@@ -240,17 +240,17 @@ export default class Calendar {
 			if(this.options.displayWeekNumber) {
 				var weekNumberCell = $(document.createElement('th'));
 				weekNumberCell.addClass('week-number');
-				weekNumberCell.text(Calendar.dates[this.options.language].weekShort);
+				weekNumberCell.text(Calendar.locales[this.options.language].weekShort);
 				headerRow.append(weekNumberCell);
 			}
 			
-			var weekStart = this.options.weekStart ? this.options.weekStart : Calendar.dates[this.options.language].weekStart;
+			var weekStart = this.options.weekStart ? this.options.weekStart : Calendar.locales[this.options.language].weekStart;
 			var d = weekStart;
 			do
 			{
 				var headerCell = $(document.createElement('th'));
 				headerCell.addClass('day-header');
-				headerCell.text(Calendar.dates[this.options.language].daysMin[d]);
+				headerCell.text(Calendar.locales[this.options.language].daysMin[d]);
 				
 				if(this._isHidden(d)) {
 					headerCell.addClass('hidden');
@@ -1115,7 +1115,7 @@ export default class Calendar {
 	}
 
 	setLanguage(language, preventRendering) {
-		if(language != null && Calendar.dates[language] != null) {
+		if(language != null && Calendar.locales[language] != null) {
 			this.options.language = language;
 			
 			if(!preventRendering) {
@@ -1138,7 +1138,7 @@ export default class Calendar {
 	}
 
 	getWeekStart() {
-		return this.options.weekStart ? this.options.weekStart : Calendar.dates[this.options.language].weekStart;
+		return this.options.weekStart ? this.options.weekStart : Calendar.locales[this.options.language].weekStart;
 	}
 
 	setWeekStart(weekStart, preventRendering) {
