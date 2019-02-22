@@ -618,19 +618,19 @@
 				var monthContainerClass = 'month-container';
 				
 				if(monthSize * 6 < calendarSize) {
-					monthContainerClass += ' col-xs-2';
+					monthContainerClass += ' month-2';
 				}
 				else if(monthSize * 4 < calendarSize) {
-					monthContainerClass += ' col-xs-3';
+					monthContainerClass += ' month-3';
 				}
 				else if(monthSize * 3 < calendarSize) {
-					monthContainerClass += ' col-xs-4';
+					monthContainerClass += ' month-4';
 				}
 				else if(monthSize * 2 < calendarSize) {
-					monthContainerClass += ' col-xs-6';
+					monthContainerClass += ' month-6';
 				}
 				else {
-					monthContainerClass += ' col-xs-12';
+					monthContainerClass += ' month-12';
 				}
 				
 				$(_this.element).find('.month-container').attr('class', monthContainerClass);

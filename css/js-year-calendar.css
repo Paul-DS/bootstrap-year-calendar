@@ -120,9 +120,30 @@
 }
 
 .calendar .month-container {
+	float: left;
 	text-align:center;
 	height:200px;
 	padding:0;
+}
+
+.calendar .month-container.month-2 {
+	width: 16.66666667%;
+}
+
+.calendar .month-container.month-3 {
+	width: 25%;
+}
+
+.calendar .month-container.month-4 {
+	width: 33.33333333%;
+}
+
+.calendar .month-container.month-6 {
+	width: 50%;
+}
+
+.calendar .month-container.month-12 {
+	width: 100%;
 }
 
 .calendar table.month th.month-title
