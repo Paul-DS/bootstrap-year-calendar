@@ -18,13 +18,5 @@ You can get the widget using the following methods:
 
 You can create a calendar using the following javascript code :
 ```
-$('.calendar').calendar()
-```
-or
-```
-$('.calendar').calendar(options)
-```
-or with the `data-provide` html attribute 
-```
-<div data-provide="calendar"></div>
+new Calendar('.calendar')
 ```

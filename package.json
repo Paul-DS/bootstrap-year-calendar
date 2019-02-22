@@ -24,5 +24,14 @@
   "homepage": "https://github.com/year-calendar/js-year-calendar",
   "dependencies": {
     "jquery": ">=1.8.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/plugin-proposal-class-properties": "^7.3.3",
+    "@babel/plugin-transform-modules-umd": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-watch": "^5.0.1"
   }
 }
