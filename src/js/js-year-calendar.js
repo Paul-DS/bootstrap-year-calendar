@@ -41,10 +41,11 @@ export default class Calendar {
 			this.element = $(element);
 		}
 		else {
-			throw new Error("The element parameter should be a node or a selector");
+			throw new Error("The element parameter should be a DOM node or a selector");
 		}
 
 		this.element.addClass('calendar');
+		this.element.data('calendar', this);
 		
 		this._initializeEvents(options);
 		this._initializeOptions(options);
