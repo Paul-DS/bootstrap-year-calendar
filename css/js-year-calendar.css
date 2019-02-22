@@ -47,7 +47,8 @@
 }
 
 .calendar table {
-  margin: auto;
+	margin: auto;
+	border-spacing: 0;
 }
 
 .calendar table td,
@@ -65,6 +66,7 @@
 {
 	width:100%;
 	margin-bottom:20px;
+	border: 1px solid #ddd;
 }
 
 .calendar .calendar-header table

@@ -97,7 +97,7 @@
 		},
 		_renderHeader: function() {
 			var header = $(document.createElement('div'));
-			header.addClass('calendar-header panel panel-default');
+			header.addClass('calendar-header');
 			
 			var headerTable = $(document.createElement('table'));
 			

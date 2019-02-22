@@ -12,7 +12,9 @@
   },
   "keywords": [
     "calendar",
-    "bootstrap"
+    "year",
+    "javascript",
+    "widget"
   ],
   "author": "Paul-DS",
   "license": "Apache-2.0",
@@ -21,7 +23,6 @@
   },
   "homepage": "https://github.com/year-calendar/js-year-calendar",
   "dependencies": {
-    "bootstrap": ">=3.1.1",
     "jquery": ">=1.8.2"
   }
 }

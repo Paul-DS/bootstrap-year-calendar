@@ -6,7 +6,6 @@ A fully customizable year calendar widget
 ## Requirements
 
 This plugin requires the following libraries :
-- Bootstrap v3.0.0 or later
 - jQuery v1.8.0 or later
 
 ## Installation
