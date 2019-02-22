@@ -12,7 +12,6 @@ This plugin requires the following libraries :
 You can get the widget using the following methods:
 - From the [GitHub repository](https://github.com/year-calendar/js-year-calendar/releases)
 - From the Node package manager, using the following command: `npm install js-year-calendar`
-- From Bower, using the following command: `bower install js-year-calendar`
 
 ## Usage
 
