@@ -5,8 +5,7 @@ A fully customizable year calendar widget
 
 ## Requirements
 
-This plugin requires the following libraries :
-- jQuery v1.8.0 or later
+This plugin uses pure javascript. No library is required.
 
 ## Installation
 You can get the widget using the following methods:

@@ -26,7 +26,6 @@
   },
   "homepage": "https://github.com/year-calendar/js-year-calendar",
   "dependencies": {
-    "jquery": ">=1.8.2"
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",
