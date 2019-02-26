@@ -121,8 +121,16 @@ export default class Calendar {
 		
 		this._applyEvents();
 
-		this.element.querySelector('.months-container').style.display = 'block';
-		this.element.querySelector('.months-container').animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500 });
+		// Fade animation
+		var months = this.element.querySelector('.months-container');
+		months.style.opacity = 0;
+		months.style.display = 'block';
+		months.style.transition = 'opacity 0.5s';
+		setTimeout(() => {
+			months.style.opacity = 1;
+
+			setTimeout(() => months.style.transition = '', 500);
+		}, 0);
 		
 		this._triggerEvent('renderEnd', { currentYear: this.options.startYear });
 	}
@@ -489,28 +497,37 @@ export default class Calendar {
 			
 			this.element.querySelector('.calendar-header .prev').addEventListener('click', e => {
 				if (!e.currentTarget.classList.contains('disabled')) {
-					this.element.querySelector('.months-container').animate([{ marginLeft: 0 }, { marginLeft: '100%' }], { duration: 100 }).onfinish = () => {
-						this.element.querySelector('.months-container').style.visibility = 'hidden';
-						this.element.querySelector('.months-container').style.marginLeft = '0';
-						
+					var months = this.element.querySelector('.months-container');
+
+					months.style.transition = 'margin-left 0.1s';
+					months.style.marginLeft = '100%';
+					setTimeout(() => {
+						months.style.visibility = 'hidden';
+						months.style.transition = '';
+						months.style.marginLeft = 0;
+
 						setTimeout(() => { 
 							this.setYear(this.options.startYear - 1);
 						}, 50);
-					};
+					}, 100);
 				}
 			});
 			
 			this.element.querySelector('.calendar-header .next').addEventListener('click', e => {
 				if (!e.currentTarget.classList.contains('disabled')) {
-					// TODO: Remove jQuery dependency
-					this.element.querySelector('.months-container').animate([{ marginLeft: 0 }, { marginLeft: '-100%' }], { duration: 100 }).onfinish = () => {
-						this.element.querySelector('.months-container').style.visibility = 'hidden';
-						this.element.querySelector('.months-container').style.marginLeft = '0';
-						
+					var months = this.element.querySelector('.months-container');
+
+					months.style.transition = 'margin-left 0.1s';
+					months.style.marginLeft = '-100%';
+					setTimeout(() => {
+						months.style.visibility = 'hidden';
+						months.style.transition = '';
+						months.style.marginLeft = 0;
+
 						setTimeout(() => { 
 							this.setYear(this.options.startYear + 1);
 						}, 50);
-					};
+					}, 100);
 				}
 			});
 		}
