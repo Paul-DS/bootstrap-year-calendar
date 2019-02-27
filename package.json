@@ -9,6 +9,10 @@
     "prepare": "npm run build",
     "test": "jest"
   },
+  "pre-commit": [
+    "build",
+    "test"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/year-calendar/js-year-calendar.git"
