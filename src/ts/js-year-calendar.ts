@@ -17,13 +17,21 @@
  * limitations under the License.
  * ========================================================= */
 
+import CalendarContextMenuItem from './interfaces/CalendarContextMenuItem';
+import CalendarDataSourceElement from './interfaces/CalendarDataSourceElement';
+import CalendarOptions from './interfaces/CalendarOptions';
+import CalendarDayEventObject from './interfaces/CalendarDayEventObject';
+import CalendarClickEventObject from './interfaces/CalendarClickEventObject';
+import CalendarYearChangedEventObject from './interfaces/CalendarYearChangedEventObject';
+import CalendarRenderEndEventObject from './interfaces/CalendarRenderEndEventObject';
+import CalendarRangeEventObject from './interfaces/CalendarRangeEventObject';
 
 /**
- * Represent a context menu item for the calendar.
+ * Calendar instance.
  */
-export default class Calendar {
+export default class Calendar<T extends CalendarDataSourceElement> {
 	element: HTMLElement;
-	options: any;
+	options: CalendarOptions<T>;
 	_mouseDown: boolean;
 	_rangeStart: Date;
 	_rangeEnd: Date;
@@ -42,7 +50,12 @@ export default class Calendar {
 
 	static colors = ['#2C8FC9', '#9CB703', '#F5BB00', '#FF4A32', '#B56CE2', '#45A597'];
 	
-	constructor(element, options = null) {
+	/**
+	 * Create a new calendar.
+	 * @param element The element (or the selector to an element) in which the calendar should be created.
+	 * @param options [Optional] The options used to customize the calendar
+	 */
+	constructor(element: HTMLElement|string, options: any = null) {
 		if (element instanceof HTMLElement) {
 			this.element = element;
 		}
@@ -59,9 +72,8 @@ export default class Calendar {
 		this._initializeOptions(options);
 		this.setYear(this.options.startYear);
 	}
- 
 	
-	_initializeOptions(opt) {
+	private _initializeOptions(opt: any): void {
 		if (opt == null) {
 			opt = [];
 		}
@@ -93,7 +105,7 @@ export default class Calendar {
 		this._initializeDatasourceColors();
 	}
 
-	_initializeEvents(opt) {
+	private _initializeEvents(opt): void {
 		if (opt == null) {
 			opt = [];
 		}
@@ -107,7 +119,7 @@ export default class Calendar {
 		if (opt.mouseOutDay) { this.element.addEventListener('mouseOutDay', opt.mouseOutDay); }
 	}
 
-	_initializeDatasourceColors() {
+	private _initializeDatasourceColors(): void {
 		for (var i = 0; i < this.options.dataSource.length; i++) {
 			if (this.options.dataSource[i].color == null) {
 				this.options.dataSource[i].color = Calendar.colors[i % Calendar.colors.length];
@@ -115,7 +127,10 @@ export default class Calendar {
 		}
 	}
 
-	render() {
+	/**
+     * Renders the calendar.
+     */
+	public render(): void {
 		// Clear the calendar (faster method)
 		while (this.element.firstChild) {
 			this.element.removeChild(this.element.firstChild);
@@ -144,7 +159,7 @@ export default class Calendar {
 		this._triggerEvent('renderEnd', { currentYear: this.options.startYear });
 	}
 
-	_renderHeader() {
+	private _renderHeader(): void {
 		var header = document.createElement('div');
 		header.classList.add('calendar-header');
 		
@@ -186,13 +201,13 @@ export default class Calendar {
 		
 		var yearDiv = document.createElement('th');
 		yearDiv.classList.add('year-title');
-		yearDiv.textContent = this.options.startYear;
+		yearDiv.textContent = this.options.startYear.toString();
 		
 		headerTable.appendChild(yearDiv);
 		
 		var nextYearDiv = document.createElement('th');
 		nextYearDiv.classList.add('year-title', 'year-neighbor', 'hidden-xs');
-		nextYearDiv.textContent = this.options.startYear + 1;
+		nextYearDiv.textContent = (this.options.startYear + 1).toString();
 		
 		if (this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 1, 0, 1)) {
 			nextYearDiv.classList.add('disabled');
@@ -202,7 +217,7 @@ export default class Calendar {
 		
 		var next2YearDiv = document.createElement('th');
 		next2YearDiv.classList.add('year-title', 'year-neighbor2', 'hidden-sm', 'hidden-xs');
-		next2YearDiv.textContent = this.options.startYear + 2;
+		next2YearDiv.textContent = (this.options.startYear + 2).toString();
 		
 		if (this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 2, 0, 1)) {
 			next2YearDiv.classList.add('disabled');
@@ -229,7 +244,7 @@ export default class Calendar {
 		this.element.appendChild(header);
 	}
 
-	_renderBody() {
+	private _renderBody(): void {
 		var monthsDiv = document.createElement('div');
 		monthsDiv.classList.add('months-container');
 		
@@ -356,7 +371,7 @@ export default class Calendar {
 		this.element.appendChild(monthsDiv);
 	}
 
-	_renderDataSource() {
+	private _renderDataSource(): void {
 		if (this.options.dataSource != null && this.options.dataSource.length > 0) {
 			this.element.querySelectorAll('.month-container').forEach((month: HTMLElement) => {
 				var monthId = parseInt(month.dataset.monthId);
@@ -375,7 +390,7 @@ export default class Calendar {
 					}
 					
 					if (monthData.length > 0) {
-						month.querySelectorAll('.day-content').forEach(day => {
+						month.querySelectorAll('.day-content').forEach((day: HTMLElement) => {
 							var currentDate = new Date(this.options.startYear, monthId, parseInt(day.textContent));
 							var nextDate = new Date(this.options.startYear, monthId, currentDate.getDate() + 1);
 							
@@ -401,7 +416,9 @@ export default class Calendar {
 		}
 	}
 
-	_renderDataSourceDay(elt, currentDate, events) {
+	private _renderDataSourceDay(elt: HTMLElement, currentDate: Date, events: T[]): void {
+		const parent = elt.parentElement;
+
 		switch (this.options.style)
 		{
 			case 'border':
@@ -414,7 +431,7 @@ export default class Calendar {
 					weight = 2;
 				}
 				else {
-					elt.parentNode.style.boxShadow = 'inset 0 -4px 0 0 black';
+					parent.style.boxShadow = 'inset 0 -4px 0 0 black';
 				}
 				
 				if (weight > 0)
@@ -430,21 +447,21 @@ export default class Calendar {
 						boxShadow += `inset 0 -${(i + 1) * weight}px 0 0 ${events[i].color}`;
 					}
 					
-					elt.parentNode.style.boxShadow = boxShadow;
+					parent.style.boxShadow = boxShadow;
 				}
 				break;
 		
 			case 'background':
-				elt.parentNode.style.backgroundColor = events[events.length - 1].color;
+				parent.style.backgroundColor = events[events.length - 1].color;
 				
 				var currentTime = currentDate.getTime();
 				
 				if (events[events.length - 1].startDate.getTime() == currentTime)
 				{
-					elt.parentNode.classList.add('day-start');
+					parent.classList.add('day-start');
 					
 					if (events[events.length - 1].startHalfDay || this.options.alwaysHalfDay) {
-						elt.parentNode.classList.add('day-half');
+						parent.classList.add('day-half');
 						
 						// Find color for other half
 						var otherColor = 'transparent';
@@ -455,18 +472,18 @@ export default class Calendar {
 							}
 						}
 						
-						elt.parentNode.style.background = `linear-gradient(-45deg, ${events[events.length - 1].color}, ${events[events.length - 1].color} 49%, ${otherColor} 51%, ${otherColor})`;
+						parent.style.background = `linear-gradient(-45deg, ${events[events.length - 1].color}, ${events[events.length - 1].color} 49%, ${otherColor} 51%, ${otherColor})`;
 					}
 					else if (this.options.roundRangeLimits) {
-						elt.parentNode.classList.add('round-left');
+						parent.classList.add('round-left');
 					}
 				}
 				else if (events[events.length - 1].endDate.getTime() == currentTime)
 				{
-					elt.parentNode.classList.add('day-end');
+					parent.classList.add('day-end');
 					
 					if (events[events.length - 1].endHalfDay || this.options.alwaysHalfDay) {
-						elt.parentNode.classList.add('day-half');
+						parent.classList.add('day-half');
 						
 						// Find color for other half
 						var otherColor = 'transparent';
@@ -477,10 +494,10 @@ export default class Calendar {
 							}
 						}
 						
-						elt.parentNode.style.background = `linear-gradient(135deg, ${events[events.length - 1].color}, ${events[events.length - 1].color} 49%, ${otherColor} 51%, ${otherColor})`;
+						parent.style.background = `linear-gradient(135deg, ${events[events.length - 1].color}, ${events[events.length - 1].color} 49%, ${otherColor} 51%, ${otherColor})`;
 					}
 					else if (this.options.roundRangeLimits) {
-						elt.parentNode.classList.add('round-right');
+						parent.classList.add('round-right');
 					}
 				}
 				break;
@@ -493,7 +510,7 @@ export default class Calendar {
 		}
 	}
 
-	_applyEvents () {
+	private _applyEvents(): void {
 		if (this.options.displayHeader) {
 			/* Header buttons */
 			this.element.querySelectorAll('.year-neighbor, .year-neighbor2').forEach(element => {
@@ -564,7 +581,7 @@ export default class Calendar {
 					e.preventDefault();
 					if (this.options.contextMenuItems.length > 0)
 					{
-						this._openContextMenu(e.currentTarget);
+						this._openContextMenu(e.currentTarget as HTMLElement);
 					}
 				}
 					
@@ -710,7 +727,7 @@ export default class Calendar {
 		}, 300);
 	}
 
-	_refreshRange () {
+	private _refreshRange(): void {
 		this.element.querySelectorAll('td.day.range').forEach(day => day.classList.remove('range'));
 		this.element.querySelectorAll('td.day.range-start').forEach(day => day.classList.remove('range-start'));
 		this.element.querySelectorAll('td.day.range-end').forEach(day => day.classList.remove('range-end'));
@@ -742,7 +759,7 @@ export default class Calendar {
 		}
 	}
 
-	_openContextMenu(elt) {
+	private _openContextMenu(elt: HTMLElement): void {
 		var contextMenu = document.querySelector('.calendar-context-menu') as HTMLElement;
 		
 		if (contextMenu !== null) {
@@ -794,40 +811,42 @@ export default class Calendar {
 		}
 	}
 
-	_renderContextMenuItems(parent, items, evt) {
+	private _renderContextMenuItems(parent: HTMLElement, items: CalendarContextMenuItem<T>[], evt: T): void {
 		var subMenu = document.createElement('div');
 		subMenu.classList.add('submenu');
 		
 		for (var i = 0; i < items.length; i++) {
-			if (!items[i].visible || items[i].visible(evt)) {
-				var menuItem = document.createElement('div');
-				menuItem.classList.add('item');
-				
-				var menuItemContent = document.createElement('div');
-				menuItemContent.classList.add('content');
-				menuItemContent.textContent = items[i].text;
-				
-				menuItem.appendChild(menuItemContent);
-				
-				if (items[i].click) {
-					(function(index) {
-						menuItem.addEventListener('click', () => {
-							items[index].click(evt);
-						});
-					})(i);
-				}
-				
-				var icon = document.createElement('span');
-				icon.innerHTML = "&rsaquo;";
-				
-				menuItem.appendChild(icon);
-				
-				if (items[i].items && items[i].items.length > 0) {
-					this._renderContextMenuItems(menuItem, items[i].items, evt);
-				}
-				
-				subMenu.appendChild(menuItem);
+			if (items[i].visible === false || (typeof items[i].visible === "function" && !(items[i] as any).visible(evt))) {
+				continue;
 			}
+
+			var menuItem = document.createElement('div');
+			menuItem.classList.add('item');
+			
+			var menuItemContent = document.createElement('div');
+			menuItemContent.classList.add('content');
+			menuItemContent.textContent = items[i].text;
+			
+			menuItem.appendChild(menuItemContent);
+			
+			if (items[i].click) {
+				(function(index) {
+					menuItem.addEventListener('click', () => {
+						items[index].click(evt);
+					});
+				})(i);
+			}
+			
+			var icon = document.createElement('span');
+			icon.innerHTML = "&rsaquo;";
+			
+			menuItem.appendChild(icon);
+			
+			if (items[i].items && items[i].items.length > 0) {
+				this._renderContextMenuItems(menuItem, items[i].items, evt);
+			}
+			
+			subMenu.appendChild(menuItem);
 		}
 		
 		if (subMenu.children.length > 0)
@@ -836,15 +855,15 @@ export default class Calendar {
 		}
 	}
 
-	_getDate(elt) {
-		var day = elt.querySelectorAll(':scope > .day-content').textContent;
+	private _getDate(elt): Date {
+		var day = elt.querySelector(':scope > .day-content').textContent;
 		var month = elt.closest('.month-container').dataset.monthId;
 		var year = this.options.startYear;
 
 		return new Date(year, month, day);
 	}
 
-	_triggerEvent(eventName, parameters) {
+	private _triggerEvent(eventName: string, parameters: any) {
 		var event:any = new Event(eventName);
 		
 		for (var i in parameters) {
@@ -856,7 +875,7 @@ export default class Calendar {
 		return event;
 	}
 
-	_isDisabled(date) {
+	private _isDisabled(date: Date): boolean {
 		if ((this.options.minDate != null && date < this.options.minDate) || (this.options.maxDate != null && date > this.options.maxDate))
 		{
 			return true;
@@ -881,7 +900,7 @@ export default class Calendar {
 		return false;
 	}
 	
-	_isHidden(day) {
+	private _isHidden(day: number): boolean {
 		if (this.options.hiddenWeekDays.length > 0) {
 			for (var d = 0; d < this.options.hiddenWeekDays.length; d++) {
 				if (day == this.options.hiddenWeekDays[d]) {
@@ -893,7 +912,12 @@ export default class Calendar {
 		return false;
 	}
 
-	getWeekNumber(date) {
+	/**
+     * Gets the week number for a specified date.
+     *
+     * @param date The specified date.
+     */
+	public getWeekNumber(date: Date): number {
 		var tempDate = new Date(date.getTime());
 		tempDate.setHours(0, 0, 0, 0);
 		tempDate.setDate(tempDate.getDate() + 3 - (tempDate.getDay() + 6) % 7);
@@ -901,11 +925,22 @@ export default class Calendar {
 		return 1 + Math.round(((tempDate.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
 	}
 
-	getEvents(date) {
+	/**
+     * Gets the data source elements for a specified day.
+     *
+     * @param date The specified day.
+     */
+	public getEvents(date: Date): T[] {
 		return this.getEventsOnRange(date, new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1));
 	}
 
-	getEventsOnRange(startDate, endDate) {
+	/**
+     * Gets the data source elements for a specified range of days.
+     *
+     * @param startDate The beginning of the day range.
+	 * @param endDate The end of the day range.
+     */
+	public getEventsOnRange(startDate: Date, endDate: Date): T[] {
 		var events = [];
 		
 		if (this.options.dataSource && startDate && endDate) {
@@ -919,12 +954,20 @@ export default class Calendar {
 		return events;
 	}
 
-	getYear() {
+	/**
+     * Gets the year displayed on the calendar.
+     */
+	public getYear(): number {
 		return this.options.startYear;
 	}
 
-	setYear(year) {
-		var parsedYear = parseInt(year);
+	/**
+     * Sets the year displayed on the calendar.
+     *
+     * @param year The year to displayed on the calendar.
+     */
+	public setYear(year: number | string): void {
+		var parsedYear = parseInt(year as string);
 		if (!isNaN(parsedYear)) {
 			this.options.startYear = parsedYear;
 							
@@ -945,11 +988,20 @@ export default class Calendar {
 		}
 	}
 
-	getMinDate() {
+	/**
+     * Gets the minimum date of the calendar.
+     */
+	public getMinDate(): Date {
 		return this.options.minDate;
 	}
 
-	setMinDate(date, preventRendering) {
+	/**
+     * Sets the minimum date of the calendar. This method causes a refresh of the calendar.
+     *
+     * @param minDate The minimum date to set.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setMinDate(date: Date, preventRendering: boolean): void {
 		if (date instanceof Date) {
 			this.options.minDate = date;
 			
@@ -959,11 +1011,20 @@ export default class Calendar {
 		}
 	}
 
-	getMaxDate() {
+	/**
+     * Gets the maximum date of the calendar.
+     */
+	public getMaxDate(): Date {
 		return this.options.maxDate;
 	}
 
-	setMaxDate(date, preventRendering) {
+	/**
+     * Sets the maximum date of the calendar. This method causes a refresh of the calendar.
+     *
+     * @param maxDate The maximum date to set.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setMaxDate(date: Date, preventRendering: boolean): void {
 		if (date instanceof Date) {
 			this.options.maxDate = date;
 			
@@ -973,11 +1034,20 @@ export default class Calendar {
 		}
 	}
 
-	getStyle() {
+	/**
+     * Gets the current style used for displaying data source.
+     */
+	public getStyle(): string {
 		return this.options.style;
 	}
 
-	setStyle(style, preventRendering) {
+	/**
+     * Sets the style to use for displaying data source. This method causes a refresh of the calendar.
+     *
+     * @param style The style to use for displaying data source ("background", "border" or "custom").
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setStyle(style: string, preventRendering: boolean): void {
 		this.options.style = style == 'background' || style == 'border' || style == 'custom' ? style : 'border';
 		
 		if (!preventRendering) {
@@ -985,19 +1055,36 @@ export default class Calendar {
 		}
 	}
 
-	getAllowOverlap() {
+	/**
+     * Gets a value indicating whether the user can select a range which overlapping an other element present in the datasource.
+     */
+	public getAllowOverlap(): boolean {
 		return this.options.allowOverlap;
 	}
 
-	setAllowOverlap(allowOverlap) {
+	/**
+     * Sets a value indicating whether the user can select a range which overlapping an other element present in the datasource.
+     *
+     * @param allowOverlap Indicates whether the user can select a range which overlapping an other element present in the datasource.
+     */
+	public setAllowOverlap(allowOverlap: boolean): void {
 		this.options.allowOverlap = allowOverlap;
 	}
 
-	getDisplayWeekNumber() {
+	/**
+     * Gets a value indicating whether the weeks number are displayed.
+     */
+	public getDisplayWeekNumber(): boolean {
 		return this.options.displayWeekNumber;
 	}
 
-	setDisplayWeekNumber(displayWeekNumber, preventRendering) {
+	/**
+     * Sets a value indicating whether the weeks number are displayed. This method causes a refresh of the calendar.
+     *
+     * @param  displayWeekNumber Indicates whether the weeks number are displayed.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setDisplayWeekNumber(displayWeekNumber: boolean, preventRendering: boolean): void {
 		this.options.displayWeekNumber = displayWeekNumber;
 		
 		if (!preventRendering) {
@@ -1005,11 +1092,20 @@ export default class Calendar {
 		}
 	}
 
-	getDisplayHeader() {
+	/**
+     * Gets a value indicating whether the calendar header is displayed.
+     */
+	public getDisplayHeader(): boolean {
 		return this.options.displayHeader;
 	}
 
-	setDisplayHeader(displayHeader, preventRendering) {
+	/**
+     * Sets a value indicating whether the calendar header is displayed. This method causes a refresh of the calendar.
+     *
+     * @param  displayHeader Indicates whether the calendar header is displayed.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setDisplayHeader(displayHeader: boolean, preventRendering: boolean): void {
 		this.options.displayHeader = displayHeader;
 		
 		if (!preventRendering) {
@@ -1017,11 +1113,20 @@ export default class Calendar {
 		}
 	}
 
-	getDisplayDisabledDataSource() {
+	/**
+     * Gets a value indicating whether the data source must be rendered on disabled days.
+     */
+	public getDisplayDisabledDataSource(): boolean {
 		return this.options.displayDisabledDataSource;
 	}
 
-	setDisplayDisabledDataSource(displayDisabledDataSource, preventRendering) {
+	/**
+     * Sets a value indicating whether the data source must be rendered on disabled days. This method causes a refresh of the calendar.
+     *
+     * @param  displayDisabledDataSource Indicates whether the data source must be rendered on disabled days.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setDisplayDisabledDataSource(displayDisabledDataSource: boolean, preventRendering: boolean): void {
 		this.options.displayDisabledDataSource = displayDisabledDataSource;
 		
 		if (!preventRendering) {
@@ -1029,11 +1134,21 @@ export default class Calendar {
 		}
 	}
 
-	getAlwaysHalfDay() {
+	/**
+     * Gets a value indicating whether the beginning and the end of each range should be displayed as half selected day.
+     */
+	public getAlwaysHalfDay(): boolean {
 		return this.options.alwaysHalfDay;
 	}
 
-	setAlwaysHalfDay(alwaysHalfDay, preventRendering) {
+	/**
+     * Sets a value indicating whether the beginning and the end of each range should be displayed as half selected day.
+	 * This method causes a refresh of the calendar.
+     *
+     * @param alwaysHalfDay Indicates whether the beginning and the end of each range should be displayed as half selected day.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setAlwaysHalfDay(alwaysHalfDay: boolean, preventRendering: boolean): void {
 		this.options.alwaysHalfDay = alwaysHalfDay;
 		
 		if (!preventRendering) {
@@ -1041,11 +1156,20 @@ export default class Calendar {
 		}
 	}
 
-	getEnableRangeSelection() {
+	/**
+     * Gets a value indicating whether the user can make range selection.
+     */
+	public getEnableRangeSelection(): boolean {
 		return this.options.enableRangeSelection;
 	}
 
-	setEnableRangeSelection(enableRangeSelection, preventRendering) {
+	/**
+     * Sets a value indicating whether the user can make range selection. This method causes a refresh of the calendar.
+     *
+     * @param enableRangeSelection Indicates whether the user can make range selection.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setEnableRangeSelection(enableRangeSelection: boolean, preventRendering: boolean): void {
 		this.options.enableRangeSelection = enableRangeSelection;
 		
 		if (!preventRendering) {
@@ -1053,11 +1177,20 @@ export default class Calendar {
 		}
 	}
 
-	getDisabledDays() {
+	/**
+     * Gets the disabled days.
+     */
+	public getDisabledDays(): Date[] {
 		return this.options.disabledDays;
 	}
 
-	setDisabledDays(disabledDays, preventRendering) {
+	/**
+     * Sets the disabled days. This method causes a refresh of the calendar.
+     *
+     * @param disableDays The disabled days to set.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setDisabledDays(disabledDays: Date[], preventRendering: boolean): void {
 		this.options.disabledDays = disabledDays instanceof Array ? disabledDays : [];
 		
 		if (!preventRendering) {
@@ -1065,11 +1198,20 @@ export default class Calendar {
 		}
 	}
 
-	getDisabledWeekDays() {
+	/**
+     * Gets the disabled days of the week.
+     */
+	public getDisabledWeekDays(): number[] {
 		return this.options.disabledWeekDays;
 	}
 
-	setDisabledWeekDays(disabledWeekDays, preventRendering) {
+	/**
+     * Sets the disabled days of the week. This method causes a refresh of the calendar.
+     *
+     * @param disabledWeekDays The disabled days of the week to set.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setDisabledWeekDays(disabledWeekDays: number[], preventRendering: boolean): void {
 		this.options.disabledWeekDays = disabledWeekDays instanceof Array ? disabledWeekDays : [];
 		
 		if (!preventRendering) {
@@ -1077,11 +1219,20 @@ export default class Calendar {
 		}
 	}
 
-	getHiddenWeekDays() {
+	/**
+     * Gets the hidden days of the week.
+     */
+	public getHiddenWeekDays(): number[] {
 		return this.options.hiddenWeekDays;
 	}
 
-	setHiddenWeekDays(hiddenWeekDays, preventRendering) {
+	/**
+     * Sets the hidden days of the week. This method causes a refresh of the calendar.
+     *
+     * @param hiddenWeekDays The hidden days of the week to set.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setHiddenWeekDays(hiddenWeekDays: number[], preventRendering: boolean): void {
 		this.options.hiddenWeekDays = hiddenWeekDays instanceof Array ? hiddenWeekDays : [];
 		
 		if (!preventRendering) {
@@ -1089,11 +1240,21 @@ export default class Calendar {
 		}
 	}
 
-	getRoundRangeLimits() {
+	/**
+     * Gets a value indicating whether the beginning and the end of each range should be displayed as rounded cells.
+     */
+	public getRoundRangeLimits(): boolean {
 		return this.options.roundRangeLimits;
 	}
 
-	setRoundRangeLimits(roundRangeLimits, preventRendering) {
+	/**
+     * Sets a value indicating whether the beginning and the end of each range should be displayed as rounded cells.
+	 * This method causes a refresh of the calendar.
+     *
+     * @param roundRangeLimits Indicates whether the beginning and the end of each range should be displayed as rounded cells. 
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setRoundRangeLimits(roundRangeLimits: boolean, preventRendering: boolean): void {
 		this.options.roundRangeLimits = roundRangeLimits;
 		
 		if (!preventRendering) {
@@ -1101,11 +1262,21 @@ export default class Calendar {
 		}
 	}
 
-	getEnableContextMenu() {
+	/**
+     * Gets a value indicating whether the default context menu must be displayed when right clicking on a day.
+     */
+	public getEnableContextMenu(): boolean {
 		return this.options.enableContextMenu;
 	}
 
-	setEnableContextMenu(enableContextMenu, preventRendering) {
+	/**
+     * Sets a value indicating whether the default context menu must be displayed when right clicking on a day. 
+     * This method causes a refresh of the calendar.
+     * 
+     * @param enableContextMenu Indicates whether the default context menu must be displayed when right clicking on a day.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setEnableContextMenu(enableContextMenu: boolean, preventRendering: boolean): void {
 		this.options.enableContextMenu = enableContextMenu;
 		
 		if (!preventRendering) {
@@ -1113,11 +1284,20 @@ export default class Calendar {
 		}
 	}
 
-	getContextMenuItems() {
+	/**
+     * Gets the context menu items.
+     */
+	public getContextMenuItems(): CalendarContextMenuItem<T>[] {
 		return this.options.contextMenuItems;
 	}
 
-	setContextMenuItems(contextMenuItems, preventRendering) {
+	/**
+     * Sets new context menu items. This method causes a refresh of the calendar.
+     *
+     * @param contextMenuItems The new context menu items.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setContextMenuItems(contextMenuItems: CalendarContextMenuItem<T>[], preventRendering: boolean): void {
 		this.options.contextMenuItems = contextMenuItems instanceof Array ? contextMenuItems : [];
 		
 		if (!preventRendering) {
@@ -1125,11 +1305,20 @@ export default class Calendar {
 		}
 	}
 
-	getCustomDayRenderer() {
+	/**
+     * Gets the custom day renderer.
+     */
+	public getCustomDayRenderer(): (element: HTMLElement, currentDate: Date) => void {
 		return this.options.customDayRenderer;
 	}
 
-	setCustomDayRenderer(customDayRenderer, preventRendering) {
+	/**
+     * Sets the custom day renderer. This method causes a refresh of the calendar.
+	 *
+	 * @param handler The function used to render the days. This function is called during render for each day.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setCustomDayRenderer(customDayRenderer: (element: HTMLElement, currentDate: Date) => void, preventRendering: boolean): void {
 		this.options.customDayRenderer = typeof customDayRenderer === "function" ? customDayRenderer : null;
 		
 		if (!preventRendering) {
@@ -1137,11 +1326,20 @@ export default class Calendar {
 		}
 	}
 
-	getCustomDataSourceRenderer() {
+	/**
+     * Gets the custom data source renderer.
+     */
+	public getCustomDataSourceRenderer(): (element: HTMLElement, currentDate: Date, events: T[]) => void {
 		return this.options.customDataSourceRenderer;
 	}
 
-	setCustomDataSourceRenderer(customDataSourceRenderer, preventRendering) {
+	/**
+     * Sets the custom data source renderer. Works only with the style set to "custom". This method causes a refresh of the calendar.
+	 *
+	 * @param handler The function used to render the data source. This function is called during render for each day containing at least one event.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setCustomDataSourceRenderer(customDataSourceRenderer: (element: HTMLElement, currentDate: Date, events: T[]) => void, preventRendering: boolean): void {
 		this.options.customDataSourceRenderer = typeof customDataSourceRenderer === "function" ? customDataSourceRenderer : null;
 		
 		if (!preventRendering) {
@@ -1149,11 +1347,20 @@ export default class Calendar {
 		}
 	}
 
-	getLanguage() {
+	/**
+     * Gets the language used for calendar rendering.
+     */
+	public getLanguage(): string {
 		return this.options.language;
 	}
 
-	setLanguage(language, preventRendering) {
+	/**
+     * Sets the language used for calendar rendering. This method causes a refresh of the calendar.
+     *
+     * @param language The language to use for calendar redering.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setLanguage(language: string, preventRendering: boolean): void {
 		if (language != null && Calendar.locales[language] != null) {
 			this.options.language = language;
 			
@@ -1163,11 +1370,20 @@ export default class Calendar {
 		}
 	}
 
-	getDataSource() {
+	/**
+     * Gets the current data source.
+     */
+	public getDataSource(): T[] {
 		return this.options.dataSource;
 	}
 
-	setDataSource(dataSource, preventRendering) {
+	/**
+     * Sets a new data source. This method causes a refresh of the calendar.
+     *
+     * @param dataSource The new data source.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setDataSource(dataSource: T[], preventRendering: boolean): void {
 		this.options.dataSource = dataSource instanceof Array ? dataSource : [];
 		this._initializeDatasourceColors();
 		
@@ -1176,19 +1392,34 @@ export default class Calendar {
 		}
 	}
 
-	getWeekStart() {
+	/**
+     * Gets the starting day of the week.
+     */
+	public getWeekStart(): number {
 		return this.options.weekStart ? this.options.weekStart : Calendar.locales[this.options.language].weekStart;
 	}
 
-	setWeekStart(weekStart, preventRendering) {
-		this.options.weekStart = !isNaN(parseInt(weekStart)) ? parseInt(weekStart) : null;
+	/**
+     * Sets the starting day of the week. This method causes a refresh of the calendar.
+     *
+     * @param year The starting day of the week. This option overrides the parameter define in the language file.
+     * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setWeekStart(weekStart: number | string, preventRendering: boolean): void {
+		this.options.weekStart = !isNaN(parseInt(weekStart as string)) ? parseInt(weekStart as string) : null;
 
 		if (!preventRendering) {
 			this.render();
 		}
 	}
 
-	addEvent(evt, preventRendering) {
+	/**
+     * Add a new element to the data source. This method causes a refresh of the calendar.
+     * 
+     * @param element The element to add.
+	 * @param preventRendering Indicates whether the calendar shouldn't be refreshed once the event added.
+     */
+	public addEvent(evt: T, preventRendering: boolean) {
 		this.options.dataSource.push(evt);
 		
 		if (!preventRendering) {
@@ -1205,6 +1436,6 @@ if (typeof window === "object") {
 	window.Calendar = Calendar;
 
 	document.addEventListener("DOMContentLoaded", () => { 
-		document.querySelectorAll('[data-provide="calendar"]').forEach(element => new Calendar(element));
+		document.querySelectorAll('[data-provide="calendar"]').forEach((element: HTMLElement) => new Calendar(element));
 	});
 }
