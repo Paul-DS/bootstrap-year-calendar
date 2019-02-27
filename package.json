@@ -7,7 +7,7 @@
     "watch": "gulp watch",
     "build": "gulp build",
     "prepare": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -25,8 +25,7 @@
     "url": "https://github.com/year-calendar/js-year-calendar/issues"
   },
   "homepage": "https://github.com/year-calendar/js-year-calendar",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.3.3",
     "@babel/plugin-proposal-class-properties": "^7.3.3",
@@ -37,6 +36,12 @@
     "gulp-clean-css": "^4.0.0",
     "gulp-less": "^4.0.1",
     "gulp-rename": "^1.4.0",
-    "gulp-uglify": "^3.0.1"
+    "gulp-uglify": "^3.0.1",
+    "jest": "^24.1.0"
+  },
+  "jest": {
+    "testMatch": [
+      "**/tests/*.[jt]s?(x)"
+    ]
   }
 }
