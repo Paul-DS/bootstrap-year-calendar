@@ -16,8 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================= */
- 
+
+
+/**
+ * Represent a context menu item for the calendar.
+ */
 export default class Calendar {
+	element: HTMLElement;
+	options: any;
+	_mouseDown: boolean;
+	_rangeStart: Date;
+	_rangeEnd: Date;
 
 	static locales = {
 		en: {
@@ -33,7 +42,7 @@ export default class Calendar {
 
 	static colors = ['#2C8FC9', '#9CB703', '#F5BB00', '#FF4A32', '#B56CE2', '#45A597'];
 	
-	constructor(element, options) {
+	constructor(element, options = null) {
 		if (element instanceof HTMLElement) {
 			this.element = element;
 		}
@@ -122,12 +131,12 @@ export default class Calendar {
 		this._applyEvents();
 
 		// Fade animation
-		var months = this.element.querySelector('.months-container');
-		months.style.opacity = 0;
+		var months = this.element.querySelector('.months-container') as HTMLElement;
+		months.style.opacity = '0';
 		months.style.display = 'block';
 		months.style.transition = 'opacity 0.5s';
 		setTimeout(() => {
-			months.style.opacity = 1;
+			months.style.opacity = '1';
 
 			setTimeout(() => months.style.transition = '', 500);
 		}, 0);
@@ -157,7 +166,7 @@ export default class Calendar {
 		
 		var prev2YearDiv = document.createElement('th');
 		prev2YearDiv.classList.add('year-title', 'year-neighbor2', 'hidden-sm', 'hidden-xs');
-		prev2YearDiv.textContent = this.options.startYear - 2;
+		prev2YearDiv.textContent = (this.options.startYear - 2).toString();
 		
 		if (this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 2, 11, 31)) {
 			prev2YearDiv.classList.add('disabled');
@@ -167,7 +176,7 @@ export default class Calendar {
 		
 		var prevYearDiv = document.createElement('th');
 		prevYearDiv.classList.add('year-title', 'year-neighbor', 'hidden-xs');
-		prevYearDiv.textContent = this.options.startYear - 1;
+		prevYearDiv.textContent = (this.options.startYear - 1).toString();
 		
 		if (this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 1, 11, 31)) {
 			prevYearDiv.classList.add('disabled');
@@ -228,7 +237,7 @@ export default class Calendar {
 			/* Container */
 			var monthDiv = document.createElement('div');
 			monthDiv.classList.add('month-container');
-			monthDiv.dataset.monthId = m;
+			monthDiv.dataset.monthId = m.toString();
 			
 			var firstDate = new Date(this.options.startYear, m, 1);
 			
@@ -242,7 +251,7 @@ export default class Calendar {
 			
 			var titleCell = document.createElement('th');
 			titleCell.classList.add('month-title');
-			titleCell.setAttribute('colspan', this.options.displayWeekNumber ? 8 : 7);
+			titleCell.setAttribute('colspan', this.options.displayWeekNumber ? '8' : '7');
 			titleCell.textContent = Calendar.locales[this.options.language].months[m];
 			
 			titleRow.appendChild(titleCell);
@@ -296,7 +305,7 @@ export default class Calendar {
 				if (this.options.displayWeekNumber) {
 					var weekNumberCell = document.createElement('td');
 					weekNumberCell.classList.add('week-number');
-					weekNumberCell.textContent = this.getWeekNumber(currentDate);
+					weekNumberCell.textContent = this.getWeekNumber(currentDate).toString();
 					row.appendChild(weekNumberCell);
 				}
 			
@@ -322,7 +331,7 @@ export default class Calendar {
 					
 						var cellContent = document.createElement('div');
 						cellContent.classList.add('day-content');
-						cellContent.textContent = currentDate.getDate();
+						cellContent.textContent = currentDate.getDate().toString();
 						cell.appendChild(cellContent);
 						
 						if (this.options.customDayRenderer) {
@@ -349,8 +358,8 @@ export default class Calendar {
 
 	_renderDataSource() {
 		if (this.options.dataSource != null && this.options.dataSource.length > 0) {
-			this.element.querySelectorAll('.month-container').forEach(month => {
-				var monthId = month.dataset.monthId;
+			this.element.querySelectorAll('.month-container').forEach((month: HTMLElement) => {
+				var monthId = parseInt(month.dataset.monthId);
 				
 				var firstDate = new Date(this.options.startYear, monthId, 1);
 				var lastDate = new Date(this.options.startYear, monthId + 1, 1);
@@ -367,7 +376,7 @@ export default class Calendar {
 					
 					if (monthData.length > 0) {
 						month.querySelectorAll('.day-content').forEach(day => {
-							var currentDate = new Date(this.options.startYear, monthId, day.textContent);
+							var currentDate = new Date(this.options.startYear, monthId, parseInt(day.textContent));
 							var nextDate = new Date(this.options.startYear, monthId, currentDate.getDate() + 1);
 							
 							var dayData = [];
@@ -418,7 +427,7 @@ export default class Calendar {
 							boxShadow += ",";
 						}
 						
-						boxShadow += 'inset 0 -' + (parseInt(i) + 1) * weight + 'px 0 0 ' + events[i].color;
+						boxShadow += `inset 0 -${(i + 1) * weight}px 0 0 ${events[i].color}`;
 					}
 					
 					elt.parentNode.style.boxShadow = boxShadow;
@@ -489,22 +498,22 @@ export default class Calendar {
 			/* Header buttons */
 			this.element.querySelectorAll('.year-neighbor, .year-neighbor2').forEach(element => {
 				element.addEventListener('click', e => {
-					if (!e.currentTarget.classList.contains('disabled')) {
-						this.setYear(parseInt(e.currentTarget.textContent));
+					if (!(e.currentTarget as HTMLElement).classList.contains('disabled')) {
+						this.setYear(parseInt((e.currentTarget as HTMLElement).textContent));
 					}
 				});
 			});
 			
 			this.element.querySelector('.calendar-header .prev').addEventListener('click', e => {
-				if (!e.currentTarget.classList.contains('disabled')) {
-					var months = this.element.querySelector('.months-container');
+				if (!(e.currentTarget as HTMLElement).classList.contains('disabled')) {
+					var months = this.element.querySelector('.months-container') as HTMLElement;
 
 					months.style.transition = 'margin-left 0.1s';
 					months.style.marginLeft = '100%';
 					setTimeout(() => {
 						months.style.visibility = 'hidden';
 						months.style.transition = '';
-						months.style.marginLeft = 0;
+						months.style.marginLeft = '0';
 
 						setTimeout(() => { 
 							this.setYear(this.options.startYear - 1);
@@ -514,15 +523,15 @@ export default class Calendar {
 			});
 			
 			this.element.querySelector('.calendar-header .next').addEventListener('click', e => {
-				if (!e.currentTarget.classList.contains('disabled')) {
-					var months = this.element.querySelector('.months-container');
+				if (!(e.currentTarget as HTMLElement).classList.contains('disabled')) {
+					var months = this.element.querySelector('.months-container') as HTMLElement;
 
 					months.style.transition = 'margin-left 0.1s';
 					months.style.marginLeft = '-100%';
 					setTimeout(() => {
 						months.style.visibility = 'hidden';
 						months.style.transition = '';
-						months.style.marginLeft = 0;
+						months.style.marginLeft = '0';
 
 						setTimeout(() => { 
 							this.setYear(this.options.startYear + 1);
@@ -536,7 +545,7 @@ export default class Calendar {
 		
 		cells.forEach(cell => {
 			/* Click on date */
-			cell.addEventListener('click', e => {
+			cell.addEventListener('click', (e: MouseEvent) => {
 				e.stopPropagation();
 
 				var date = this._getDate(e.currentTarget);
@@ -569,7 +578,7 @@ export default class Calendar {
 		
 			/* Range selection */
 			if (this.options.enableRangeSelection) {
-				cell.addEventListener('mousedown', e => {
+				cell.addEventListener('mousedown', (e: MouseEvent) => {
 					if (e.which == 1) {
 						var currentDate = this._getDate(e.currentTarget);
 					
@@ -673,7 +682,7 @@ export default class Calendar {
 		/* Responsive management */
 		setInterval(() => {
 			var calendarSize = this.element.offsetWidth;
-			var monthSize = this.element.querySelector('.month').offsetWidth + 10;
+			var monthSize = (this.element.querySelector('.month') as HTMLElement).offsetWidth + 10;
 			var col = null;
 			
 			if (monthSize * 6 < calendarSize) {
@@ -710,8 +719,8 @@ export default class Calendar {
 			var minDate = this._rangeStart < this._rangeEnd ? this._rangeStart : this._rangeEnd;
 			var maxDate = this._rangeEnd > this._rangeStart ? this._rangeEnd : this._rangeStart;
 
-			this.element.querySelectorAll('.month-container').forEach(month => {
-				var monthId = month.dataset.monthId;
+			this.element.querySelectorAll('.month-container').forEach((month: HTMLElement) => {
+				var monthId = parseInt(month.dataset.monthId);
 
 				if (minDate.getMonth() <= monthId && maxDate.getMonth() >= monthId) {
 					month.querySelectorAll('td.day:not(.old, .new)').forEach(day => {
@@ -734,7 +743,7 @@ export default class Calendar {
 	}
 
 	_openContextMenu(elt) {
-		var contextMenu = document.querySelector('.calendar-context-menu');
+		var contextMenu = document.querySelector('.calendar-context-menu') as HTMLElement;
 		
 		if (contextMenu !== null) {
 			contextMenu.style.display = 'none';
@@ -802,7 +811,7 @@ export default class Calendar {
 				
 				if (items[i].click) {
 					(function(index) {
-						menuItem.click(() => {
+						menuItem.addEventListener('click', () => {
 							items[index].click(evt);
 						});
 					})(i);
@@ -836,7 +845,7 @@ export default class Calendar {
 	}
 
 	_triggerEvent(eventName, parameters) {
-		var event = new Event(eventName);
+		var event:any = new Event(eventName);
 		
 		for (var i in parameters) {
 			event[i] = parameters[i];
@@ -1186,7 +1195,11 @@ export default class Calendar {
 			this.render();
 		}
 	}
-};
+}
+
+declare global {
+    interface Window { Calendar: any; }
+}
 
 if (typeof window === "object") {
 	window.Calendar = Calendar;

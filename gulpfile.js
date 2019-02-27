@@ -1,21 +1,35 @@
 const gulp = require('gulp');
+const ts = require('gulp-typescript');
 const babel = require('gulp-babel');
 const less = require('gulp-less');
 const uglify = require('gulp-uglify');
 const cleanCss = require('gulp-clean-css');
 const rename = require('gulp-rename');
 
-function scripts() {
-	return gulp.src('src/js/js-year-calendar.js')
+const compileTS = function() {
+    // Use to generate the definition type
+    return gulp.src('src/ts/js-year-calendar.ts')
+        .pipe(ts({ declaration: true }))
+        .pipe(gulp.dest('dist'));
+}
+
+const exportJS = function() {
+    return gulp.src('src/ts/js-year-calendar.ts')
         .pipe(babel())
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest('dist'));
+}
+
+const minifyJS = function() {
+    return gulp.src('dist/js-year-calendar.js')
         .pipe(rename({ suffix: '.min' }))
         .pipe(uglify())
         .pipe(gulp.dest('dist'));
 }
 
-function styles() {
-	return gulp.src('src/less/js-year-calendar.less')
+const scripts = gulp.series(compileTS, exportJS, minifyJS);
+
+const styles = function() {
+    return gulp.src('src/less/js-year-calendar.less')
         .pipe(less())
         .pipe(gulp.dest('dist'))
         .pipe(rename({ suffix: '.min' }))
@@ -26,6 +40,6 @@ function styles() {
 gulp.task('build', gulp.series(scripts, styles));
 
 gulp.task('watch', function () {
-    gulp.watch('src/js/**/*.js', scripts);
+    gulp.watch('src/ts/**/*.ts', scripts);
     gulp.watch('src/less/**/*.less', styles);
 });
