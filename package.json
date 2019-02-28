@@ -49,6 +49,7 @@
   "jest": {
     "testMatch": [
       "**/tests/*.[jt]s?(x)"
-    ]
+    ],
+    "collectCoverage": true
   }
 }

@@ -1,4 +1,6 @@
 version: 2
+orbs:
+  codecov: codecov/codecov@1.0.4
 jobs:
   build:
     docker:
@@ -15,6 +17,7 @@ jobs:
       - run: 'npm install'
       - run: 'npm run build'
       - run: 'npm run test'
+      - codecov
 workflows:
   version: 2
   build_and_test:
