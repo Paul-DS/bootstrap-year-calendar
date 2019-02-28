@@ -9,6 +9,6 @@ Calendar.locales['fi'] = {
 	daysMin: ["su", "ma", "ti", "ke", "to", "pe", "la"],
 	months: ["tammikuu", "helmikuu", "maaliskuu", "huhtikuu", "toukokuu", "kesäkuu", "heinäkuu", "elokuu", "syyskuu", "lokakuu", "marraskuu", "joulukuu"],
 	monthsShort: ["tammi", "helmi", "maalis", "huhti", "touko", "kesä", "heinä", "elo", "syys", "loka", "marras", "joulu"],
-	weekShort: 'vko',
+	weekShort: 'V',
 	weekStart: 1
 };

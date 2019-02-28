@@ -11,6 +11,6 @@ Calendar.locales['lt'] = {
 	daysMin: ["Se", "Pr", "An", "Tr", "Kt", "Pn", "Še"],
 	months: ["Sausis", "Vasaris", "Kovas", "Balandis", "Gegužė", "Birželis", "Liepa", "Rugpjūtis", "Rugsėjis", "Spalis", "Lapkritis", "Gruodis"],
 	monthsShort: ["Sau", "Vas", "Kov", "Bal", "Geg", "Bir", "Lie", "Rgp", "Rug", "Spa", "Lap", "Gru"],
-	weekShort: 'Sav',
+	weekShort: 'S',
 	weekStart: 1
 };
