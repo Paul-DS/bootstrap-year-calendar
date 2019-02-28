@@ -20,11 +20,6 @@
 import CalendarContextMenuItem from './interfaces/CalendarContextMenuItem';
 import CalendarDataSourceElement from './interfaces/CalendarDataSourceElement';
 import CalendarOptions from './interfaces/CalendarOptions';
-import CalendarDayEventObject from './interfaces/CalendarDayEventObject';
-import CalendarClickEventObject from './interfaces/CalendarClickEventObject';
-import CalendarYearChangedEventObject from './interfaces/CalendarYearChangedEventObject';
-import CalendarRenderEndEventObject from './interfaces/CalendarRenderEndEventObject';
-import CalendarRangeEventObject from './interfaces/CalendarRangeEventObject';
 
 /**
  * Calendar instance.
