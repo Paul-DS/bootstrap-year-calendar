@@ -17,7 +17,8 @@ jobs:
       - run: 'npm install'
       - run: 'npm run build'
       - run: 'npm run test'
-      - codecov
+      - codecov/upload:
+          file: coverage-final.json
 workflows:
   version: 2
   build_and_test:
