@@ -4,6 +4,7 @@ A fully customizable year calendar widget
 ![alt tag](http://www.bootstrap-year-calendar.com/img/calendar.png)
 
 [![CircleCI](https://img.shields.io/circleci/project/github/year-calendar/js-year-calendar/master.svg)](https://circleci.com/gh/year-calendar/js-year-calendar/tree/master)
+[![CodeCov](https://img.shields.io/codecov/c/github/year-calendar/js-year-calendar/master.svg)](https://codecov.io/gh/year-calendar/js-year-calendar)
 
 ## Requirements
 
