@@ -25,13 +25,13 @@ import CalendarOptions from './interfaces/CalendarOptions';
  * Calendar instance.
  */
 export default class Calendar<T extends CalendarDataSourceElement> {
-	element: HTMLElement;
-	options: CalendarOptions<T>;
-	_mouseDown: boolean;
-	_rangeStart: Date;
-	_rangeEnd: Date;
+	protected element: HTMLElement;
+	protected options: CalendarOptions<T>;
+	protected _mouseDown: boolean;
+	protected _rangeStart: Date;
+	protected _rangeEnd: Date;
 
-	static locales = {
+	protected static locales = {
 		en: {
 			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
 			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
@@ -43,7 +43,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 	};
 
-	static colors = ['#2C8FC9', '#9CB703', '#F5BB00', '#FF4A32', '#B56CE2', '#45A597'];
+	protected static colors = ['#2C8FC9', '#9CB703', '#F5BB00', '#FF4A32', '#B56CE2', '#45A597'];
 	
 	/**
 	 * Create a new calendar.
@@ -68,7 +68,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		this.setYear(this.options.startYear);
 	}
 	
-	private _initializeOptions(opt: any): void {
+	protected _initializeOptions(opt: any): void {
 		if (opt == null) {
 			opt = [];
 		}
@@ -100,7 +100,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		this._initializeDatasourceColors();
 	}
 
-	private _initializeEvents(opt): void {
+	protected _initializeEvents(opt): void {
 		if (opt == null) {
 			opt = [];
 		}
@@ -114,7 +114,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		if (opt.mouseOutDay) { this.element.addEventListener('mouseOutDay', opt.mouseOutDay); }
 	}
 
-	private _initializeDatasourceColors(): void {
+	protected _initializeDatasourceColors(): void {
 		for (var i = 0; i < this.options.dataSource.length; i++) {
 			if (this.options.dataSource[i].color == null) {
 				this.options.dataSource[i].color = Calendar.colors[i % Calendar.colors.length];
@@ -154,7 +154,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		this._triggerEvent('renderEnd', { currentYear: this.options.startYear });
 	}
 
-	private _renderHeader(): void {
+	protected _renderHeader(): void {
 		var header = document.createElement('div');
 		header.classList.add('calendar-header');
 		
@@ -239,7 +239,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		this.element.appendChild(header);
 	}
 
-	private _renderBody(): void {
+	protected _renderBody(): void {
 		var monthsDiv = document.createElement('div');
 		monthsDiv.classList.add('months-container');
 		
@@ -366,7 +366,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		this.element.appendChild(monthsDiv);
 	}
 
-	private _renderDataSource(): void {
+	protected _renderDataSource(): void {
 		if (this.options.dataSource != null && this.options.dataSource.length > 0) {
 			this.element.querySelectorAll('.month-container').forEach((month: HTMLElement) => {
 				var monthId = parseInt(month.dataset.monthId);
@@ -411,7 +411,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 	}
 
-	private _renderDataSourceDay(elt: HTMLElement, currentDate: Date, events: T[]): void {
+	protected _renderDataSourceDay(elt: HTMLElement, currentDate: Date, events: T[]): void {
 		const parent = elt.parentElement;
 
 		switch (this.options.style)
@@ -505,7 +505,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 	}
 
-	private _applyEvents(): void {
+	protected _applyEvents(): void {
 		if (this.options.displayHeader) {
 			/* Header buttons */
 			this.element.querySelectorAll('.year-neighbor, .year-neighbor2').forEach(element => {
@@ -722,7 +722,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}, 300);
 	}
 
-	private _refreshRange(): void {
+	protected _refreshRange(): void {
 		this.element.querySelectorAll('td.day.range').forEach(day => day.classList.remove('range'));
 		this.element.querySelectorAll('td.day.range-start').forEach(day => day.classList.remove('range-start'));
 		this.element.querySelectorAll('td.day.range-end').forEach(day => day.classList.remove('range-end'));
@@ -754,7 +754,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 	}
 
-	private _openContextMenu(elt: HTMLElement): void {
+	protected _openContextMenu(elt: HTMLElement): void {
 		var contextMenu = document.querySelector('.calendar-context-menu') as HTMLElement;
 		
 		if (contextMenu !== null) {
@@ -806,7 +806,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 	}
 
-	private _renderContextMenuItems(parent: HTMLElement, items: CalendarContextMenuItem<T>[], evt: T): void {
+	protected _renderContextMenuItems(parent: HTMLElement, items: CalendarContextMenuItem<T>[], evt: T): void {
 		var subMenu = document.createElement('div');
 		subMenu.classList.add('submenu');
 		
@@ -850,7 +850,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 	}
 
-	private _getDate(elt): Date {
+	protected _getDate(elt): Date {
 		var day = elt.querySelector(':scope > .day-content').textContent;
 		var month = elt.closest('.month-container').dataset.monthId;
 		var year = this.options.startYear;
@@ -858,7 +858,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		return new Date(year, month, day);
 	}
 
-	private _triggerEvent(eventName: string, parameters: any) {
+	protected _triggerEvent(eventName: string, parameters: any) {
 		var event:any = new Event(eventName);
 		
 		for (var i in parameters) {
@@ -870,7 +870,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		return event;
 	}
 
-	private _isDisabled(date: Date): boolean {
+	protected _isDisabled(date: Date): boolean {
 		if ((this.options.minDate != null && date < this.options.minDate) || (this.options.maxDate != null && date > this.options.maxDate))
 		{
 			return true;
@@ -895,7 +895,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		return false;
 	}
 	
-	private _isHidden(day: number): boolean {
+	protected _isHidden(day: number): boolean {
 		if (this.options.hiddenWeekDays.length > 0) {
 			for (var d = 0; d < this.options.hiddenWeekDays.length; d++) {
 				if (day == this.options.hiddenWeekDays[d]) {

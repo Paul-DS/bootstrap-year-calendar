@@ -7,7 +7,8 @@
     "watch": "gulp watch",
     "build": "gulp build",
     "prepare": "npm run build",
-    "test": "jest"
+    "test": "jest",
+    "doc": "typedoc src/ts/js-year-calendar.ts --out docs --mode file --target ES6 --excludePrivate --excludeProtected"
   },
   "pre-commit": [
     "build",
@@ -44,6 +45,7 @@
     "gulp-typescript": "^5.0.0",
     "gulp-uglify": "^3.0.1",
     "jest": "^24.1.0",
+    "typedoc": "^0.14.2",
     "typescript": "^3.3.3333"
   },
   "jest": {
