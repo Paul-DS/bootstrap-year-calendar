@@ -996,7 +996,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param minDate The minimum date to set.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setMinDate(date: Date, preventRendering: boolean): void {
+	public setMinDate(date: Date, preventRendering: boolean = false): void {
 		if (date instanceof Date) {
 			this.options.minDate = date;
 			
@@ -1019,7 +1019,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param maxDate The maximum date to set.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setMaxDate(date: Date, preventRendering: boolean): void {
+	public setMaxDate(date: Date, preventRendering: boolean = false): void {
 		if (date instanceof Date) {
 			this.options.maxDate = date;
 			
@@ -1042,7 +1042,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param style The style to use for displaying data source ("background", "border" or "custom").
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setStyle(style: string, preventRendering: boolean): void {
+	public setStyle(style: string, preventRendering: boolean = false): void {
 		this.options.style = style == 'background' || style == 'border' || style == 'custom' ? style : 'border';
 		
 		if (!preventRendering) {
@@ -1079,7 +1079,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param  displayWeekNumber Indicates whether the weeks number are displayed.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setDisplayWeekNumber(displayWeekNumber: boolean, preventRendering: boolean): void {
+	public setDisplayWeekNumber(displayWeekNumber: boolean, preventRendering: boolean = false): void {
 		this.options.displayWeekNumber = displayWeekNumber;
 		
 		if (!preventRendering) {
@@ -1100,7 +1100,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param  displayHeader Indicates whether the calendar header is displayed.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setDisplayHeader(displayHeader: boolean, preventRendering: boolean): void {
+	public setDisplayHeader(displayHeader: boolean, preventRendering: boolean = false): void {
 		this.options.displayHeader = displayHeader;
 		
 		if (!preventRendering) {
@@ -1121,7 +1121,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param  displayDisabledDataSource Indicates whether the data source must be rendered on disabled days.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setDisplayDisabledDataSource(displayDisabledDataSource: boolean, preventRendering: boolean): void {
+	public setDisplayDisabledDataSource(displayDisabledDataSource: boolean, preventRendering: boolean = false): void {
 		this.options.displayDisabledDataSource = displayDisabledDataSource;
 		
 		if (!preventRendering) {
@@ -1143,7 +1143,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param alwaysHalfDay Indicates whether the beginning and the end of each range should be displayed as half selected day.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setAlwaysHalfDay(alwaysHalfDay: boolean, preventRendering: boolean): void {
+	public setAlwaysHalfDay(alwaysHalfDay: boolean, preventRendering: boolean = false): void {
 		this.options.alwaysHalfDay = alwaysHalfDay;
 		
 		if (!preventRendering) {
@@ -1164,7 +1164,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param enableRangeSelection Indicates whether the user can make range selection.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setEnableRangeSelection(enableRangeSelection: boolean, preventRendering: boolean): void {
+	public setEnableRangeSelection(enableRangeSelection: boolean, preventRendering: boolean = false): void {
 		this.options.enableRangeSelection = enableRangeSelection;
 		
 		if (!preventRendering) {
@@ -1185,7 +1185,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param disableDays The disabled days to set.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setDisabledDays(disabledDays: Date[], preventRendering: boolean): void {
+	public setDisabledDays(disabledDays: Date[], preventRendering: boolean = false): void {
 		this.options.disabledDays = disabledDays instanceof Array ? disabledDays : [];
 		
 		if (!preventRendering) {
@@ -1206,7 +1206,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param disabledWeekDays The disabled days of the week to set.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setDisabledWeekDays(disabledWeekDays: number[], preventRendering: boolean): void {
+	public setDisabledWeekDays(disabledWeekDays: number[], preventRendering: boolean = false): void {
 		this.options.disabledWeekDays = disabledWeekDays instanceof Array ? disabledWeekDays : [];
 		
 		if (!preventRendering) {
@@ -1227,7 +1227,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param hiddenWeekDays The hidden days of the week to set.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setHiddenWeekDays(hiddenWeekDays: number[], preventRendering: boolean): void {
+	public setHiddenWeekDays(hiddenWeekDays: number[], preventRendering: boolean = false): void {
 		this.options.hiddenWeekDays = hiddenWeekDays instanceof Array ? hiddenWeekDays : [];
 		
 		if (!preventRendering) {
@@ -1249,7 +1249,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param roundRangeLimits Indicates whether the beginning and the end of each range should be displayed as rounded cells. 
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setRoundRangeLimits(roundRangeLimits: boolean, preventRendering: boolean): void {
+	public setRoundRangeLimits(roundRangeLimits: boolean, preventRendering: boolean = false): void {
 		this.options.roundRangeLimits = roundRangeLimits;
 		
 		if (!preventRendering) {
@@ -1271,7 +1271,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param enableContextMenu Indicates whether the default context menu must be displayed when right clicking on a day.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setEnableContextMenu(enableContextMenu: boolean, preventRendering: boolean): void {
+	public setEnableContextMenu(enableContextMenu: boolean, preventRendering: boolean = false): void {
 		this.options.enableContextMenu = enableContextMenu;
 		
 		if (!preventRendering) {
@@ -1292,7 +1292,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param contextMenuItems The new context menu items.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setContextMenuItems(contextMenuItems: CalendarContextMenuItem<T>[], preventRendering: boolean): void {
+	public setContextMenuItems(contextMenuItems: CalendarContextMenuItem<T>[], preventRendering: boolean = false): void {
 		this.options.contextMenuItems = contextMenuItems instanceof Array ? contextMenuItems : [];
 		
 		if (!preventRendering) {
@@ -1313,7 +1313,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	 * @param handler The function used to render the days. This function is called during render for each day.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setCustomDayRenderer(customDayRenderer: (element: HTMLElement, currentDate: Date) => void, preventRendering: boolean): void {
+	public setCustomDayRenderer(customDayRenderer: (element: HTMLElement, currentDate: Date) => void, preventRendering: boolean = false): void {
 		this.options.customDayRenderer = typeof customDayRenderer === "function" ? customDayRenderer : null;
 		
 		if (!preventRendering) {
@@ -1334,7 +1334,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	 * @param handler The function used to render the data source. This function is called during render for each day containing at least one event.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setCustomDataSourceRenderer(customDataSourceRenderer: (element: HTMLElement, currentDate: Date, events: T[]) => void, preventRendering: boolean): void {
+	public setCustomDataSourceRenderer(customDataSourceRenderer: (element: HTMLElement, currentDate: Date, events: T[]) => void, preventRendering: boolean = false): void {
 		this.options.customDataSourceRenderer = typeof customDataSourceRenderer === "function" ? customDataSourceRenderer : null;
 		
 		if (!preventRendering) {
@@ -1355,7 +1355,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param language The language to use for calendar redering.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setLanguage(language: string, preventRendering: boolean): void {
+	public setLanguage(language: string, preventRendering: boolean = false): void {
 		if (language != null && Calendar.locales[language] != null) {
 			this.options.language = language;
 			
@@ -1378,7 +1378,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param dataSource The new data source.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setDataSource(dataSource: T[], preventRendering: boolean): void {
+	public setDataSource(dataSource: T[], preventRendering: boolean = false): void {
 		this.options.dataSource = dataSource instanceof Array ? dataSource : [];
 		this._initializeDatasourceColors();
 		
@@ -1400,7 +1400,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param year The starting day of the week. This option overrides the parameter define in the language file.
      * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
-	public setWeekStart(weekStart: number | string, preventRendering: boolean): void {
+	public setWeekStart(weekStart: number | string, preventRendering: boolean = false): void {
 		this.options.weekStart = !isNaN(parseInt(weekStart as string)) ? parseInt(weekStart as string) : null;
 
 		if (!preventRendering) {
@@ -1414,7 +1414,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param element The element to add.
 	 * @param preventRendering Indicates whether the calendar shouldn't be refreshed once the event added.
      */
-	public addEvent(evt: T, preventRendering: boolean) {
+	public addEvent(evt: T, preventRendering: boolean = false) {
 		this.options.dataSource.push(evt);
 		
 		if (!preventRendering) {
