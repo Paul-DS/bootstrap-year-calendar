@@ -4,7 +4,7 @@ test('instantiate calendar with selector', () => {
     document.body.innerHTML = '<div id="calendar" data-provide="calendar"></div>';
 
     // Manually trigger the DOMContentLoaded event
-    var event = document.createEvent("Event");
+    var event = new Event("Event");
     event.initEvent("DOMContentLoaded", true, true);
     document.dispatchEvent(event);
 
