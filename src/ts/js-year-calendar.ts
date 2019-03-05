@@ -314,8 +314,10 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 				
 				if (this.options.displayWeekNumber) {
 					var weekNumberCell = document.createElement('td');
+					var currentThursday = new Date(currentDate.getTime()); // Week number is computed based on the thursday
+					currentThursday.setDate(currentThursday.getDate() - weekStart + 4);
 					weekNumberCell.classList.add('week-number');
-					weekNumberCell.textContent = this.getWeekNumber(currentDate).toString();
+					weekNumberCell.textContent = this.getWeekNumber(currentThursday).toString();
 					row.appendChild(weekNumberCell);
 				}
 			
@@ -913,11 +915,16 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * @param date The specified date.
      */
 	public getWeekNumber(date: Date): number {
-		var tempDate = new Date(date.getTime());
-		tempDate.setHours(0, 0, 0, 0);
-		tempDate.setDate(tempDate.getDate() + 3 - (tempDate.getDay() + 6) % 7);
-		var week1 = new Date(tempDate.getFullYear(), 0, 4);
-		return 1 + Math.round(((tempDate.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+		// Algorithm from https://weeknumber.net/how-to/javascript
+		var workingDate = new Date(date.getTime());
+		workingDate.setHours(0, 0, 0, 0);
+		// Thursday in current week decides the year.
+		workingDate.setDate(workingDate.getDate() + 3 - (workingDate.getDay() + 6) % 7);
+		// January 4 is always in week 1.
+		var week1 = new Date(workingDate.getFullYear(), 0, 4);
+		// Adjust to Thursday in week 1 and count number of weeks from date to week1.
+		return 1 + Math.round(((workingDate.getTime() - week1.getTime()) / 86400000
+			- 3 + (week1.getDay() + 6) % 7) / 7);
 	}
 
 	/**
