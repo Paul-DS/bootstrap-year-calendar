@@ -151,3 +151,44 @@ test('range selection with overlap', () => {
     expect(end.classList).toContain('range');
     expect(end.classList).toContain('range-end');
 });
+
+test('context menu', () => {
+    const calendar = new Calendar('#calendar', {
+        enableContextMenu: false,
+        contextMenuItems: [
+            {
+                text: 'Test 1',
+                items: [{ text: 'Subtest 1'}] 
+            },
+            { text: 'Test 2' }
+        ],
+        dataSource: [
+            { name: 'Event 1', startDate: new Date(currentYear, 2, 6), endDate: new Date(currentYear, 2, 15)}
+        ]
+    });
+
+    var checkContextMenuVisible = () =>
+        document.querySelector('.calendar-context-menu')
+            && document.querySelector('.calendar-context-menu').style.display == 'block';
+
+    // Context menu not enabled
+    triggerEvent(getDay(2, 10), 'contextmenu');
+    expect(checkContextMenuVisible()).toBeFalsy();
+
+    calendar.setEnableContextMenu(true);
+
+    // Day with no event
+    triggerEvent(getDay(2, 2), 'contextmenu');
+    expect(checkContextMenuVisible()).toBeFalsy();
+
+    // Day with events
+    triggerEvent(getDay(2, 10), 'contextmenu');
+    expect(checkContextMenuVisible()).toBeTruthy();
+    expect(document.querySelector('.calendar-context-menu').children.length).toEqual(1);
+    expect(document.querySelector('.calendar-context-menu > .item > .content').textContent).toEqual('Event 1');
+    expect(document.querySelectorAll('.calendar-context-menu > .item > .submenu > .item').length).toEqual(2);
+    expect(document.querySelector('.calendar-context-menu > .item > .submenu > .item:first-child > .content').textContent).toEqual('Test 1');
+    expect(document.querySelectorAll('.calendar-context-menu > .item > .submenu > .item:first-child > .submenu > .item').length).toEqual(1);
+    expect(document.querySelector('.calendar-context-menu > .item > .submenu > .item:first-child > .submenu > .item > .content').textContent).toEqual('Subtest 1');
+    expect(document.querySelector('.calendar-context-menu > .item > .submenu > .item:nth-child(2) > .content').textContent).toEqual('Test 2');
+});
