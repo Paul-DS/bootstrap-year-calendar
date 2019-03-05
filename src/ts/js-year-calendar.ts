@@ -932,8 +932,8 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	/**
      * Gets the data source elements for a specified range of days.
      *
-     * @param startDate The beginning of the day range.
-	 * @param endDate The end of the day range.
+     * @param startDate The beginning of the day range (inclusive).
+	 * @param endDate The end of the day range (non inclusive).
      */
 	public getEventsOnRange(startDate: Date, endDate: Date): T[] {
 		var events = [];
