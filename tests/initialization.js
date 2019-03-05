@@ -44,6 +44,10 @@ test('instantiate calendar with selector', () => {
     expect(document.querySelector('#calendar').children.length).toEqual(2);
 });
 
+test('instantiate calendar with other', () => {
+    expect(() => new Calendar(null)).toThrow();
+});
+
 test('instantiate calendar with start year', () => {
     const calendar = new Calendar('#calendar', { startYear: 2000 });
   
