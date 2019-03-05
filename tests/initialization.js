@@ -193,7 +193,7 @@ test('instantiate calendar with disable days', () => {
     expect(Array.from(getDay(5, 2).classList)).not.toContain("disabled");
 });
 
-test('instantiate calendar with disable week days', () => {
+test('instantiate calendar with disabled week days', () => {
     const calendar = new Calendar('#calendar', {
 		disabledWeekDays: [1, 3, 5]
     });
@@ -237,4 +237,26 @@ test('instantiate calendar with hidden week days', () => {
 
         currentDate.setDate(currentDate.getDate() + 1);
     }
+});
+
+test('instantiate calendar with display disabled data source', () => {
+    const calendar = new Calendar('#calendar', {
+        style: 'background',
+        disabledDays: [new Date(currentYear, 6, 15)],
+        displayDisabledDataSource: true,
+		dataSource: [
+			{
+				startDate: new Date(currentYear, 6, 10),
+				endDate: new Date(currentYear, 6, 20)
+			}
+		]
+    });
+    
+    expect(getDay(6, 14).style.backgroundColor).toBeTruthy();
+    expect(getDay(6, 15).style.backgroundColor).toBeTruthy();
+
+    calendar.setDisplayDisabledDataSource(false);
+
+    expect(getDay(6, 14).style.backgroundColor).toBeTruthy();
+    expect(getDay(6, 15).style.backgroundColor).toBeFalsy();
 });
