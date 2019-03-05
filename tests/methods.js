@@ -339,3 +339,17 @@ test('get / set year method', () => {
     calendar.setYear('test');
     expect(calendar.getYear()).toEqual(2010);
 });
+
+test('add events method', () => {
+    const calendar = new Calendar('#calendar', {
+        dataSource: [
+			{
+				startDate: new Date(currentYear, 6, 10),
+				endDate: new Date(currentYear, 6, 20)
+            }
+		]
+    });
+  
+    calendar.addEvent({ startDate: new Date(currentYear, 7, 1), endDate: new Date(currentYear, 8, 1) });
+    expect(calendar.getDataSource().length).toEqual(2);
+});
