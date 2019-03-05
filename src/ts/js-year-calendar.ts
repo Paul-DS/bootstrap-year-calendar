@@ -997,7 +997,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
 	public setMinDate(date: Date, preventRendering: boolean = false): void {
-		if (date instanceof Date) {
+		if (date instanceof Date || date === null) {
 			this.options.minDate = date;
 			
 			if (!preventRendering) {
@@ -1020,7 +1020,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
 	public setMaxDate(date: Date, preventRendering: boolean = false): void {
-		if (date instanceof Date) {
+		if (date instanceof Date || date === null) {
 			this.options.maxDate = date;
 			
 			if (!preventRendering) {
