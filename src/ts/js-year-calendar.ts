@@ -30,6 +30,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	protected _mouseDown: boolean;
 	protected _rangeStart: Date;
 	protected _rangeEnd: Date;
+	protected _responsiveInterval: number;
 
 	protected static locales = {
 		en: {
@@ -694,7 +695,12 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 		
 		/* Responsive management */
-		setInterval(() => {
+		if (this._responsiveInterval) {
+			clearInterval(this._responsiveInterval);
+			this._responsiveInterval = null;
+		}
+
+		this._responsiveInterval = setInterval(() => {
 			var calendarSize = this.element.offsetWidth;
 			var monthSize = (this.element.querySelector('.month') as HTMLElement).offsetWidth + 10;
 			var col = null;
