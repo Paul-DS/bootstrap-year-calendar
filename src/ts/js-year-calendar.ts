@@ -737,7 +737,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 				var monthId = parseInt(month.dataset.monthId);
 
 				if (minDate.getMonth() <= monthId && maxDate.getMonth() >= monthId) {
-					month.querySelectorAll('td.day:not(.old, .new)').forEach(day => {
+					month.querySelectorAll('td.day:not(.old):not(.new)').forEach(day => {
 						var date = this._getDate(day);
 						if (date >= minDate && date <= maxDate) {
 							day.classList.add('range');
@@ -1104,7 +1104,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	/**
      * Sets a value indicating whether the calendar header is displayed. This method causes a refresh of the calendar.
      *
-     * @param  displayHeader Indicates whether the calendar header is displayed.
+     * @param displayHeader Indicates whether the calendar header is displayed.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
 	public setDisplayHeader(displayHeader: boolean, preventRendering: boolean = false): void {
@@ -1125,7 +1125,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	/**
      * Sets a value indicating whether the data source must be rendered on disabled days. This method causes a refresh of the calendar.
      *
-     * @param  displayDisabledDataSource Indicates whether the data source must be rendered on disabled days.
+     * @param displayDisabledDataSource Indicates whether the data source must be rendered on disabled days.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
      */
 	public setDisplayDisabledDataSource(displayDisabledDataSource: boolean, preventRendering: boolean = false): void {
