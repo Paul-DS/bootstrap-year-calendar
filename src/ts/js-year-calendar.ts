@@ -30,7 +30,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	protected _mouseDown: boolean;
 	protected _rangeStart: Date;
 	protected _rangeEnd: Date;
-	protected _responsiveInterval: number;
+	protected _responsiveInterval: any;
 
 	protected static locales = {
 		en: {
