@@ -147,7 +147,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	 * @param element The element (or the selector to an element) in which the calendar should be created.
 	 * @param options [Optional] The options used to customize the calendar
 	 */
-	constructor(element: HTMLElement|string, options: any = null) {
+	constructor(element: HTMLElement|string, options: CalendarOptions<T> = null) {
 		if (element instanceof HTMLElement) {
 			this.element = element;
 		}
@@ -167,7 +167,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	
 	protected _initializeOptions(opt: any): void {
 		if (opt == null) {
-			opt = [];
+			opt = {};
 		}
 	
 		this.options = {
