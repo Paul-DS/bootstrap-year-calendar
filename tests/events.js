@@ -16,7 +16,7 @@ const triggerEvent = (el, eventToTrigger) => {
 };
 
 const testDayEvent = (eventName, eventToTrigger) => {
-    const simplifyEventsParams = e => ({ date: e.date, eltId: e.element.id, events: e.events.map(ev => ev.name) });
+    const simplifyEventsParams = e => ({ calendar: e.calendar, date: e.date, eltId: e.element.id, events: e.events.map(ev => ev.name) });
 
     const eventInit = jest.fn(simplifyEventsParams);
     const eventAdded = jest.fn(simplifyEventsParams);
@@ -42,14 +42,14 @@ const testDayEvent = (eventName, eventToTrigger) => {
     let dayElt = getDay(6, 8);
     dayElt.id = "test1";
     triggerEvent(dayElt, eventToTrigger);
-    expect(eventInit).toHaveNthReturnedWith(1, { date: new Date(currentYear, 6, 8), eltId: "test1", events: [] });
-    expect(eventAdded).toHaveNthReturnedWith(1, { date: new Date(currentYear, 6, 8), eltId: "test1", events: [] });
+    expect(eventInit).toHaveNthReturnedWith(1, { calendar, date: new Date(currentYear, 6, 8), eltId: "test1", events: [] });
+    expect(eventAdded).toHaveNthReturnedWith(1, { calendar,date: new Date(currentYear, 6, 8), eltId: "test1", events: [] });
 
     dayElt = getDay(6, 12);
     dayElt.id = "test2";
     triggerEvent(dayElt, eventToTrigger);
-    expect(eventInit).toHaveNthReturnedWith(2, { date: new Date(currentYear, 6, 12), eltId: "test2", events: ['test1'] });
-    expect(eventAdded).toHaveNthReturnedWith(2, { date: new Date(currentYear, 6, 12), eltId: "test2", events: ['test1'] });
+    expect(eventInit).toHaveNthReturnedWith(2, { calendar, date: new Date(currentYear, 6, 12), eltId: "test2", events: ['test1'] });
+    expect(eventAdded).toHaveNthReturnedWith(2, { calendar, date: new Date(currentYear, 6, 12), eltId: "test2", events: ['test1'] });
 };
 
 test('click day event', () => {
@@ -69,25 +69,25 @@ test('mouse out day event', () => {
 });
 
 test('render end event', () => {
-    const renderEndInit = jest.fn(e => e.currentYear);
-    const renderEndAdded = jest.fn(e => e.currentYear);
+    const renderEndInit = jest.fn(e => ({ calendar: e.calendar, currentYear: e.currentYear }));
+    const renderEndAdded = jest.fn(e => ({ calendar: e.calendar, currentYear: e.currentYear }));
 
     document.querySelector('#calendar').addEventListener('renderEnd', renderEndAdded);
     const calendar = new Calendar('#calendar', { renderEnd: renderEndInit });
 
     calendar.setYear(2000);
 
-    expect(renderEndInit).toHaveNthReturnedWith(1, currentYear);
-    expect(renderEndAdded).toHaveNthReturnedWith(1, currentYear);
+    expect(renderEndInit).toHaveNthReturnedWith(1, { calendar, currentYear });
+    expect(renderEndAdded).toHaveNthReturnedWith(1, { calendar, currentYear });
 
-    expect(renderEndInit).toHaveNthReturnedWith(2, 2000);
-    expect(renderEndAdded).toHaveNthReturnedWith(2, 2000);
+    expect(renderEndInit).toHaveNthReturnedWith(2, { calendar, currentYear: 2000 });
+    expect(renderEndAdded).toHaveNthReturnedWith(2, { calendar, currentYear: 2000 });
 });
 
 
 test('select range event', () => {
-    const selectRangeInit = jest.fn(e => ({ startDate: e.startDate, endDate: e.endDate }));
-    const selectRangeAdded = jest.fn(e => ({ startDate: e.startDate, endDate: e.endDate }));
+    const selectRangeInit = jest.fn(e => ({ calendar: e.calendar, startDate: e.startDate, endDate: e.endDate }));
+    const selectRangeAdded = jest.fn(e => ({ calendar: e.calendar, startDate: e.startDate, endDate: e.endDate }));
 
     document.querySelector('#calendar').addEventListener('selectRange', selectRangeAdded);
     const calendar = new Calendar('#calendar', { enableRangeSelection: true, selectRange: selectRangeInit });
@@ -96,22 +96,22 @@ test('select range event', () => {
     triggerEvent(getDay(9, 20), "mouseenter");
     triggerEvent(getDay(9, 20), "mouseup");
 
-    expect(selectRangeInit).toHaveNthReturnedWith(1, { startDate: new Date(currentYear, 8, 10), endDate: new Date(currentYear, 9, 20) });
-    expect(selectRangeAdded).toHaveNthReturnedWith(1, { startDate: new Date(currentYear, 8, 10), endDate: new Date(currentYear, 9, 20) });
+    expect(selectRangeInit).toHaveNthReturnedWith(1, { calendar, startDate: new Date(currentYear, 8, 10), endDate: new Date(currentYear, 9, 20) });
+    expect(selectRangeAdded).toHaveNthReturnedWith(1, { calendar, startDate: new Date(currentYear, 8, 10), endDate: new Date(currentYear, 9, 20) });
 });
 
 test('year changed event', () => {
-    const yearChangedInit = jest.fn(e => e.currentYear);
-    const yearChangedAdded = jest.fn(e => e.currentYear);
+    const yearChangedInit = jest.fn(e => ({ calendar: e.calendar, currentYear: e.currentYear }));
+    const yearChangedAdded = jest.fn(e =>  ({ calendar: e.calendar, currentYear: e.currentYear }));
 
     document.querySelector('#calendar').addEventListener('yearChanged', yearChangedAdded);
     const calendar = new Calendar(document.querySelector('#calendar'), { yearChanged: yearChangedInit });
 
     calendar.setYear(2000);
 
-    expect(yearChangedInit).toHaveNthReturnedWith(1, currentYear);
-    expect(yearChangedAdded).toHaveNthReturnedWith(1, currentYear);
+    expect(yearChangedInit).toHaveNthReturnedWith(1, { calendar, currentYear });
+    expect(yearChangedAdded).toHaveNthReturnedWith(1, { calendar, currentYear });
 
-    expect(yearChangedInit).toHaveNthReturnedWith(2, 2000);
-    expect(yearChangedAdded).toHaveNthReturnedWith(2, 2000);
+    expect(yearChangedInit).toHaveNthReturnedWith(2, { calendar, currentYear: 2000 });
+    expect(yearChangedAdded).toHaveNthReturnedWith(2, { calendar, currentYear: 2000 });
 });

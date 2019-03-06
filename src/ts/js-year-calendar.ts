@@ -45,7 +45,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	};
 
 	protected static colors = ['#2C8FC9', '#9CB703', '#F5BB00', '#FF4A32', '#B56CE2', '#45A597'];
-	
+
 	/**
 	 * Create a new calendar.
 	 * @param element The element (or the selector to an element) in which the calendar should be created.
@@ -868,6 +868,8 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 
 	protected _triggerEvent(eventName: string, parameters: any) {
 		var event:any = new Event(eventName);
+
+		event.calendar = this;
 		
 		for (var i in parameters) {
 			event[i] = parameters[i];
