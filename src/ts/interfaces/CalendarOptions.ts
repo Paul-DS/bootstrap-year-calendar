@@ -1,6 +1,5 @@
 import CalendarDataSourceElement from './CalendarDataSourceElement'
 import CalendarContextMenuItem from './CalendarContextMenuItem'
-import CalendarClickEventObject from './CalendarClickEventObject'
 import CalendarDayEventObject from './CalendarDayEventObject'
 import CalendarRenderEndEventObject from './CalendarRenderEndEventObject'
 import CalendarRangeEventObject from './CalendarRangeEventObject'
@@ -121,7 +120,7 @@ export default interface CalendarOptions<T extends CalendarDataSourceElement> {
     /**
      * Function fired when a day is clicked.
      */
-    clickDay?: (e: CalendarClickEventObject<T>) => void;
+    clickDay?: (e: CalendarDayEventObject<T>) => void;
 
     /**
      * Function fired when a day is right clicked.

@@ -20,6 +20,10 @@
 import CalendarContextMenuItem from './interfaces/CalendarContextMenuItem';
 import CalendarDataSourceElement from './interfaces/CalendarDataSourceElement';
 import CalendarOptions from './interfaces/CalendarOptions';
+import CalendarYearChangedEventObject from './interfaces/CalendarYearChangedEventObject';
+import CalendarDayEventObject from './interfaces/CalendarDayEventObject';
+import CalendarRenderEndEventObject from './interfaces/CalendarRenderEndEventObject';
+import CalendarRangeEventObject from './interfaces/CalendarRangeEventObject';
 
 /**
  * Calendar instance.
@@ -46,6 +50,98 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 
 	protected static colors = ['#2C8FC9', '#9CB703', '#F5BB00', '#FF4A32', '#B56CE2', '#45A597'];
 
+	/**
+	 * Fired when a day is clicked.
+	 * @event
+	 * @example
+	 * ```
+	 * 
+	 * document.querySelector('.calendar').addEventListener('clickDay', function(e) {
+	 *   console.log("Click on day: " + e.date + " (" + e.events.length + " events)");
+	 * })
+	 * ```
+	 */
+	public clickDay: CalendarDayEventObject<T>;
+	
+	/**
+	 * Fired when a day is right clicked.
+	 * @event
+	 * @example
+	 * ```
+	 * 
+	 * document.querySelector('.calendar').addEventListener('clickDay', function(e) {
+	 *   console.log("Right click on day: " + e.date + " (" + e.events.length + " events)");
+	 * })
+	 * ```
+	 */
+	public dayContextMenu: CalendarDayEventObject<T>;
+	
+	/**
+	 * Fired when the mouse enter in a day.
+	 * @event
+	 * @example
+	 * ```
+	 * 
+	 * document.querySelector('.calendar').addEventListener('mouseOnDay', function(e) {
+	 *   console.log("Mouse enter in a day: " + e.date + " (" + e.events.length + " events)");
+	 * })
+	 * ```
+	 */
+	public mouseOnDay: CalendarDayEventObject<T>;
+	
+	/**
+	 * Fired when the mouse leave a day.
+	 * @event
+	 * @example
+	 * ```
+	 * 
+	 * document.querySelector('.calendar').addEventListener('mouseOutDay', function(e) {
+	 *   console.log("Mouse leave a day: " + e.date + " (" + e.events.length + " events)");
+	 * })
+	 * ```
+	 */
+	public mouseOutDay: CalendarDayEventObject<T>;
+	
+	/**
+	 * Fired when the calendar rendering is ended.
+	 * @event
+	 * @example
+	 * ```
+	 * 
+	 * document.querySelector('.calendar').addEventListener('renderEnd', function(e) {
+	 *   console.log("Render end for year: " + e.currentYear);
+	 * })
+	 * ```
+	 */
+	public renderEnd: CalendarRenderEndEventObject;
+	
+	/**
+	 * @event
+	 * Fired when a date range is selected.
+	 * Don't forget to enable the `enableRangeSelection` option to be able to use the range selection functionality.
+	 * @example
+	 * ```
+	 * 
+	 * document.querySelector('.calendar').addEventListener('selectRange', function(e) {
+	 *   console.log("Select the range: " + e.startDate + " - " + e.endDate);
+	 * })
+	 * ```
+	 */
+    public selectRange: CalendarRangeEventObject;
+	
+	/**
+	 * Triggered after the changing the current year.
+	 * @event
+	 * @example
+	 * ```
+	 * 
+	 * document.querySelector('.calendar').addEventListener('yearChanged', function(e) {
+	 *   console.log("New year selected: " + e.currentYear);
+	 * })
+	 * ```
+	 */
+    public yearChanged: CalendarYearChangedEventObject;
+	
 	/**
 	 * Create a new calendar.
 	 * @param element The element (or the selector to an element) in which the calendar should be created.
@@ -566,7 +662,6 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 				var date = this._getDate(e.currentTarget);
 				this._triggerEvent('clickDay', {
 					element: e.currentTarget,
-					which: e.which,
 					date: date,
 					events: this.getEvents(date)
 				});
