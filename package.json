@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "gulp watch",
     "build": "gulp build",
-    "prepare": "npm run build",
+    "prepare": "npm run build && npm run test && npm run doc",
     "test": "jest",
     "doc": "typedoc src/ts/js-year-calendar.ts --out docs --mode file --target ES6 --excludePrivate --excludeProtected"
   },
