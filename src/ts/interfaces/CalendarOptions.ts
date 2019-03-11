@@ -39,8 +39,13 @@ export default interface CalendarOptions<T extends CalendarDataSourceElement> {
 
     /**
      * The elements that must be displayed on the calendar.
+     * Could be:
+     * - The datasource
+     * - A function that returns the datasource
+     * - An async function that will call the callback function with the datasource
+     * - An async function that returns a Promise to get the datasource
      */
-    dataSource?: T[];
+    dataSource?: T[] | ((currentYear: number) => T[] | Promise<T[]>) | ((currentYear: number, done: (result: T[]) => void) => void);
 
     /**
      * The days that must be displayed as disabled.
@@ -86,6 +91,11 @@ export default interface CalendarOptions<T extends CalendarDataSourceElement> {
      * The language/culture used for calendar rendering.
      */
     language?: string;
+
+    /**
+     * The HTML used to render the loading component.
+     */
+    loadingTemplate: string | HTMLElement;
 
     /**
      * The date until which days are enabled.

@@ -85,6 +85,14 @@ test('get / set datasource method', () => {
 
     calendar.setDataSource(items);
     expect(calendar.getDataSource()).toEqual(items);
+
+    // Dynamic data source
+    const dataSource = jest.fn(() => []);
+    calendar.setDataSource(dataSource);
+    expect(calendar.getDataSource()).toEqual(dataSource);
+
+    expect(dataSource).toHaveBeenCalledTimes(1);
+    expect(dataSource).toHaveBeenLastCalledWith(currentYear);
 });
 
 test('get / set disabled days method', () => {
@@ -249,6 +257,18 @@ test('get / set language method', () => {
     // Non existent language, should keep english
     calendar.setLanguage('zz');
     expect(calendar.getLanguage()).toEqual('en');
+});
+
+test('get / set loading template method', () => {
+    const calendar = new Calendar('#calendar', { loadingTemplate: 'Test' });
+  
+    expect(calendar.getLoadingTemplate()).toEqual('Test');
+
+    calendar.setLoadingTemplate(null);
+    expect(calendar.getLoadingTemplate()).toBeNull;
+
+    calendar.setLoadingTemplate('Test 2');
+    expect(calendar.getLoadingTemplate()).toEqual('Test 2');
 });
 
 test('get / set max date method', () => {

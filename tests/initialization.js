@@ -264,3 +264,87 @@ test('instantiate calendar with display disabled data source', () => {
     expect(getDay(6, 14).style.backgroundColor).toBeTruthy();
     expect(getDay(6, 15).style.backgroundColor).toBeFalsy();
 });
+
+test('instantiate calendar with data source function', () => {
+    const dataSource = jest.fn(year => [
+        {
+            startDate: new Date(year, 6, year - 2000),
+            endDate: new Date(year, 6, year - 2000)
+        }
+    ]);
+
+    const calendar = new Calendar('#calendar', {
+        startYear: 2001,
+		dataSource: dataSource
+    });
+    
+    expect(dataSource).toHaveBeenCalledTimes(1);
+    expect(dataSource).toHaveBeenLastCalledWith(2001);
+    expect(getDay(6, 1).style.boxShadow).toBeTruthy();
+    expect(getDay(6, 2).style.boxShadow).toBeFalsy();
+    
+    calendar.setYear(2002);
+    expect(dataSource).toHaveBeenCalledTimes(2);
+    expect(dataSource).toHaveBeenLastCalledWith(2002);
+    expect(getDay(6, 1).style.boxShadow).toBeFalsy();
+    expect(getDay(6, 2).style.boxShadow).toBeTruthy();
+});
+
+test('instantiate calendar with data source callback function', () => {
+    const dataSource = jest.fn((year, callback) => {
+        callback([
+            {
+                startDate: new Date(year, 6, year - 2000),
+                endDate: new Date(year, 6, year - 2000)
+            }
+        ]);
+    });
+
+    const calendar = new Calendar('#calendar', {
+        startYear: 2001,
+		dataSource: dataSource
+    });
+    
+    expect(dataSource).toHaveBeenCalledTimes(1);
+    expect(getDay(6, 1).style.boxShadow).toBeTruthy();
+    expect(getDay(6, 2).style.boxShadow).toBeFalsy();
+    
+    calendar.setYear(2002);
+    expect(dataSource).toHaveBeenCalledTimes(2);
+    expect(getDay(6, 1).style.boxShadow).toBeFalsy();
+    expect(getDay(6, 2).style.boxShadow).toBeTruthy();
+});
+
+test('instantiate calendar with data source promise function', done => {
+    const dataSource = jest.fn(year => new Promise((resolve, reject) => {
+        resolve([
+            {
+                startDate: new Date(year, 6, year - 2000),
+                endDate: new Date(year, 6, year - 2000)
+            }
+        ]);
+    }));
+
+    const calendar = new Calendar('#calendar', {
+        startYear: 2001,
+		dataSource: dataSource
+    });
+
+    expect(dataSource).toHaveBeenCalledTimes(1);
+    expect(dataSource).toHaveBeenLastCalledWith(2001);
+
+    setTimeout(() => {
+        expect(getDay(6, 1).style.boxShadow).toBeTruthy();
+        expect(getDay(6, 2).style.boxShadow).toBeFalsy();
+        
+        calendar.setYear(2002);
+        expect(dataSource).toHaveBeenCalledTimes(2);
+        expect(dataSource).toHaveBeenLastCalledWith(2002);
+
+        setTimeout(() => {
+            expect(getDay(6, 1).style.boxShadow).toBeFalsy();
+            expect(getDay(6, 2).style.boxShadow).toBeTruthy();
+            done();
+        }, 0);
+    }, 0);
+});
