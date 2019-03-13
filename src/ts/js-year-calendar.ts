@@ -934,6 +934,18 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 	}
 
+	protected _getElementPosition(element: HTMLElement): {top: number, left: number} {
+		let top = 0, left = 0;
+
+		do {
+			top += element.offsetTop  || 0;
+			left += element.offsetLeft || 0;
+			element = element.offsetParent as HTMLElement;
+		} while(element);
+	
+		return { top, left };
+	}
+
 	protected _openContextMenu(elt: HTMLElement): void {
 		var contextMenu = document.querySelector('.calendar-context-menu') as HTMLElement;
 		
@@ -976,8 +988,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 		
 		if (contextMenu.children.length > 0) {
-			contextMenu.style.left = (elt.offsetLeft + 25) + 'px';
-			contextMenu.style.top = (elt.offsetTop + 25) + 'px';
+			const position = this._getElementPosition(elt);
+			contextMenu.style.left = (position.left + 25) + 'px';
+			contextMenu.style.top = (position.top + 25) + 'px';
 			contextMenu.style.display = 'block';
 			
 			window.addEventListener('mouseup', () => {
