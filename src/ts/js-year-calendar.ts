@@ -869,6 +869,10 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 
 		this._responsiveInterval = setInterval(() => {
+			if (this.element.querySelector('.month') == null) {
+				return;
+			}
+
 			var calendarSize = this.element.offsetWidth;
 			var monthSize = (this.element.querySelector('.month') as HTMLElement).offsetWidth + 10;
 			this._nbCols = null;
