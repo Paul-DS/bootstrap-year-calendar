@@ -64,7 +64,7 @@ new Calendar('.calendar', {
 })
 ```
 
-You can find the exhaustive list of options in the [documentation](/documentation).
+You can find the exhaustive list of options in the [documentation](https://year-calendar.github.io/js-year-calendar/documentation).
 
 ## Language
 
@@ -102,7 +102,7 @@ calendar.setStyle('background');
 calendar.setMaxDate(new Date());
 ```
 
-You can find the exhaustive list of methods in the [documentation](/documentation).
+You can find the exhaustive list of methods in the [documentation](https://year-calendar.github.io/js-year-calendar/documentation).
 
 ## Events
 
@@ -124,7 +124,7 @@ document.querySelector('.calendar').addEventListener('clickDay', function(e) {
 });
 ```
 
-You can find the exhaustive list of events in the [documentation](/documentation).
+You can find the exhaustive list of events in the [documentation](https://year-calendar.github.io/js-year-calendar/documentation).
 
 ## Migrating from bootstrap-year-calendar
 
@@ -167,3 +167,7 @@ const calendar = new Calendar('.calendar');
 
 calendar.set...();
 ```
+
+## What next
+
+Check the [documentation](https://year-calendar.github.io/js-year-calendar/documentation) and [examples](https://year-calendar.github.io/rc-year-calendar/examples) pages to discover all the functionalities.
