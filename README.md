@@ -5,6 +5,8 @@ A fully customizable year calendar widget
 
 [![CircleCI](https://img.shields.io/circleci/project/github/year-calendar/js-year-calendar/master.svg)](https://circleci.com/gh/year-calendar/js-year-calendar/tree/master)
 [![CodeCov](https://img.shields.io/codecov/c/github/year-calendar/js-year-calendar/master.svg)](https://codecov.io/gh/year-calendar/js-year-calendar)
+[![NPM](https://img.shields.io/npm/dw/js-year-calendar.svg)](https://www.npmjs.com/package/js-year-calendar)
+
 
 ## Requirements
 
