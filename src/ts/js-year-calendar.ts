@@ -1602,6 +1602,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			});
 		}
 		else {
+			this._dataSource = this.options.dataSource;
 			this._initializeDatasourceColors();
 			if (!preventRendering) {
 				this.render();
