@@ -29,7 +29,7 @@
   "bugs": {
     "url": "https://github.com/year-calendar/js-year-calendar/issues"
   },
-  "homepage": "https://github.com/year-calendar/js-year-calendar",
+  "homepage": "https://year-calendar.github.io/",
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.3.3",
