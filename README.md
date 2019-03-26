@@ -7,6 +7,10 @@ A fully customizable year calendar widget
 [![CodeCov](https://img.shields.io/codecov/c/github/year-calendar/js-year-calendar/master.svg)](https://codecov.io/gh/year-calendar/js-year-calendar)
 [![NPM](https://img.shields.io/npm/dw/js-year-calendar.svg)](https://www.npmjs.com/package/js-year-calendar)
 
+This library is also available for:
+
+[![React.js](https://year-calendar.github.io/assets/img/react.png)](https://github.com/year-calendar/rc-year-calendar) 
+[![Vue.js](https://year-calendar.github.io/assets/img/vue.png)](https://github.com/year-calendar/v-year-calendar)
 
 ## Requirements
 
