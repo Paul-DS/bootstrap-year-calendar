@@ -993,7 +993,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			contextMenu.style.top = (position.top + 25) + 'px';
 			contextMenu.style.display = 'block';
 			
-			window.addEventListener('mouseup', () => {
+			window.addEventListener('click', () => {
 				contextMenu.style.display = 'none';
 			}, { once: true });
 		}
