@@ -1,3 +1,11 @@
+## bootstrap-year-calendar is now [year-calendar](https://year-calendar.github.io/) !
+The library has been rewritten to remove all dependencies.
+
+You should consider using the new repository (https://github.com/year-calendar/js-year-calendar) as the current one is not maintained anymore, and will soon be deprecated.
+
+
+----
+
 # bootstrap-year-calendar
 A fully customizable year calendar widget, for boostrap !
 You can find all details on the [official website](http://www.bootstrap-year-calendar.com/).
