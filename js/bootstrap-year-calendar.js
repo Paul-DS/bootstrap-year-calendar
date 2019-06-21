@@ -2,6 +2,8 @@
  * Bootstrap year calendar v1.1.0
  * Repo: https://github.com/Paul-DS/bootstrap-year-calendar
  * =========================================================
+ * BOOTSTRAP 4 Integration by Raul Neiva
+ * =========================================================
  * Created by Paul David-Sivelle
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -97,7 +99,10 @@
 		},
 		_renderHeader: function() {
 			var header = $(document.createElement('div'));
-			header.addClass('calendar-header panel panel-default');
+			header.addClass('calendar-header card');
+
+			var headerBody = $(document.createElement('div'));
+			headerBody.addClass('card-body p-0');
 			
 			var headerTable = $(document.createElement('table'));
 			
@@ -109,14 +114,14 @@
 			}
 			
 			var prevIcon = $(document.createElement('span'));
-			prevIcon.addClass('glyphicon glyphicon-chevron-left');
+			prevIcon.addClass('oi oi-chevron-left');
 			
 			prevDiv.append(prevIcon);
 			
 			headerTable.append(prevDiv);
 			
 			var prev2YearDiv = $(document.createElement('th'));
-			prev2YearDiv.addClass('year-title year-neighbor2 hidden-sm hidden-xs');
+			prev2YearDiv.addClass('year-title year-neighbor2 d-none d-md-table-cell');
 			prev2YearDiv.text(this.options.startYear - 2);
 			
 			if(this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 2, 11, 31)) {
@@ -126,7 +131,7 @@
 			headerTable.append(prev2YearDiv);
 			
 			var prevYearDiv = $(document.createElement('th'));
-			prevYearDiv.addClass('year-title year-neighbor hidden-xs');
+			prevYearDiv.addClass('year-title year-neighbor d-none d-sm-table-cell');
 			prevYearDiv.text(this.options.startYear - 1);
 			
 			if(this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 1, 11, 31)) {
@@ -142,7 +147,7 @@
 			headerTable.append(yearDiv);
 			
 			var nextYearDiv = $(document.createElement('th'));
-			nextYearDiv.addClass('year-title year-neighbor hidden-xs');
+			nextYearDiv.addClass('year-title year-neighbor d-none d-sm-table-cell');
 			nextYearDiv.text(this.options.startYear + 1);
 			
 			if(this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 1, 0, 1)) {
@@ -152,7 +157,7 @@
 			headerTable.append(nextYearDiv);
 			
 			var next2YearDiv = $(document.createElement('th'));
-			next2YearDiv.addClass('year-title year-neighbor2 hidden-sm hidden-xs');
+			next2YearDiv.addClass('year-title year-neighbor2 d-none d-md-table-cell');
 			next2YearDiv.text(this.options.startYear + 2);
 			
 			if(this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 2, 0, 1)) {
@@ -169,19 +174,26 @@
 			}
 			
 			var nextIcon = $(document.createElement('span'));
-			nextIcon.addClass('glyphicon glyphicon-chevron-right');
+			nextIcon.addClass('oi oi-chevron-right');
 			
 			nextDiv.append(nextIcon);
 			
 			headerTable.append(nextDiv);
 			
-			header.append(headerTable);
+			headerBody.append(headerTable);
+
+			header.append(headerBody);
 			
 			this.element.append(header);
 		},
 		_renderBody: function() {
 			var monthsDiv = $(document.createElement('div'));
 			monthsDiv.addClass('months-container');
+
+			var bsRow = $(document.createElement('div'));
+			bsRow.addClass('row m-0');
+
+			monthsDiv.append(bsRow);
 			
 			for(var m = 0; m < 12; m++) {
 				/* Container */
@@ -300,7 +312,7 @@
 				
 				monthDiv.append(table);
 				
-				monthsDiv.append(monthDiv);
+				bsRow.append(monthDiv);
 			}
 			
 			this.element.append(monthsDiv);
@@ -618,19 +630,19 @@
 				var monthContainerClass = 'month-container';
 				
 				if(monthSize * 6 < calendarSize) {
-					monthContainerClass += ' col-xs-2';
+					monthContainerClass += ' col-2';
 				}
 				else if(monthSize * 4 < calendarSize) {
-					monthContainerClass += ' col-xs-3';
+					monthContainerClass += ' col-3';
 				}
 				else if(monthSize * 3 < calendarSize) {
-					monthContainerClass += ' col-xs-4';
+					monthContainerClass += ' col-4';
 				}
 				else if(monthSize * 2 < calendarSize) {
-					monthContainerClass += ' col-xs-6';
+					monthContainerClass += ' col-6';
 				}
 				else {
-					monthContainerClass += ' col-xs-12';
+					monthContainerClass += ' col-12';
 				}
 				
 				$(_this.element).find('.month-container').attr('class', monthContainerClass);
@@ -698,7 +710,7 @@
 				eventItem.append(eventItemContent);
 				
 				var icon = $(document.createElement('span'));
-				icon.addClass('glyphicon glyphicon-chevron-right');
+				icon.addClass('oi oi-chevron-right');
 				
 				eventItem.append(icon);
 				
@@ -742,7 +754,7 @@
 					}
 					
 					var icon = $(document.createElement('span'));
-					icon.addClass('glyphicon glyphicon-chevron-right');
+					icon.addClass('oi oi-chevron-right');
 					
 					menuItem.append(icon);
 					
