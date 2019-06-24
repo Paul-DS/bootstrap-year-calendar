@@ -6,14 +6,14 @@
  * Kiki Ldc <7x24th@gmail.com>
  */
  
- ;(Function($) {
+ ;(function($) {
    $.fn.calendar.dates ['id'] = {
    days: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
    daysShort: ["Ming", "Sen", "Sel", "Rab", "kam", "Jum", "Sab"],
    daysMin: ["Mg", "Sn", "Sl", "Rb", "Km", "Jm", "Sb"],
    months: ["Januari", "Februari", "Maret", "April", "Mai", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
    monthsShort: ["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"],
-   weekShort: 'W'
+   weekShort: 'W',
    weekStart: 1
    };
- }(JQuery));
+ }(jQuery));
