@@ -92,6 +92,7 @@
 			
 			this._applyEvents();
 			this.element.find('.months-container').fadeIn(500);
+			this._updateMonthClass();
 			
 			this._triggerEvent('renderEnd', { currentYear: this.options.startYear });
 		},
@@ -611,9 +612,16 @@
 			});
 			
 			/* Responsive management */
-			
-			setInterval(function() {
-				var calendarSize = $(_this.element).width();
+
+			clearInterval(timer);
+			timer = setInterval(function() {
+				_this._updateMonthClass();
+			}, 300);
+		},
+		_updateMonthClass: function () {
+			var _this = this;
+			var calendarSize = $(_this.element).width();
+			if (lastCalendarSize != calendarSize) {
 				var monthSize = $(_this.element).find('.month').first().width() + 10;
 				var monthContainerClass = 'month-container';
 				
@@ -633,8 +641,11 @@
 					monthContainerClass += ' col-xs-12';
 				}
 				
-				$(_this.element).find('.month-container').attr('class', monthContainerClass);
-			}, 300);
+				$(_this.element).find('.month-container').each(function() {
+					if ($(this).attr('class') != monthContainerClass)
+						$(this).attr('class', monthContainerClass);
+				});
+			}
 		},
 		_refreshRange: function () {
 			var _this = this;
@@ -1101,7 +1112,10 @@
 	};
 	
 	var colors = $.fn.calendar.colors = ['#2C8FC9', '#9CB703', '#F5BB00', '#FF4A32', '#B56CE2', '#45A597'];
-	
+
+	var timer = null;
+	var lastCalendarSize = 0;
+
 	$(function(){
 		$('[data-provide="calendar"]').each(function() {
 			$(this).calendar();
