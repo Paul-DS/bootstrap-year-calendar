@@ -3,7 +3,7 @@
 // Definitions by: Paul David-Sivelle
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
-/// <reference path="../jquery/jquery.d.ts"/>
+/// <reference types="jquery"/>
 
 /**
  * Represent a context menu item for the calendar.
