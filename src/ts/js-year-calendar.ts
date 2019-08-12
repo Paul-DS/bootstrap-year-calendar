@@ -308,7 +308,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		headerTable.appendChild(prevDiv);
 		
 		var prev2YearDiv = document.createElement('th');
-		prev2YearDiv.classList.add('year-title', 'year-neighbor2', 'hidden-sm', 'hidden-xs');
+		prev2YearDiv.classList.add('year-title', 'year-neighbor2');
 		prev2YearDiv.textContent = (this.options.startYear - 2).toString();
 		
 		if (this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 2, 11, 31)) {
@@ -318,7 +318,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		headerTable.appendChild(prev2YearDiv);
 		
 		var prevYearDiv = document.createElement('th');
-		prevYearDiv.classList.add('year-title', 'year-neighbor', 'hidden-xs');
+		prevYearDiv.classList.add('year-title', 'year-neighbor');
 		prevYearDiv.textContent = (this.options.startYear - 1).toString();
 		
 		if (this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 1, 11, 31)) {
@@ -334,7 +334,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		headerTable.appendChild(yearDiv);
 		
 		var nextYearDiv = document.createElement('th');
-		nextYearDiv.classList.add('year-title', 'year-neighbor', 'hidden-xs');
+		nextYearDiv.classList.add('year-title', 'year-neighbor');
 		nextYearDiv.textContent = (this.options.startYear + 1).toString();
 		
 		if (this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 1, 0, 1)) {
@@ -344,7 +344,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		headerTable.appendChild(nextYearDiv);
 		
 		var next2YearDiv = document.createElement('th');
-		next2YearDiv.classList.add('year-title', 'year-neighbor2', 'hidden-sm', 'hidden-xs');
+		next2YearDiv.classList.add('year-title', 'year-neighbor2');
 		next2YearDiv.textContent = (this.options.startYear + 2).toString();
 		
 		if (this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 2, 0, 1)) {
