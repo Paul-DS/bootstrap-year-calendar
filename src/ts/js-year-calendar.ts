@@ -993,8 +993,10 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			contextMenu.style.top = (position.top + 25) + 'px';
 			contextMenu.style.display = 'block';
 			
-			window.addEventListener('mouseup', () => {
-				contextMenu.style.display = 'none';
+			window.addEventListener('click', (e) => {
+				if (!contextMenu.contains(e.target as Node)) {
+					contextMenu.style.display = 'none';
+				}
 			}, { once: true });
 		}
 	}
@@ -1020,6 +1022,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			if (items[i].click) {
 				(function(index) {
 					menuItem.addEventListener('click', () => {
+						(document.querySelector('.calendar-context-menu') as HTMLElement).style.display = 'none';
 						items[index].click(evt);
 					});
 				})(i);
