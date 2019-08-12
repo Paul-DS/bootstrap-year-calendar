@@ -973,14 +973,18 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			
 			var eventItemContent = document.createElement('div');
 			eventItemContent.classList.add('content');
-			eventItemContent.textContent = events[i].name;
-			
-			eventItem.appendChild(eventItemContent);
+
+			var text = document.createElement('span');
+			text.classList.add('text');
+			text.textContent = events[i].name;
+			eventItemContent.appendChild(text);
 			
 			var icon = document.createElement('span');
+			icon.classList.add('arrow');
 			icon.innerHTML = "&rsaquo;";
-			
-			eventItem.appendChild(icon);
+			eventItemContent.appendChild(icon);
+
+			eventItem.appendChild(eventItemContent);
 			
 			this._renderContextMenuItems(eventItem, this.options.contextMenuItems, events[i]);
 			
@@ -1015,25 +1019,29 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			
 			var menuItemContent = document.createElement('div');
 			menuItemContent.classList.add('content');
-			menuItemContent.textContent = items[i].text;
-			
-			menuItem.appendChild(menuItemContent);
-			
+
+			var text = document.createElement('span');
+			text.classList.add('text');
+			text.textContent = items[i].text;
+			menuItemContent.appendChild(text);
+						
 			if (items[i].click) {
 				(function(index) {
-					menuItem.addEventListener('click', () => {
+					menuItemContent.addEventListener('click', () => {
 						(document.querySelector('.calendar-context-menu') as HTMLElement).style.display = 'none';
 						items[index].click(evt);
 					});
 				})(i);
 			}
-			
-			var icon = document.createElement('span');
-			icon.innerHTML = "&rsaquo;";
-			
-			menuItem.appendChild(icon);
+
+			menuItem.appendChild(menuItemContent);
 			
 			if (items[i].items && items[i].items.length > 0) {
+				var icon = document.createElement('span');
+				icon.classList.add('arrow');
+				icon.innerHTML = "&rsaquo;";
+				menuItemContent.appendChild(icon);
+
 				this._renderContextMenuItems(menuItem, items[i].items, evt);
 			}
 			

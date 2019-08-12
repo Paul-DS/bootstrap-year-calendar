@@ -291,33 +291,33 @@
 }
 
 .calendar-context-menu .item {
-	padding:5px 10px;
-	cursor:pointer;
-	display:table;
-	width:100%;
-	white-space: nowrap;
-
-	&:hover {
-		background:#eee;
-	}
+	position: relative;
 
 	.content {
-		display:table-cell;
-	}
+		padding:5px 10px;
+		cursor:pointer;
+		display:table;
+		width:100%;
+		white-space: nowrap;
 
-	span {
-		display:table-cell;
-		padding-left:10px;
-		text-align:right;
-	}
+		&:hover {
+			background:#eee;
+		}
 
-	span:last-child {
-		display:none;
+		.text {
+			display:table-cell;
+		}
+
+		.arrow {
+			display:table-cell;
+			padding-left:10px;
+			text-align:right;
+		}
 	}
 
 	.submenu {
 		left: 100%;
-		margin-top: -6px;
+		top: -1px; /* Compensate for the border */
 	}
 
 	&:hover > .submenu {
