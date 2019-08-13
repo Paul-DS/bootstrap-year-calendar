@@ -1204,9 +1204,12 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Gets the data source elements for a specified day.
+     * Check if there is no event on the first part, last part or on the whole specified day.
      *
      * @param date The specified day.
+     * @param after Whether to check for a free slot on the first part (if `false`) or the last part (if `true`) of the day. If `null`, this will check on the whole day.
+	 * 
+	 * Usefull only if using the `alwaysHalfDay` option of the calendar, or the `startHalfDay` or `endHalfDay` option of the datasource.
      */
 	public isThereFreeSlot(date: Date, after: Boolean = null): Boolean {
 		const events = this.getEvents(date);
