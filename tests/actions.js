@@ -185,10 +185,10 @@ test('context menu', () => {
     triggerEvent(getDay(2, 10), 'contextmenu');
     expect(checkContextMenuVisible()).toBeTruthy();
     expect(document.querySelector('.calendar-context-menu').children.length).toEqual(1);
-    expect(document.querySelector('.calendar-context-menu > .item > .content').textContent).toEqual('Event 1');
+    expect(document.querySelector('.calendar-context-menu > .item > .content > .text').textContent).toEqual('Event 1');
     expect(document.querySelectorAll('.calendar-context-menu > .item > .submenu > .item').length).toEqual(2);
-    expect(document.querySelector('.calendar-context-menu > .item > .submenu > .item:first-child > .content').textContent).toEqual('Test 1');
+    expect(document.querySelector('.calendar-context-menu > .item > .submenu > .item:first-child > .content > .text').textContent).toEqual('Test 1');
     expect(document.querySelectorAll('.calendar-context-menu > .item > .submenu > .item:first-child > .submenu > .item').length).toEqual(1);
-    expect(document.querySelector('.calendar-context-menu > .item > .submenu > .item:first-child > .submenu > .item > .content').textContent).toEqual('Subtest 1');
-    expect(document.querySelector('.calendar-context-menu > .item > .submenu > .item:nth-child(2) > .content').textContent).toEqual('Test 2');
+    expect(document.querySelector('.calendar-context-menu > .item > .submenu > .item:first-child > .submenu > .item > .content > .text').textContent).toEqual('Subtest 1');
+    expect(document.querySelector('.calendar-context-menu > .item > .submenu > .item:nth-child(2) > .content > .text').textContent).toEqual('Test 2');
 });
