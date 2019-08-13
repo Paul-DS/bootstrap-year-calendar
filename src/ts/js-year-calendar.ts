@@ -146,10 +146,10 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	public renderEnd: CalendarRenderEndEventObject;
 	
 	/**
-	 * @event
 	 * Fired when a date range is selected.
 	 * 
 	 * Don't forget to enable the `enableRangeSelection` option to be able to use the range selection functionality.
+	 * @event
 	 * @example
 	 * ```
 	 * 
