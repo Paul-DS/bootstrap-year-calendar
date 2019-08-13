@@ -25,6 +25,34 @@ import CalendarDayEventObject from './interfaces/CalendarDayEventObject';
 import CalendarRenderEndEventObject from './interfaces/CalendarRenderEndEventObject';
 import CalendarRangeEventObject from './interfaces/CalendarRangeEventObject';
 
+// NodeList forEach() polyfill
+if (typeof NodeList !== "undefined" && !NodeList.prototype.forEach) {
+	NodeList.prototype.forEach = function (callback, thisArg) {
+		thisArg = thisArg || window;
+		for (var i = 0; i < this.length; i++) {
+			callback.call(thisArg, this[i], i, this);
+		}
+	};
+}
+
+// Element closest() polyfill
+if (typeof Element !== "undefined" && !Element.prototype.matches) {
+	const prototype:any = Element.prototype;
+    Element.prototype.matches = prototype.msMatchesSelector || prototype.webkitMatchesSelector;
+}
+
+if (typeof Element !== "undefined" && !Element.prototype.closest) {
+    Element.prototype.closest = function(s) {
+        var el = this;
+        if (!document.documentElement.contains(el)) return null;
+        do {
+            if (el.matches(s)) return el;
+            el = el.parentElement || el.parentNode;
+        } while (el !== null && el.nodeType == 1); 
+        return null;
+	};
+}
+
 /**
  * Calendar instance.
  */
@@ -308,7 +336,8 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		headerTable.appendChild(prevDiv);
 		
 		var prev2YearDiv = document.createElement('th');
-		prev2YearDiv.classList.add('year-title', 'year-neighbor2');
+		prev2YearDiv.classList.add('year-title');
+		prev2YearDiv.classList.add('year-neighbor2');
 		prev2YearDiv.textContent = (this.options.startYear - 2).toString();
 		
 		if (this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 2, 11, 31)) {
@@ -318,7 +347,8 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		headerTable.appendChild(prev2YearDiv);
 		
 		var prevYearDiv = document.createElement('th');
-		prevYearDiv.classList.add('year-title', 'year-neighbor');
+		prevYearDiv.classList.add('year-title');
+		prevYearDiv.classList.add('year-neighbor');
 		prevYearDiv.textContent = (this.options.startYear - 1).toString();
 		
 		if (this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 1, 11, 31)) {
@@ -334,7 +364,8 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		headerTable.appendChild(yearDiv);
 		
 		var nextYearDiv = document.createElement('th');
-		nextYearDiv.classList.add('year-title', 'year-neighbor');
+		nextYearDiv.classList.add('year-title');
+		nextYearDiv.classList.add('year-neighbor');
 		nextYearDiv.textContent = (this.options.startYear + 1).toString();
 		
 		if (this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 1, 0, 1)) {
@@ -344,7 +375,8 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		headerTable.appendChild(nextYearDiv);
 		
 		var next2YearDiv = document.createElement('th');
-		next2YearDiv.classList.add('year-title', 'year-neighbor2');
+		next2YearDiv.classList.add('year-title');
+		next2YearDiv.classList.add('year-neighbor2');
 		next2YearDiv.textContent = (this.options.startYear + 2).toString();
 		
 		if (this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 2, 0, 1)) {
@@ -895,7 +927,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 
 			this.element.querySelectorAll('.month-container').forEach(month => {
 				if (!month.classList.contains(`month-${this._nbCols}`)) {
-					month.classList.remove('month-2', 'month-3', 'month-4', 'month-6', 'month-12');
+					['month-2', 'month-3', 'month-4', 'month-6', 'month-12'].forEach(className => {
+						month.classList.remove(className);
+					});
 					month.classList.add(`month-${this._nbCols}`);
 				}
 			});
@@ -1055,7 +1089,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	protected _getDate(elt): Date {
-		var day = elt.querySelector(':scope > .day-content').textContent;
+		var day = elt.querySelector('.day-content').textContent;
 		var month = elt.closest('.month-container').dataset.monthId;
 		var year = this.options.startYear;
 
@@ -1063,7 +1097,15 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	protected _triggerEvent(eventName: string, parameters: any) {
-		var event:any = new Event(eventName);
+		var event:any = null;
+
+		if (typeof Event === "function") {
+			event = new Event(eventName);
+		}
+		else {
+			event = document.createEvent('Event');
+			event.initEvent(eventName, false, false);
+		}
 
 		event.calendar = this;
 		
@@ -1700,7 +1742,7 @@ declare global {
 if (typeof window === "object") {
 	window.Calendar = Calendar;
 
-	document.addEventListener("DOMContentLoaded", () => { 
+	document.addEventListener("DOMContentLoaded", () => {
 		document.querySelectorAll('[data-provide="calendar"]').forEach((element: HTMLElement) => new Calendar(element));
 	});
 }
