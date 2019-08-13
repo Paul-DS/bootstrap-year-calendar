@@ -1,5 +1,5 @@
 /* =========================================================
- * JS year calendar v0.1.0
+ * JS year calendar v1.0.0
  * Repo: https://github.com/year-calendar/js-year-calendar
  * =========================================================
  * Created by Paul David-Sivelle
