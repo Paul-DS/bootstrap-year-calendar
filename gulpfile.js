@@ -8,8 +8,9 @@ const rename = require('gulp-rename');
 
 const compileTS = function() {
     // Use to generate the definition type
-    return gulp.src('src/ts/js-year-calendar.ts')
+    return gulp.src('src/ts/**/*.ts')
         .pipe(ts({ declaration: true }))
+        .dts
         .pipe(gulp.dest('dist'));
 }
 
