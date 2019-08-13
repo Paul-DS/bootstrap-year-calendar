@@ -765,7 +765,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 					if (e.which == 1) {
 						var currentDate = this._getDate(e.currentTarget);
 					
-						if (this.options.allowOverlap || this.getEvents(currentDate).length == 0)
+						if (this.options.allowOverlap || this.isThereFreeSlot(currentDate))
 						{
 							this._mouseDown = true;
 							this._rangeStart = this._rangeEnd = currentDate;
@@ -785,7 +785,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 							if (newDate < currentDate) {
 								var nextDate = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate() + 1);
 								while (newDate < currentDate) {
-									if (this.getEvents(nextDate).length > 0)
+									if (!this.isThereFreeSlot(nextDate, false))
 									{
 										break;
 									}
@@ -797,7 +797,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 							else {
 								var nextDate = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate() - 1);
 								while (newDate > currentDate) {
-									if (this.getEvents(nextDate).length > 0)
+									if (!this.isThereFreeSlot(nextDate, true))
 									{
 										break;
 									}
@@ -1158,6 +1158,25 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 		
 		return events;
+	}
+
+	/**
+     * Gets the data source elements for a specified day.
+     *
+     * @param date The specified day.
+     */
+	public isThereFreeSlot(date: Date, after: Boolean = null): Boolean {
+		const events = this.getEvents(date);
+
+		if (after === true) {
+			return !events.some(evt => (!this.options.alwaysHalfDay && !evt.endHalfDay) || evt.endDate > date);
+		}
+		else if (after === false) {
+			return !events.some(evt => (!this.options.alwaysHalfDay && !evt.startHalfDay) || evt.startDate < date);
+		}
+		else {
+			return this.isThereFreeSlot(date, false) || this.isThereFreeSlot(date, true);
+		}
 	}
 
 	/**
