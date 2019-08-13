@@ -27,20 +27,25 @@ export default interface CalendarOptions<T extends CalendarDataSourceElement> {
 	
 	/**
      * Specify a custom renderer for days.
+     * 
      * The HTML Element passed in parameter represent a sub element of the "day" div. If you need to access the "day" div, use `element.parentElement`.
+     * 
 	 * This function is called during render for each day.
      */
     customDayRenderer?: (element: HTMLElement, currentDate: Date) => void;
 	
 	/**
      * Specify a custom renderer for data source. Works only with the style set to "custom".
+     * 
      * The HTML Element passed in parameter represent a sub element of the "day" div. If you need to access the "day" div, use `element.parentElement`.
+     * 
 	 * This function is called during render for each day containing at least one event.
      */
     customDataSourceRenderer?: (element: HTMLElement, currentDate: Date, events: T[]) => void;
 
     /**
      * The elements that must be displayed on the calendar.
+     * 
      * Could be:
      * - The datasource
      * - A function that returns the datasource

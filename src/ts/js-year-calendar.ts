@@ -148,6 +148,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	/**
 	 * @event
 	 * Fired when a date range is selected.
+	 * 
 	 * Don't forget to enable the `enableRangeSelection` option to be able to use the range selection functionality.
 	 * @example
 	 * ```
@@ -1274,7 +1275,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets the minimum date of the calendar. This method causes a refresh of the calendar.
+     * Sets the minimum date of the calendar.
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param minDate The minimum date to set.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1297,7 +1300,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets the maximum date of the calendar. This method causes a refresh of the calendar.
+     * Sets the maximum date of the calendar. 
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param maxDate The maximum date to set.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1320,7 +1325,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets the style to use for displaying data source. This method causes a refresh of the calendar.
+     * Sets the style to use for displaying data source. 
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param style The style to use for displaying data source ("background", "border" or "custom").
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1357,7 +1364,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets a value indicating whether the weeks number are displayed. This method causes a refresh of the calendar.
+     * Sets a value indicating whether the weeks number are displayed.
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param  displayWeekNumber Indicates whether the weeks number are displayed.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1378,7 +1387,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets a value indicating whether the calendar header is displayed. This method causes a refresh of the calendar.
+     * Sets a value indicating whether the calendar header is displayed.
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param displayHeader Indicates whether the calendar header is displayed.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1399,7 +1410,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets a value indicating whether the data source must be rendered on disabled days. This method causes a refresh of the calendar.
+     * Sets a value indicating whether the data source must be rendered on disabled days.
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param displayDisabledDataSource Indicates whether the data source must be rendered on disabled days.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1421,6 +1434,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 
 	/**
      * Sets a value indicating whether the beginning and the end of each range should be displayed as half selected day.
+	 * 
 	 * This method causes a refresh of the calendar.
      *
      * @param alwaysHalfDay Indicates whether the beginning and the end of each range should be displayed as half selected day.
@@ -1442,7 +1456,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets a value indicating whether the user can make range selection. This method causes a refresh of the calendar.
+     * Sets a value indicating whether the user can make range selection.
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param enableRangeSelection Indicates whether the user can make range selection.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1463,7 +1479,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets the disabled days. This method causes a refresh of the calendar.
+     * Sets the disabled days.
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param disableDays The disabled days to set.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1484,7 +1502,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets the disabled days of the week. This method causes a refresh of the calendar.
+     * Sets the disabled days of the week.
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param disabledWeekDays The disabled days of the week to set.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1505,7 +1525,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets the hidden days of the week. This method causes a refresh of the calendar.
+     * Sets the hidden days of the week.
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param hiddenWeekDays The hidden days of the week to set.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1527,6 +1549,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 
 	/**
      * Sets a value indicating whether the beginning and the end of each range should be displayed as rounded cells.
+	 * 
 	 * This method causes a refresh of the calendar.
      *
      * @param roundRangeLimits Indicates whether the beginning and the end of each range should be displayed as rounded cells. 
@@ -1549,7 +1572,8 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 
 	/**
      * Sets a value indicating whether the default context menu must be displayed when right clicking on a day. 
-     * This method causes a refresh of the calendar.
+     * 
+	 * This method causes a refresh of the calendar.
      * 
      * @param enableContextMenu Indicates whether the default context menu must be displayed when right clicking on a day.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1570,7 +1594,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets new context menu items. This method causes a refresh of the calendar.
+     * Sets new context menu items.
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param contextMenuItems The new context menu items.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1591,7 +1617,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets the custom day renderer. This method causes a refresh of the calendar.
+     * Sets the custom day renderer.
+	 * 
+	 * This method causes a refresh of the calendar.
 	 *
 	 * @param handler The function used to render the days. This function is called during render for each day.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1612,7 +1640,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets the custom data source renderer. Works only with the style set to "custom". This method causes a refresh of the calendar.
+     * Sets the custom data source renderer. Works only with the style set to "custom".
+	 * 
+	 * This method causes a refresh of the calendar.
 	 *
 	 * @param handler The function used to render the data source. This function is called during render for each day containing at least one event.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1633,7 +1663,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets the language used for calendar rendering. This method causes a refresh of the calendar.
+     * Sets the language used for calendar rendering.
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param language The language to use for calendar redering.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1656,7 +1688,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets a new data source. This method causes a refresh of the calendar.
+     * Sets a new data source.
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param dataSource The new data source.
 	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1690,7 +1724,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets the starting day of the week. This method causes a refresh of the calendar.
+     * Sets the starting day of the week.
+	 * 
+	 * This method causes a refresh of the calendar.
      *
      * @param weekStart The starting day of the week. This option overrides the parameter define in the language file.
      * @param preventRedering Indicates whether the rendering should be prevented after the property update.
@@ -1721,7 +1757,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 
 	/**
 	 * 
-     * Add a new element to the data source. This method causes a refresh of the calendar.
+     * Add a new element to the data source.
+	 * 
+	 * This method causes a refresh of the calendar.
      * 
      * @param element The element to add.
 	 * @param preventRendering Indicates whether the calendar shouldn't be refreshed once the event added.
