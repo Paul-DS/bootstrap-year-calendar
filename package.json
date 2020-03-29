@@ -1,6 +1,6 @@
 {
   "name": "js-year-calendar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A fully customizable year calendar widget",
   "main": "./dist/js-year-calendar.js",
   "scripts": {
@@ -32,21 +32,21 @@
   "homepage": "https://year-calendar.github.io/",
   "dependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.3.3",
-    "@babel/plugin-proposal-class-properties": "^7.3.3",
-    "@babel/plugin-transform-modules-umd": "^7.2.0",
-    "@babel/preset-env": "^7.3.1",
-    "@babel/preset-typescript": "^7.3.3",
-    "gulp": "^4.0.0",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-modules-umd": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-typescript": "^7.9.0",
+    "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.0.0",
     "gulp-less": "^4.0.1",
     "gulp-rename": "^1.4.0",
-    "gulp-typescript": "^5.0.0",
+    "gulp-typescript": "^5.0.1",
     "gulp-uglify": "^3.0.1",
-    "jest": "^24.1.0",
-    "typedoc": "^0.14.2",
-    "typescript": "^3.3.3333"
+    "jest": "^25.2.3",
+    "typedoc": "^0.17.3",
+    "typescript": "^3.8.3"
   },
   "jest": {
     "testMatch": [

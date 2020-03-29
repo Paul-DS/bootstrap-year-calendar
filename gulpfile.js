@@ -7,9 +7,10 @@ const cleanCss = require('gulp-clean-css');
 const rename = require('gulp-rename');
 
 const compileTS = function() {
+    const tsProject = ts.createProject('tsconfig.json');
     // Use to generate the definition type
     return gulp.src('src/ts/**/*.ts')
-        .pipe(ts({ declaration: true }))
+        .pipe(tsProject())
         .dts
         .pipe(gulp.dest('dist'));
 }
