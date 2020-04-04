@@ -1004,7 +1004,8 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		for (var i = 0; i < events.length; i++) {
 			var eventItem = document.createElement('div');
 			eventItem.classList.add('item');
-			eventItem.style.borderLeft = `4px solid ${events[i].color}`;
+			eventItem.style.paddingLeft = '4px';
+			eventItem.style.boxShadow = `inset 4px 0 0 0 ${events[i].color}`;
 			
 			var eventItemContent = document.createElement('div');
 			eventItemContent.classList.add('content');
@@ -1025,18 +1026,35 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			
 			contextMenu.appendChild(eventItem);
 		}
-		
+
 		if (contextMenu.children.length > 0) {
 			const position = this._getElementPosition(elt);
 			contextMenu.style.left = (position.left + 25) + 'px';
+			contextMenu.style.right = '';
 			contextMenu.style.top = (position.top + 25) + 'px';
 			contextMenu.style.display = 'block';
+
+			if (contextMenu.getBoundingClientRect().right > document.body.offsetWidth) {
+				contextMenu.style.left = '';
+				contextMenu.style.right = '0';
+			}
+
+			// Launch the position check once the whole context menu tree will be rendered
+			setTimeout(() => this._checkContextMenuItemsPosition(), 0);
 			
-			window.addEventListener('click', (e) => {
-				if (!contextMenu.contains(e.target as Node)) {
+			const closeContextMenu = (event: Event) => {
+				if (event.type !== 'click' || !contextMenu.contains((event as MouseEvent).target as Node)) {
 					contextMenu.style.display = 'none';
+
+					window.removeEventListener('click', closeContextMenu);
+					window.removeEventListener('resize', closeContextMenu);
+					window.removeEventListener('scroll', closeContextMenu);
 				}
-			}, { once: true });
+			};
+
+			window.addEventListener('click', closeContextMenu);
+			window.addEventListener('resize', closeContextMenu);
+			window.addEventListener('scroll', closeContextMenu);
 		}
 	}
 
@@ -1087,6 +1105,31 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		{
 			parent.appendChild(subMenu);
 		}
+	}
+
+	protected _checkContextMenuItemsPosition(): void {
+		const menus = document.querySelectorAll('.calendar-context-menu .submenu');
+
+		menus.forEach(menu => {
+			const htmlMenu = menu as HTMLElement;
+			htmlMenu.style.display = 'block';
+			htmlMenu.style.visibility = 'hidden';
+		});
+
+		menus.forEach(menu => {
+			const htmlMenu = menu as HTMLElement;
+			if (htmlMenu.getBoundingClientRect().right > document.body.offsetWidth) {
+				htmlMenu.classList.add('open-left');
+			} else {
+				htmlMenu.classList.remove('open-left');
+			}
+		});
+
+		menus.forEach(menu => {
+			const htmlMenu = menu as HTMLElement;
+			htmlMenu.style.display = '';
+			htmlMenu.style.visibility = '';
+		});
 	}
 
 	protected _getDate(elt): Date {

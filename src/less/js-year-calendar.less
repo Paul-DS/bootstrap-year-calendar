@@ -281,7 +281,7 @@
 
 /* Context menu */
 .calendar-context-menu,
-.calendar-context-menu  .submenu {
+.calendar-context-menu .submenu {
 	border: 1px solid #ddd;
 	background-color: white;
 	box-shadow: 2px 2px 5px rgba(0, 0, 0, .2);
@@ -316,8 +316,15 @@
 	}
 
 	.submenu {
-		left: 100%;
 		top: -1px; /* Compensate for the border */
+
+		&:not(.open-left) {
+			left: 100%;
+		}
+
+		&.open-left {
+			right: 100%;
+		}
 	}
 
 	&:hover > .submenu {
