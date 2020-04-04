@@ -4,6 +4,7 @@ import CalendarDayEventObject from './CalendarDayEventObject'
 import CalendarRenderEndEventObject from './CalendarRenderEndEventObject'
 import CalendarRangeEventObject from './CalendarRangeEventObject'
 import CalendarYearChangedEventObject from './CalendarYearChangedEventObject'
+import CalendarPeriodChangedEventObject from './CalendarPeriodChangedEventObject'
 
 /**
  * Options used for calendar customization.
@@ -113,11 +114,22 @@ export default interface CalendarOptions<T extends CalendarDataSourceElement> {
      * The date from which days are enabled.
      */
     minDate?: Date;
+
+    /**
+     * The number of months displayed by the calendar.
+     */
+    numberMonthsDisplayed?: number;
 	
 	/**
      * Specifies whether the beginning and the end of each range should be displayed as rounded cells.
      */
     roundRangeLimits?: boolean;
+
+    /**
+     * The date on which the calendar should be opened.
+     * The day is not considered (only the month and the year).
+     */
+    startDate?: Date;
 
     /**
      * The year on which the calendar should be opened.
@@ -163,9 +175,14 @@ export default interface CalendarOptions<T extends CalendarDataSourceElement> {
      * Function fired when a date range is selected.
      */
     selectRange?: (e: CalendarRangeEventObject) => void;
-	
-	/**
+    
+    /**
      * Function fired when the visible year of the calendar is changed.
      */
     yearChanged?: (e: CalendarYearChangedEventObject) => void;
+
+	/**
+     * Function fired when the visible period of the calendar is changed.
+     */
+    periodChanged?: (e: CalendarPeriodChangedEventObject) => void;
 }
