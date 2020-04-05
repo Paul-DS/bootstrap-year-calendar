@@ -92,7 +92,9 @@ test('get / set datasource method', () => {
     expect(calendar.getDataSource()).toEqual(dataSource);
 
     expect(dataSource).toHaveBeenCalledTimes(1);
-    expect(dataSource).toHaveBeenLastCalledWith(currentYear);
+    const endDate = new Date(currentYear + 1, 0, 1);
+    endDate.setTime(endDate.getTime() - 1);
+    expect(dataSource).toHaveBeenLastCalledWith({ year: currentYear, startDate: new Date(currentYear, 0, 1), endDate });
 });
 
 test('get / set disabled days method', () => {

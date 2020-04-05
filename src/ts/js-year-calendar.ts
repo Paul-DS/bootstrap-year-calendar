@@ -279,19 +279,25 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	protected _fetchDataSource(callback: (dataSource: T[]) => void) {
 		if (typeof this.options.dataSource === "function") {
 			const getDataSource:any = this.options.dataSource;
+			const currentPeriod = this.getCurrentPeriod();
+			const fetchParameters = {
+				year: currentPeriod.startDate.getFullYear(),
+				startDate: currentPeriod.startDate,
+				endDate: currentPeriod.endDate,
+			};
 
 			if (getDataSource.length == 2) {
 				// 2 parameters, means callback method
-				getDataSource(this.options.startYear, callback);
+				getDataSource(fetchParameters, callback);
 			}
 			else {
 				// 1 parameter, means synchronous or promise method
-				var result = getDataSource(this.options.startYear);
+				var result = getDataSource(fetchParameters);
 
 				if (result instanceof Array) {
 					callback(result);
 				}
-				else {
+				if (result && result.then) {
 					result.then(callback);
 				}
 			}

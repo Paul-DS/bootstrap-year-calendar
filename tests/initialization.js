@@ -292,10 +292,10 @@ test('instantiate calendar with display disabled data source', () => {
 });
 
 test('instantiate calendar with data source function', () => {
-    const dataSource = jest.fn(year => [
+    const dataSource = jest.fn(period => [
         {
-            startDate: new Date(year, 6, year - 2000),
-            endDate: new Date(year, 6, year - 2000)
+            startDate: new Date(period.year, 6, period.year - 2000),
+            endDate: new Date(period.year, 6, period.year - 2000)
         }
     ]);
 
@@ -305,23 +305,58 @@ test('instantiate calendar with data source function', () => {
     });
     
     expect(dataSource).toHaveBeenCalledTimes(1);
-    expect(dataSource).toHaveBeenLastCalledWith(2001);
+    
+    let endDate = new Date(2002, 0, 1);
+    endDate.setTime(endDate.getTime() - 1);
+    expect(dataSource).toHaveBeenLastCalledWith({ year: 2001, startDate: new Date(2001, 0, 1), endDate });
     expect(getDay(6, 1).style.boxShadow).toBeTruthy();
     expect(getDay(6, 2).style.boxShadow).toBeFalsy();
     
     calendar.setYear(2002);
     expect(dataSource).toHaveBeenCalledTimes(2);
-    expect(dataSource).toHaveBeenLastCalledWith(2002);
+    endDate.setFullYear(2002);
+    expect(dataSource).toHaveBeenLastCalledWith({ year: 2002, startDate: new Date(2002, 0, 1), endDate });
     expect(getDay(6, 1).style.boxShadow).toBeFalsy();
     expect(getDay(6, 2).style.boxShadow).toBeTruthy();
 });
 
+test('instantiate calendar with data source function and custom period', () => {
+    const dataSource = jest.fn(period => [
+        {
+            startDate: new Date(period.startDate.getFullYear(), period.startDate.getMonth(), period.startDate.getMonth()),
+            endDate: new Date(period.startDate.getFullYear(), period.startDate.getMonth(), period.startDate.getMonth()),
+        }
+    ]);
+
+    const calendar = new Calendar('#calendar', {
+        startDate: new Date(2001, 2, 1),
+        numberMonthsDisplayed: 2,
+		dataSource: dataSource
+    });
+    
+    expect(dataSource).toHaveBeenCalledTimes(1);
+    
+    let endDate = new Date(2001, 4, 1);
+    endDate.setTime(endDate.getTime() - 1);
+    expect(dataSource).toHaveBeenLastCalledWith({ year: 2001, startDate: new Date(2001, 2, 1), endDate });
+    expect(getDay(0, 2).style.boxShadow).toBeTruthy();
+    expect(getDay(0, 6).style.boxShadow).toBeFalsy();
+    
+    calendar.setStartDate(new Date(2001, 6, 1));
+    expect(dataSource).toHaveBeenCalledTimes(2);
+    endDate = new Date(2001, 8, 1);
+    endDate.setTime(endDate.getTime() - 1);
+    expect(dataSource).toHaveBeenLastCalledWith({ year: 2001, startDate: new Date(2001, 6, 1), endDate });
+    expect(getDay(0, 2).style.boxShadow).toBeFalsy();
+    expect(getDay(0, 6).style.boxShadow).toBeTruthy();
+});
+
 test('instantiate calendar with data source callback function', () => {
-    const dataSource = jest.fn((year, callback) => {
+    const dataSource = jest.fn((period, callback) => {
         callback([
             {
-                startDate: new Date(year, 6, year - 2000),
-                endDate: new Date(year, 6, year - 2000)
+                startDate: new Date(period.year, 6, period.year - 2000),
+                endDate: new Date(period.year, 6, period.year - 2000)
             }
         ]);
     });
@@ -342,11 +377,11 @@ test('instantiate calendar with data source callback function', () => {
 });
 
 test('instantiate calendar with data source promise function', done => {
-    const dataSource = jest.fn(year => new Promise((resolve, reject) => {
+    const dataSource = jest.fn(period => new Promise((resolve, reject) => {
         resolve([
             {
-                startDate: new Date(year, 6, year - 2000),
-                endDate: new Date(year, 6, year - 2000)
+                startDate: new Date(period.year, 6, period.year - 2000),
+                endDate: new Date(period.year, 6, period.year - 2000)
             }
         ]);
     }));
@@ -357,7 +392,9 @@ test('instantiate calendar with data source promise function', done => {
     });
 
     expect(dataSource).toHaveBeenCalledTimes(1);
-    expect(dataSource).toHaveBeenLastCalledWith(2001);
+    const endDate = new Date(2002, 0, 1);
+    endDate.setTime(endDate.getTime() - 1);
+    expect(dataSource).toHaveBeenLastCalledWith({ year: 2001, startDate: new Date(2001, 0, 1), endDate });
 
     setTimeout(() => {
         expect(getDay(6, 1).style.boxShadow).toBeTruthy();
@@ -365,7 +402,8 @@ test('instantiate calendar with data source promise function', done => {
         
         calendar.setYear(2002);
         expect(dataSource).toHaveBeenCalledTimes(2);
-        expect(dataSource).toHaveBeenLastCalledWith(2002);
+        endDate.setFullYear(2002);
+        expect(dataSource).toHaveBeenLastCalledWith({ year: 2002, startDate: new Date(2002, 0, 1), endDate });
 
         setTimeout(() => {
             expect(getDay(6, 1).style.boxShadow).toBeFalsy();
