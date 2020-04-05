@@ -348,7 +348,12 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 				setTimeout(() => months.style.transition = '', 500);
 			}, 0);
 			
-			this._triggerEvent('renderEnd', { currentYear: this.options.startYear });
+			const currentPeriod = this.getCurrentPeriod();
+			this._triggerEvent('renderEnd', {
+				currentYear: currentPeriod.startDate.getFullYear(),
+				startDate: currentPeriod.startDate,
+				endDate: currentPeriod.endDate
+			});
 		}
 	}
 

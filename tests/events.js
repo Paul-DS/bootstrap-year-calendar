@@ -69,19 +69,23 @@ test('mouse out day event', () => {
 });
 
 test('render end event', () => {
-    const renderEndInit = jest.fn(e => ({ calendar: e.calendar, currentYear: e.currentYear }));
-    const renderEndAdded = jest.fn(e => ({ calendar: e.calendar, currentYear: e.currentYear }));
+    const renderEndInit = jest.fn(e => ({ calendar: e.calendar, currentYear: e.currentYear, startDate: e.startDate, endDate: e.endDate }));
+    const renderEndAdded = jest.fn(e => ({ calendar: e.calendar, currentYear: e.currentYear, startDate: e.startDate, endDate: e.endDate }));
 
     document.querySelector('#calendar').addEventListener('renderEnd', renderEndAdded);
     const calendar = new Calendar('#calendar', { renderEnd: renderEndInit });
 
     calendar.setYear(2000);
 
-    expect(renderEndInit).toHaveNthReturnedWith(1, { calendar, currentYear });
-    expect(renderEndAdded).toHaveNthReturnedWith(1, { calendar, currentYear });
+    let endDate = new Date(currentYear + 1, 0, 1);
+    endDate.setTime(endDate.getTime() - 1);
+    expect(renderEndInit).toHaveNthReturnedWith(1, { calendar, currentYear, startDate: new Date(currentYear, 0, 1), endDate: endDate });
+    expect(renderEndAdded).toHaveNthReturnedWith(1, { calendar, currentYear, startDate: new Date(currentYear, 0, 1), endDate: endDate });
 
-    expect(renderEndInit).toHaveNthReturnedWith(2, { calendar, currentYear: 2000 });
-    expect(renderEndAdded).toHaveNthReturnedWith(2, { calendar, currentYear: 2000 });
+    endDate = new Date(2001, 0, 1);
+    endDate.setTime(endDate.getTime() - 1);
+    expect(renderEndInit).toHaveNthReturnedWith(2, { calendar, currentYear: 2000, startDate: new Date(2000, 0, 1), endDate: endDate });
+    expect(renderEndAdded).toHaveNthReturnedWith(2, { calendar, currentYear: 2000, startDate: new Date(2000, 0, 1), endDate: endDate });
 });
 
 
