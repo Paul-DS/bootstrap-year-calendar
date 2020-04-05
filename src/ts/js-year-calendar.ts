@@ -406,10 +406,8 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			yearDiv.textContent = `${period.startDate.getFullYear()} - ${(period.endDate.getFullYear())}`;
 		}
 		else if (this.options.numberMonthsDisplayed > 1) {
-			yearDiv.textContent = `
-				${Calendar.locales[this.options.language].months[period.startDate.getMonth()]} ${period.startDate.getFullYear()}
-				 - ${Calendar.locales[this.options.language].months[period.endDate.getMonth()]} ${period.endDate.getFullYear()}
-			`;
+			yearDiv.textContent = 
+				`${Calendar.locales[this.options.language].months[period.startDate.getMonth()]} ${period.startDate.getFullYear()} - ${Calendar.locales[this.options.language].months[period.endDate.getMonth()]} ${period.endDate.getFullYear()}`;
 		}
 		else {
 			yearDiv.textContent = `${Calendar.locales[this.options.language].months[period.startDate.getMonth()]} ${period.startDate.getFullYear()}`;
@@ -1351,7 +1349,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * Gets the year displayed on the calendar.
      */
 	public getYear(): number | null {
-		return this._isFullYearMode() ? this.options.startYear : null;
+		return this._isFullYearMode() ? this._startDate.getFullYear() : null;
 	}
 
 	/**
@@ -1380,7 +1378,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			while (this.element.firstChild) {
 				this.element.removeChild(this.element.firstChild);
 			}
-		
+
 			if (this.options.displayHeader) {
 				this._renderHeader();
 			}

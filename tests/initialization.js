@@ -48,10 +48,36 @@ test('instantiate calendar with other', () => {
     expect(() => new Calendar(null)).toThrow();
 });
 
+test('instantiate calendar with start date', () => {
+    const calendar = new Calendar('#calendar', { startDate: new Date(2000, 5, 1) });
+  
+    expect(document.querySelectorAll('#calendar .year-title').length).toEqual(1);
+    expect(document.querySelector('#calendar .year-title').textContent).toEqual("2000 - 2001");
+    expect(document.querySelectorAll('#calendar .month').length).toEqual(12);
+});
+
+test('instantiate calendar with start date and number months displayed', () => {
+    const calendar = new Calendar('#calendar', { startDate: new Date(2000, 10, 1), numberMonthsDisplayed: 3 });
+  
+    expect(document.querySelectorAll('#calendar .year-title').length).toEqual(1);
+    expect(document.querySelector('#calendar .year-title').textContent).toEqual("November 2000 - January 2001");
+    expect(document.querySelectorAll('#calendar .month').length).toEqual(3);
+});
+
+test('instantiate calendar with start date and single month displayed', () => {
+    const calendar = new Calendar('#calendar', { startDate: new Date(2000, 5, 1), numberMonthsDisplayed: 1 });
+  
+    expect(document.querySelectorAll('#calendar .year-title').length).toEqual(1);
+    expect(document.querySelector('#calendar .year-title').textContent).toEqual("June 2000");
+    expect(document.querySelectorAll('#calendar .month').length).toEqual(1);
+});
+
 test('instantiate calendar with start year', () => {
     const calendar = new Calendar('#calendar', { startYear: 2000 });
   
+    expect(document.querySelectorAll('#calendar .year-title').length).toEqual(5);
     expect(document.querySelector('#calendar .year-title:not(.year-neighbor):not(.year-neighbor2').textContent).toEqual("2000");
+    expect(document.querySelectorAll('#calendar .month').length).toEqual(12);
 });
 
 test('instantiate calendar with min date', () => {
