@@ -1358,6 +1358,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 
 	/**
      * Gets the year displayed on the calendar.
+	 * If the calendar is not used in a full year configuration, this will return the year of the first date displayed in the calendar.
      */
 	public getYear(): number | null {
 		return this._isFullYearMode() ? this._startDate.getFullYear() : null;
@@ -1365,6 +1366,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 
 	/**
      * Sets the year displayed on the calendar.
+	 * If the calendar is not used in a full year configuration, this will set the start date to January 1st of the given year.
      *
      * @param year The year to displayed on the calendar.
      */
