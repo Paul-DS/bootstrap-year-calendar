@@ -132,6 +132,27 @@ document.querySelector('.calendar').addEventListener('clickDay', function(e) {
 
 You can find the exhaustive list of events in the [documentation](https://year-calendar.github.io/js-year-calendar/documentation).
 
+## Migrating v1.x to v2.x
+
+If you are using the dataSource option as a function (callback or promise), the first parameter has changed:
+```
+new Calendar('#calendar', {
+  dataSource: (year) => {
+    console.log(year);
+  }
+}
+```
+becomes
+```
+new Calendar('#calendar', {
+  dataSource: (period) => {
+    console.log(period.year);
+  }
+}
+```
+
+For more details, check [this PR](https://github.com/year-calendar/js-year-calendar/pull/32)
+
 ## Migrating from bootstrap-year-calendar
 
 This widget is based on the [bootstrap-year-calendar](https://github.com/Paul-DS/bootstrap-year-calendar) widget.
