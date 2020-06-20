@@ -1379,6 +1379,13 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
+     * Gets the first date displayed on the calendar.
+     */
+	public getStartDate(): Date {
+		return this._startDate;
+	}
+
+	/**
      * Sets the first date that should be displayed on the calendar.
      *
      * @param startDate The first date that should be displayed on the calendar.
@@ -1418,6 +1425,32 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 				if (!periodEventResult.preventRendering && (!yearEventResult || !yearEventResult.preventRedering)) {
 					this.render();
 				}
+			}
+		}
+	}
+
+	/**
+     * Gets the number of months displayed by the calendar.
+     */
+	public getNumberMonthsDisplayed(): number {
+		return this.options.numberMonthsDisplayed;
+	}
+
+	/**
+     * Sets the number of months displayed that should be displayed by the calendar.
+	 * 
+	 * This method causes a refresh of the calendar.
+     *
+     * @param numberMonthsDisplayed Number of months that should be displayed by the calendar.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setNumberMonthsDisplayed(numberMonthsDisplayed: number | string, preventRendering: boolean = false): void {
+		var parsedNumber = parseInt(numberMonthsDisplayed as string);
+		if (!isNaN(parsedNumber) && parsedNumber > 0 && parsedNumber <= 12) {
+			this.options.numberMonthsDisplayed = parsedNumber;
+
+			if (!preventRendering) {
+				this.render();
 			}
 		}
 	}
