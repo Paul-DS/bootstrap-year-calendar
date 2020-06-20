@@ -133,6 +133,7 @@ export default interface CalendarOptions<T extends CalendarDataSourceElement> {
 
     /**
      * The year on which the calendar should be opened.
+     * If `startDate` is provided, this option will be ignored.
      */
     startYear?: number;
 

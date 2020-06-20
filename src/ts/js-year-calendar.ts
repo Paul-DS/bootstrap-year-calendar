@@ -1376,9 +1376,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Sets the year displayed on the calendar.
+     * Sets the first date that should be displayed on the calendar.
      *
-     * @param year The year to displayed on the calendar.
+     * @param startDate The first date that should be displayed on the calendar.
      */
 	public setStartDate(startDate: Date): void {
 		if (startDate instanceof Date) {
