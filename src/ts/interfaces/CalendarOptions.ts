@@ -179,6 +179,7 @@ export default interface CalendarOptions<T extends CalendarDataSourceElement> {
     
     /**
      * Function fired when the visible year of the calendar is changed.
+     * This function will be fired only if the calendar is used in a full year mode. Otherwise, use `periodChanged` event.
      */
     yearChanged?: (e: CalendarYearChangedEventObject) => void;
 

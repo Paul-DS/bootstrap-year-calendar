@@ -164,6 +164,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	
 	/**
 	 * Triggered after the changing the current year.
+	 * Works only if the calendar is used in a full year mode. Otherwise, use `periodChanged` event.
 	 * @event
 	 * @example
 	 * ```
