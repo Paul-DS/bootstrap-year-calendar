@@ -21,6 +21,7 @@ import CalendarContextMenuItem from './interfaces/CalendarContextMenuItem';
 import CalendarDataSourceElement from './interfaces/CalendarDataSourceElement';
 import CalendarOptions from './interfaces/CalendarOptions';
 import CalendarYearChangedEventObject from './interfaces/CalendarYearChangedEventObject';
+import CalendarPeriodChangedEventObject from './interfaces/CalendarPeriodChangedEventObject';
 import CalendarDayEventObject from './interfaces/CalendarDayEventObject';
 import CalendarRenderEndEventObject from './interfaces/CalendarRenderEndEventObject';
 import CalendarRangeEventObject from './interfaces/CalendarRangeEventObject';
@@ -59,6 +60,7 @@ if (typeof Element !== "undefined" && !Element.prototype.closest) {
 export default class Calendar<T extends CalendarDataSourceElement> {
 	protected element: HTMLElement;
 	protected options: CalendarOptions<T>;
+	protected _startDate: Date;
 	protected _dataSource: T[];
 	protected _mouseDown: boolean;
 	protected _rangeStart: Date;
@@ -158,10 +160,11 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	 * })
 	 * ```
 	 */
-    public selectRange: CalendarRangeEventObject;
+	public selectRange: CalendarRangeEventObject;	
 	
 	/**
 	 * Triggered after the changing the current year.
+	 * Works only if the calendar is used in a full year mode. Otherwise, use `periodChanged` event.
 	 * @event
 	 * @example
 	 * ```
@@ -171,7 +174,20 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	 * })
 	 * ```
 	 */
-    public yearChanged: CalendarYearChangedEventObject;
+	public yearChanged: CalendarYearChangedEventObject;
+	
+	/**
+	 * Triggered after the changing the visible period.
+	 * @event
+	 * @example
+	 * ```
+	 * 
+	 * document.querySelector('.calendar').addEventListener('periodChanged', function(e) {
+	 *   console.log(`New period selected: ${e.startDate} ${e.endDate}`);
+	 * })
+	 * ```
+	 */
+	public periodChanged: CalendarPeriodChangedEventObject;
 	
 	/**
 	 * Create a new calendar.
@@ -193,7 +209,19 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		
 		this._initializeEvents(options);
 		this._initializeOptions(options);
-		this.setYear(this.options.startYear);
+
+		let startYear = new Date().getFullYear();
+		let startMonth = 0;
+
+		if (this.options.startDate) {
+			startYear = this.options.startDate.getFullYear();
+			startMonth = this.options.startDate.getMonth();
+		}
+		else if (this.options.startYear) {
+			startYear = this.options.startYear;
+		}
+
+		this.setStartDate(new Date(startYear, startMonth, 1));
 	}
 	
 	protected _initializeOptions(opt: any): void {
@@ -202,7 +230,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 	
 		this.options = {
-			startYear: !isNaN(parseInt(opt.startYear)) ? parseInt(opt.startYear) : new Date().getFullYear(),
+			startYear: !isNaN(parseInt(opt.startYear)) ? parseInt(opt.startYear) : null,
+			startDate: opt.startDate instanceof Date ? opt.startDate : null,
+			numberMonthsDisplayed: !isNaN(parseInt(opt.numberMonthsDisplayed)) && opt.numberMonthsDisplayed > 0 && opt.numberMonthsDisplayed <= 12 ? parseInt(opt.numberMonthsDisplayed) : 12,
 			minDate: opt.minDate instanceof Date ? opt.minDate : null,
 			maxDate: opt.maxDate instanceof Date ? opt.maxDate : null,
 			language: (opt.language != null && Calendar.locales[opt.language] != null) ? opt.language : 'en',
@@ -238,6 +268,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 	
 		if (opt.yearChanged) { this.element.addEventListener('yearChanged', opt.yearChanged); }
+		if (opt.periodChanged) { this.element.addEventListener('periodChanged', opt.periodChanged); }
 		if (opt.renderEnd) { this.element.addEventListener('renderEnd', opt.renderEnd); }
 		if (opt.clickDay) { this.element.addEventListener('clickDay', opt.clickDay); }
 		if (opt.dayContextMenu) { this.element.addEventListener('dayContextMenu', opt.dayContextMenu); }
@@ -249,19 +280,25 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	protected _fetchDataSource(callback: (dataSource: T[]) => void) {
 		if (typeof this.options.dataSource === "function") {
 			const getDataSource:any = this.options.dataSource;
+			const currentPeriod = this.getCurrentPeriod();
+			const fetchParameters = {
+				year: currentPeriod.startDate.getFullYear(),
+				startDate: currentPeriod.startDate,
+				endDate: currentPeriod.endDate,
+			};
 
 			if (getDataSource.length == 2) {
 				// 2 parameters, means callback method
-				getDataSource(this.options.startYear, callback);
+				getDataSource(fetchParameters, callback);
 			}
 			else {
 				// 1 parameter, means synchronous or promise method
-				var result = getDataSource(this.options.startYear);
+				var result = getDataSource(fetchParameters);
 
 				if (result instanceof Array) {
 					callback(result);
 				}
-				else {
+				if (result && result.then) {
 					result.then(callback);
 				}
 			}
@@ -312,7 +349,12 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 				setTimeout(() => months.style.transition = '', 500);
 			}, 0);
 			
-			this._triggerEvent('renderEnd', { currentYear: this.options.startYear });
+			const currentPeriod = this.getCurrentPeriod();
+			this._triggerEvent('renderEnd', {
+				currentYear: currentPeriod.startDate.getFullYear(),
+				startDate: currentPeriod.startDate,
+				endDate: currentPeriod.endDate
+			});
 		}
 	}
 
@@ -321,11 +363,14 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		header.classList.add('calendar-header');
 		
 		var headerTable = document.createElement('table');
+
+		const period = this.getCurrentPeriod();
 		
+		// Left arrow
 		var prevDiv = document.createElement('th');
 		prevDiv.classList.add('prev');
 		
-		if (this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 1, 11, 31)) {
+		if (this.options.minDate != null && this.options.minDate >= period.startDate) {
 			prevDiv.classList.add('disabled');
 		}
 		
@@ -336,60 +381,83 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		
 		headerTable.appendChild(prevDiv);
 		
-		var prev2YearDiv = document.createElement('th');
-		prev2YearDiv.classList.add('year-title');
-		prev2YearDiv.classList.add('year-neighbor2');
-		prev2YearDiv.textContent = (this.options.startYear - 2).toString();
+		if (this._isFullYearMode()) {
+			// Year N-2
+			var prev2YearDiv = document.createElement('th');
+			prev2YearDiv.classList.add('year-title');
+			prev2YearDiv.classList.add('year-neighbor2');
+			prev2YearDiv.textContent = (this._startDate.getFullYear() - 2).toString();
+			
+			if (this.options.minDate != null && this.options.minDate > new Date(this._startDate.getFullYear() - 2, 11, 31)) {
+				prev2YearDiv.classList.add('disabled');
+			}
+			
+			headerTable.appendChild(prev2YearDiv);
+			
+			// Year N-1
+			var prevYearDiv = document.createElement('th');
+			prevYearDiv.classList.add('year-title');
+			prevYearDiv.classList.add('year-neighbor');
+			prevYearDiv.textContent = (this._startDate.getFullYear() - 1).toString();
+			
+			if (this.options.minDate != null && this.options.minDate > new Date(this._startDate.getFullYear() - 1, 11, 31)) {
+				prevYearDiv.classList.add('disabled');
+			}
 		
-		if (this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 2, 11, 31)) {
-			prev2YearDiv.classList.add('disabled');
+			headerTable.appendChild(prevYearDiv);
 		}
 		
-		headerTable.appendChild(prev2YearDiv);
-		
-		var prevYearDiv = document.createElement('th');
-		prevYearDiv.classList.add('year-title');
-		prevYearDiv.classList.add('year-neighbor');
-		prevYearDiv.textContent = (this.options.startYear - 1).toString();
-		
-		if (this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 1, 11, 31)) {
-			prevYearDiv.classList.add('disabled');
-		}
-		
-		headerTable.appendChild(prevYearDiv);
-		
+		// Current year
 		var yearDiv = document.createElement('th');
 		yearDiv.classList.add('year-title');
-		yearDiv.textContent = this.options.startYear.toString();
+
+		if (this._isFullYearMode()) {
+			yearDiv.textContent = this._startDate.getFullYear().toString();
+		}
+		else if (this.options.numberMonthsDisplayed == 12) {
+			yearDiv.textContent = `${period.startDate.getFullYear()} - ${(period.endDate.getFullYear())}`;
+		}
+		else if (this.options.numberMonthsDisplayed > 1) {
+			yearDiv.textContent = 
+				`${Calendar.locales[this.options.language].months[period.startDate.getMonth()]} ${period.startDate.getFullYear()} - ${Calendar.locales[this.options.language].months[period.endDate.getMonth()]} ${period.endDate.getFullYear()}`;
+		}
+		else {
+			yearDiv.textContent = `${Calendar.locales[this.options.language].months[period.startDate.getMonth()]} ${period.startDate.getFullYear()}`;
+		}
 		
 		headerTable.appendChild(yearDiv);
-		
-		var nextYearDiv = document.createElement('th');
-		nextYearDiv.classList.add('year-title');
-		nextYearDiv.classList.add('year-neighbor');
-		nextYearDiv.textContent = (this.options.startYear + 1).toString();
-		
-		if (this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 1, 0, 1)) {
-			nextYearDiv.classList.add('disabled');
+
+		if (this._isFullYearMode()) {
+			// Year N+1
+			var nextYearDiv = document.createElement('th');
+			nextYearDiv.classList.add('year-title');
+			nextYearDiv.classList.add('year-neighbor');
+			nextYearDiv.textContent = (this._startDate.getFullYear() + 1).toString();
+			
+			if (this.options.maxDate != null && this.options.maxDate < new Date(this._startDate.getFullYear() + 1, 0, 1)) {
+				nextYearDiv.classList.add('disabled');
+			}
+			
+			headerTable.appendChild(nextYearDiv);
+			
+			// Year N+2
+			var next2YearDiv = document.createElement('th');
+			next2YearDiv.classList.add('year-title');
+			next2YearDiv.classList.add('year-neighbor2');
+			next2YearDiv.textContent = (this._startDate.getFullYear() + 2).toString();
+			
+			if (this.options.maxDate != null && this.options.maxDate < new Date(this._startDate.getFullYear() + 2, 0, 1)) {
+				next2YearDiv.classList.add('disabled');
+			}
+			
+			headerTable.appendChild(next2YearDiv);
 		}
 		
-		headerTable.appendChild(nextYearDiv);
-		
-		var next2YearDiv = document.createElement('th');
-		next2YearDiv.classList.add('year-title');
-		next2YearDiv.classList.add('year-neighbor2');
-		next2YearDiv.textContent = (this.options.startYear + 2).toString();
-		
-		if (this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 2, 0, 1)) {
-			next2YearDiv.classList.add('disabled');
-		}
-		
-		headerTable.appendChild(next2YearDiv);
-		
+		// Right arrow
 		var nextDiv = document.createElement('th');
 		nextDiv.classList.add('next');
 		
-		if (this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 1, 0, 1)) {
+		if (this.options.maxDate != null && this.options.maxDate <= period.endDate) {
 			nextDiv.classList.add('disabled');
 		}
 		
@@ -408,8 +476,10 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	protected _renderBody(): void {
 		var monthsDiv = document.createElement('div');
 		monthsDiv.classList.add('months-container');
+
+		let monthStartDate = new Date(this._startDate.getTime());
 		
-		for (var m = 0; m < 12; m++) {
+		for (var m = 0; m < this.options.numberMonthsDisplayed; m++) {
 			/* Container */
 			var monthDiv = document.createElement('div');
 			monthDiv.classList.add('month-container');
@@ -418,8 +488,6 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			if (this._nbCols) {
 				monthDiv.classList.add(`month-${this._nbCols}`);
 			}
-			
-			var firstDate = new Date(this.options.startYear, m, 1);
 			
 			var table = document.createElement('table');
 			table.classList.add('month');
@@ -432,7 +500,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			var titleCell = document.createElement('th');
 			titleCell.classList.add('month-title');
 			titleCell.setAttribute('colspan', this.options.displayWeekNumber ? '8' : '7');
-			titleCell.textContent = Calendar.locales[this.options.language].months[m];
+			titleCell.textContent = Calendar.locales[this.options.language].months[monthStartDate.getMonth()];
 			
 			titleRow.appendChild(titleCell);
 			thead.appendChild(titleRow);
@@ -470,8 +538,8 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			table.appendChild(thead);
 			
 			/* Days */
-			var currentDate = new Date(firstDate.getTime());
-			var lastDate = new Date(this.options.startYear, m + 1, 0);
+			var currentDate = new Date(monthStartDate.getTime());
+			var lastDate = new Date(monthStartDate.getFullYear(), monthStartDate.getMonth() + 1, 0);
 			
 			while (currentDate.getDay() != weekStart)
 			{
@@ -500,7 +568,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 						cell.classList.add('hidden');
 					}
 					
-					if (currentDate < firstDate) {
+					if (currentDate < monthStartDate) {
 						cell.classList.add('old');
 					}
 					else if (currentDate > lastDate) {
@@ -533,6 +601,8 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			monthDiv.appendChild(table);
 			
 			monthsDiv.appendChild(monthDiv);
+
+			monthStartDate.setMonth(monthStartDate.getMonth() + 1);
 		}
 		
 		this.element.appendChild(monthsDiv);
@@ -575,9 +645,11 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		if (this._dataSource != null && this._dataSource.length > 0) {
 			this.element.querySelectorAll('.month-container').forEach((month: HTMLElement) => {
 				var monthId = parseInt(month.dataset.monthId);
+				const currentYear = this._startDate.getFullYear();
+				const currentMonth = this._startDate.getMonth() + monthId;
 				
-				var firstDate = new Date(this.options.startYear, monthId, 1);
-				var lastDate = new Date(this.options.startYear, monthId + 1, 1);
+				var firstDate = new Date(currentYear, currentMonth, 1);
+				var lastDate = new Date(currentYear, currentMonth + 1, 1);
 				
 				if ((this.options.minDate == null || lastDate > this.options.minDate) && (this.options.maxDate == null || firstDate <= this.options.maxDate))
 				{
@@ -591,8 +663,8 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 					
 					if (monthData.length > 0) {
 						month.querySelectorAll('.day-content').forEach((day: HTMLElement) => {
-							var currentDate = new Date(this.options.startYear, monthId, parseInt(day.textContent));
-							var nextDate = new Date(this.options.startYear, monthId, currentDate.getDate() + 1);
+							var currentDate = new Date(currentYear, currentMonth, parseInt(day.textContent));
+							var nextDate = new Date(currentYear, currentMonth, currentDate.getDate() + 1);
 							
 							var dayData = [];
 							
@@ -733,7 +805,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 						months.style.marginLeft = '0';
 
 						setTimeout(() => { 
-							this.setYear(this.options.startYear - 1);
+							this.setStartDate(new Date(this._startDate.getFullYear(), this._startDate.getMonth() - this.options.numberMonthsDisplayed, 1));
 						}, 50);
 					}, 100);
 				}
@@ -751,7 +823,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 						months.style.marginLeft = '0';
 
 						setTimeout(() => { 
-							this.setYear(this.options.startYear + 1);
+							this.setStartDate(new Date(this._startDate.getFullYear(), this._startDate.getMonth() + this.options.numberMonthsDisplayed, 1));
 						}, 50);
 					}, 100);
 				}
@@ -910,17 +982,17 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			var monthSize = (this.element.querySelector('.month') as HTMLElement).offsetWidth + 10;
 			this._nbCols = null;
 			
-			if (monthSize * 6 < calendarSize) {
+			if (monthSize * 6 < calendarSize && this.options.numberMonthsDisplayed >= 6) {
 				this._nbCols = 2;
 			}
-			else if (monthSize * 4 < calendarSize) {
+			else if (monthSize * 4 < calendarSize && this.options.numberMonthsDisplayed >= 4) {
 				this._nbCols = 3;
 			}
-			else if (monthSize * 3 < calendarSize) {
-				this._nbCols = 4
+			else if (monthSize * 3 < calendarSize && this.options.numberMonthsDisplayed >= 3) {
+				this._nbCols = 4;
 			}
-			else if (monthSize * 2 < calendarSize) {
-				this._nbCols = 6
+			else if (monthSize * 2 < calendarSize && this.options.numberMonthsDisplayed >= 2) {
+				this._nbCols = 6;
 			}
 			else {
 				this._nbCols = 12;
@@ -948,8 +1020,10 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 
 			this.element.querySelectorAll('.month-container').forEach((month: HTMLElement) => {
 				var monthId = parseInt(month.dataset.monthId);
+				const monthStartDate = new Date(this._startDate.getFullYear(), this._startDate.getMonth() + monthId, 1);
+				const monthEndDate = new Date(this._startDate.getFullYear(), this._startDate.getMonth() + monthId + 1, 1);
 
-				if (minDate.getMonth() <= monthId && maxDate.getMonth() >= monthId) {
+				if (minDate.getTime() < monthEndDate.getTime() && maxDate.getTime() >= monthStartDate.getTime()) {
 					month.querySelectorAll('td.day:not(.old):not(.new)').forEach(day => {
 						var date = this._getDate(day);
 						if (date >= minDate && date <= maxDate) {
@@ -1134,10 +1208,9 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 
 	protected _getDate(elt): Date {
 		var day = elt.querySelector('.day-content').textContent;
-		var month = elt.closest('.month-container').dataset.monthId;
-		var year = this.options.startYear;
+		var monthId = parseInt(elt.closest('.month-container').dataset.monthId);
 
-		return new Date(year, month, day);
+		return new Date(this._startDate.getFullYear(), this._startDate.getMonth() + monthId, day);
 	}
 
 	protected _triggerEvent(eventName: string, parameters: any) {
@@ -1197,6 +1270,10 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 		}
 		
 		return false;
+	}
+
+	protected _isFullYearMode(): boolean {
+		return this._startDate.getMonth() == 0 && this.options.numberMonthsDisplayed == 12;
 	}
 
 	/**
@@ -1269,32 +1346,71 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 	}
 
 	/**
-     * Gets the year displayed on the calendar.
+     * Gets the period displayed on the calendar.
      */
-	public getYear(): number {
-		return this.options.startYear;
+	public getCurrentPeriod(): { startDate: Date, endDate: Date } {
+		const startDate = new Date(this._startDate.getTime());
+		const endDate = new Date(this._startDate.getTime());
+		endDate.setMonth(endDate.getMonth() + this.options.numberMonthsDisplayed);
+		endDate.setTime(endDate.getTime() - 1);
+
+		return { startDate, endDate };
+	}
+
+	/**
+     * Gets the year displayed on the calendar.
+	 * If the calendar is not used in a full year configuration, this will return the year of the first date displayed in the calendar.
+     */
+	public getYear(): number | null {
+		return this._isFullYearMode() ? this._startDate.getFullYear() : null;
 	}
 
 	/**
      * Sets the year displayed on the calendar.
+	 * If the calendar is not used in a full year configuration, this will set the start date to January 1st of the given year.
      *
      * @param year The year to displayed on the calendar.
      */
 	public setYear(year: number | string): void {
 		var parsedYear = parseInt(year as string);
 		if (!isNaN(parsedYear)) {
-			this.options.startYear = parsedYear;
+			this.setStartDate(new Date(parsedYear, 0 , 1));
+		}
+	}
+
+	/**
+     * Gets the first date displayed on the calendar.
+     */
+	public getStartDate(): Date {
+		return this._startDate;
+	}
+
+	/**
+     * Sets the first date that should be displayed on the calendar.
+     *
+     * @param startDate The first date that should be displayed on the calendar.
+     */
+	public setStartDate(startDate: Date): void {
+		if (startDate instanceof Date) {
+			this.options.startDate = startDate;
+			this._startDate = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
 							
 			// Clear the calendar (faster method)
 			while (this.element.firstChild) {
 				this.element.removeChild(this.element.firstChild);
 			}
-		
+
 			if (this.options.displayHeader) {
 				this._renderHeader();
 			}
 			
-			var eventResult = this._triggerEvent('yearChanged', { currentYear: this.options.startYear, preventRendering: false });
+			const newPeriod = this.getCurrentPeriod();
+			const periodEventResult = this._triggerEvent('periodChanged', { startDate: newPeriod.startDate, endDate: newPeriod.endDate, preventRendering: false });
+			let yearEventResult = null;
+
+			if (this._isFullYearMode()) {
+				yearEventResult = this._triggerEvent('yearChanged', { currentYear: this._startDate.getFullYear(), preventRendering: false });
+			}
 
 			if (typeof this.options.dataSource === "function") {
 				this.render(true);
@@ -1306,9 +1422,35 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 				})
 			}
 			else {
-				if (!eventResult.preventRendering) {
+				if (!periodEventResult.preventRendering && (!yearEventResult || !yearEventResult.preventRedering)) {
 					this.render();
 				}
+			}
+		}
+	}
+
+	/**
+     * Gets the number of months displayed by the calendar.
+     */
+	public getNumberMonthsDisplayed(): number {
+		return this.options.numberMonthsDisplayed;
+	}
+
+	/**
+     * Sets the number of months displayed that should be displayed by the calendar.
+	 * 
+	 * This method causes a refresh of the calendar.
+     *
+     * @param numberMonthsDisplayed Number of months that should be displayed by the calendar.
+	 * @param preventRedering Indicates whether the rendering should be prevented after the property update.
+     */
+	public setNumberMonthsDisplayed(numberMonthsDisplayed: number | string, preventRendering: boolean = false): void {
+		var parsedNumber = parseInt(numberMonthsDisplayed as string);
+		if (!isNaN(parsedNumber) && parsedNumber > 0 && parsedNumber <= 12) {
+			this.options.numberMonthsDisplayed = parsedNumber;
+
+			if (!preventRendering) {
+				this.render();
 			}
 		}
 	}
