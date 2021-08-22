@@ -341,7 +341,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			// Fade animation
 			var months = this.element.querySelector('.months-container') as HTMLElement;
 			months.style.opacity = '0';
-			months.style.display = 'block';
+			months.style.display = 'flex';
 			months.style.transition = 'opacity 0.5s';
 			setTimeout(() => {
 				months.style.opacity = '1';
