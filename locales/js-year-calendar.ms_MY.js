@@ -1,8 +1,8 @@
 /**
-Malay translation for bootstrap-year-calendar
-Chia Wei Lim <acelimcw@hotmail.com>
-*/
-Calendar.locales['ms_MY'] = {
+ * Malay translation for js-year-calendar
+ * Chia Wei Lim <acelimcw@hotmail.com>
+ */
+Calendar.locales['ms'] = {
 	days: ["Ahad", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu"],
 	daysShort: ["Ahd", "Isn", "Sel", "Rab", "Kha", "Jum", "Sab"],
 	daysMin: ["Ahd", "Isn", "Sel", "Rab", "Kha", "Jum", "Sab"],
