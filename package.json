@@ -47,7 +47,7 @@
     "gulp-rename": "^2.0.0",
     "gulp-typescript": "^5.0.1",
     "gulp-uglify": "^3.0.2",
-    "jest": "^25.2.3",
+    "jest": "^27.0.6",
     "typedoc": "^0.19.2",
     "typescript": "^4.0.8"
   },
@@ -55,6 +55,7 @@
     "testMatch": [
       "**/tests/*.[jt]s?(x)"
     ],
-    "collectCoverage": true
+    "collectCoverage": true,
+    "testEnvironment": "jsdom"
   }
 }
