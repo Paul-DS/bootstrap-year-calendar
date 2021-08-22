@@ -97,6 +97,7 @@ export default interface CalendarOptions<T extends CalendarDataSourceElement> {
 
     /**
      * The language/culture used for calendar rendering.
+     * Don't forget to import the corresponding language file. For more information, check the language section of the readme.
      */
     language?: string;
 
