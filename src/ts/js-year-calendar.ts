@@ -446,7 +446,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 				headerRow.appendChild(weekNumberCell);
 			}
 			
-			var weekStart = !isNaN(this.options.weekStart) ? this.options.weekStart : Calendar.locales[this.options.language].weekStart;
+			var weekStart = this.getWeekStart();
 			var d = weekStart;
 			do
 			{
@@ -1766,7 +1766,7 @@ export default class Calendar<T extends CalendarDataSourceElement> {
      * Gets the starting day of the week.
      */
 	public getWeekStart(): number {
-		return !isNaN(this.options.weekStart) ? this.options.weekStart : Calendar.locales[this.options.language].weekStart;
+		return this.options.weekStart !== null ? this.options.weekStart : Calendar.locales[this.options.language].weekStart;
 	}
 
 	/**
