@@ -8,6 +8,6 @@ Calendar.locales['ms'] = {
 	daysMin: ["Ahd", "Isn", "Sel", "Rab", "Kha", "Jum", "Sab"],
 	months: ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"],
 	monthsShort: ["Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"],
-	weekShort: 'Minggu',
+	weekShort: 'M',
 	weekStart: 1
 };
