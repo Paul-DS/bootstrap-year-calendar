@@ -973,40 +973,43 @@ export default class Calendar<T extends CalendarDataSourceElement> {
 			this._responsiveInterval = null;
 		}
 
-		this._responsiveInterval = setInterval(() => {
-			if (this.element.querySelector('.month') == null) {
-				return;
-			}
+		this._computeMonthsSize();
+		this._responsiveInterval = setInterval(() => this._computeMonthsSize(), 300);
+	}
 
-			var calendarSize = this.element.offsetWidth;
-			var monthSize = (this.element.querySelector('.month') as HTMLElement).offsetWidth + 10;
-			this._nbCols = null;
-			
-			if (monthSize * 6 < calendarSize && this.options.numberMonthsDisplayed >= 6) {
-				this._nbCols = 2;
-			}
-			else if (monthSize * 4 < calendarSize && this.options.numberMonthsDisplayed >= 4) {
-				this._nbCols = 3;
-			}
-			else if (monthSize * 3 < calendarSize && this.options.numberMonthsDisplayed >= 3) {
-				this._nbCols = 4;
-			}
-			else if (monthSize * 2 < calendarSize && this.options.numberMonthsDisplayed >= 2) {
-				this._nbCols = 6;
-			}
-			else {
-				this._nbCols = 12;
-			}
+	protected _computeMonthsSize(): void {
+		if (this.element.querySelector('.month') == null) {
+			return;
+		}
 
-			this.element.querySelectorAll('.month-container').forEach(month => {
-				if (!month.classList.contains(`month-${this._nbCols}`)) {
-					['month-2', 'month-3', 'month-4', 'month-6', 'month-12'].forEach(className => {
-						month.classList.remove(className);
-					});
-					month.classList.add(`month-${this._nbCols}`);
-				}
-			});
-		}, 300);
+		var calendarSize = this.element.offsetWidth;
+		var monthSize = (this.element.querySelector('.month') as HTMLElement).offsetWidth + 10;
+		this._nbCols = null;
+		
+		if (monthSize * 6 < calendarSize && this.options.numberMonthsDisplayed >= 6) {
+			this._nbCols = 2;
+		}
+		else if (monthSize * 4 < calendarSize && this.options.numberMonthsDisplayed >= 4) {
+			this._nbCols = 3;
+		}
+		else if (monthSize * 3 < calendarSize && this.options.numberMonthsDisplayed >= 3) {
+			this._nbCols = 4;
+		}
+		else if (monthSize * 2 < calendarSize && this.options.numberMonthsDisplayed >= 2) {
+			this._nbCols = 6;
+		}
+		else {
+			this._nbCols = 12;
+		}
+
+		this.element.querySelectorAll('.month-container').forEach(month => {
+			if (!month.classList.contains(`month-${this._nbCols}`)) {
+				['month-2', 'month-3', 'month-4', 'month-6', 'month-12'].forEach(className => {
+					month.classList.remove(className);
+				});
+				month.classList.add(`month-${this._nbCols}`);
+			}
+		});
 	}
 
 	protected _refreshRange(): void {
