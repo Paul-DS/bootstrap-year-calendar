@@ -1,7 +1,10 @@
-## bootstrap-year-calendar is now [year-calendar](https://year-calendar.github.io/) !
+# ⚠️ Deprecated!
+
 The library has been rewritten to remove all dependencies.
 
-You should consider using the new repository (https://github.com/year-calendar/js-year-calendar) as the current one is not maintained anymore, and will soon be deprecated.
+The current version is deprecated, and won't be maintained anymore.
+
+You can find the new version here: https://year-calendar.github.io/ (also available for React.js and Vue.js).
 
 
 ----
