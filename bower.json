@@ -6,8 +6,9 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "bootstrap": ">=3.1.1",
-    "jquery": ">=1.8.2"
+    "bootstrap-v4-dev": ">=4.0.0",
+    "jquery": ">=1.8.2",
+    "open-iconic": ">=1.1.1"
   },
   "ignore": []
 }

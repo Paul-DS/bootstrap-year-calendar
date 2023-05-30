@@ -10,7 +10,7 @@ You can find the new version here: https://year-calendar.github.io/ (also availa
 ----
 
 # bootstrap-year-calendar
-A fully customizable year calendar widget, for boostrap !
+A fully customizable year calendar widget, now for Bootstrap 4 !
 You can find all details on the [official website](http://www.bootstrap-year-calendar.com/).
 
 
@@ -19,7 +19,7 @@ You can find all details on the [official website](http://www.bootstrap-year-cal
 ## Requirements
 
 This plugin requires the following libraries :
-- Bootstrap v3.0.0 or later
+- Bootstrap v4.0.0 or later
 - jQuery v1.8.0 or later
 
 ## Installation
